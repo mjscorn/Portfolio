@@ -9,54 +9,56 @@
   <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wdth,wght@75..125,200..900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --teal: #16587a; --teal-light: rgba(22, 88, 122, 0.12); --text-primary: #2b3135; --stroke: #e2e9ed; --bg: #ffffff; --radius-md: 6px; --radius-full: 9999px; }
-    html, body { height: 100%; font-family: 'Inconsolata', monospace; background: #f4f7f9; color: var(--text-primary); }
-    nav { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; align-items: center; gap: 10px; background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 4px 12px; white-space: nowrap; box-shadow: 0 2px 12px rgba(22,88,122,0.08); }
-    .tab { display: flex; align-items: center; justify-content: center; padding: 4px 8px; border-radius: var(--radius-md); min-width: 70px; cursor: pointer; transition: background 0.18s ease; text-decoration: none; color: var(--text-primary); font-size: 12px; font-weight: 400; }
-    .tab:hover { background: var(--teal-light); }
-    .tab.active { background: var(--teal-light); font-weight: 500; }
-    .brand { display: flex; align-items: center; gap: 4px; padding: 4px 40px; border-radius: var(--radius-md); cursor: default; }
-    .brand-icon { width: 32px; height: 32px; flex-shrink: 0; }
-    .brand-name { font-size: 12px; font-weight: 500; letter-spacing: 0.04em; color: var(--text-primary); }
-    section { display: none; min-height: 100vh; padding-top: 100px; }
+    :root { --teal: #2196c8; --teal-light: rgba(33, 150, 200, 0.15); --text-primary: #dce8f0; --stroke: #1e2d3a; --bg: #141d26; --radius-md: 12px; --radius-full: 9999px; }
+    html, body { height: 100%; font-family: 'Inconsolata', monospace; background: #0d1519; color: var(--text-primary); cursor: url('cursors/arrow.cur'), auto; }
+    nav { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; align-items: center; gap: 20px; background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 8px 12px; white-space: nowrap; box-shadow: 0 2px 24px rgba(0,0,0,0.4); overflow: visible; }
+    .tab { display: flex; align-items: center; justify-content: center; padding: 4px 8px; border-radius: var(--radius-md); flex: 0 0 130px; cursor: url('cursors/hand.cur'), pointer; transition: background 0.18s ease; text-decoration: none; color: var(--text-primary); font-size: 20px; font-weight: 400; }
+    .tab:hover { background: rgba(33, 150, 200, 0.12); }
+    .tab.active { background: rgba(33, 150, 200, 0.12); font-weight: 500; }
+    .brand { display: flex; align-items: center; gap: 8px; padding: 0 40px; border-radius: var(--radius-md); cursor: url('cursors/arrow.cur'), auto; height: 0; overflow: visible; }
+    .brand-icon { width: 52px; height: 52px; flex-shrink: 0; }
+    .brand-name { font-size: 20px; font-weight: 500; letter-spacing: 0.04em; color: var(--text-primary); }
+    section { display: none; min-height: 100vh; padding-top: 100px; position: relative; z-index: 1; }
     section.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    #home { background: linear-gradient(135deg, #f0f6fa 0%, #e8f2f8 100%); }
+    #home { background: transparent; }
     .hero { text-align: center; max-width: 600px; padding: 0 24px; animation: fadeUp 0.6s ease both; }
     .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 16px; }
     .hero h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 700; color: var(--text-primary); line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.02em; }
-    .hero p { font-size: 15px; font-weight: 400; color: #5a6a72; line-height: 1.7; margin-bottom: 36px; }
-    .cta { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #fff; font-family: 'Inconsolata', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 24px; border-radius: var(--radius-md); text-decoration: none; cursor: pointer; border: none; transition: opacity 0.18s ease, transform 0.18s ease; }
+    .hero p { font-size: 15px; font-weight: 400; color: #6a8a9e; line-height: 1.7; margin-bottom: 36px; }
+    .cta { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #fff; font-family: 'Inconsolata', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 24px; border-radius: var(--radius-md); text-decoration: none; cursor: url('cursors/hand.cur'), pointer; border: none; transition: opacity 0.18s ease, transform 0.18s ease; }
     .cta:hover { opacity: 0.85; transform: translateY(-1px); }
-    #portfolio { background: #f4f7f9; padding: 100px 24px 60px; align-items: flex-start; }
+    #portfolio { background: transparent; padding: 100px 24px 60px; align-items: flex-start; }
     .section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-bottom: 32px; width: 100%; max-width: 900px; margin-left: auto; margin-right: auto; animation: fadeUp 0.5s ease both; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; width: 100%; max-width: 900px; margin: 0 auto; }
-    .card { background: #fff; border: 1px solid var(--stroke); border-radius: var(--radius-md); overflow: hidden; transition: box-shadow 0.2s ease, transform 0.2s ease; animation: fadeUp 0.5s ease both; cursor: pointer; }
-    .card:hover { box-shadow: 0 8px 28px rgba(22,88,122,0.12); transform: translateY(-3px); }
+    .card { background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); overflow: hidden; transition: box-shadow 0.2s ease, transform 0.2s ease; animation: fadeUp 0.5s ease both; cursor: url('cursors/hand.cur'), pointer; }
+    .card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.5); transform: translateY(-3px); }
     .card-thumb { width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, var(--teal-light), var(--stroke)); display: flex; align-items: center; justify-content: center; color: var(--teal); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; }
     .card-body { padding: 16px; }
     .card-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
     .card-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); background: var(--teal-light); display: inline-block; padding: 2px 8px; border-radius: 4px; }
-    #contact { background: #f0f6fa; }
-    .contact-box { background: #fff; border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 48px; max-width: 480px; width: 100%; margin: 0 24px; animation: fadeUp 0.5s ease both; }
+    #contact { background: transparent; }
+    .contact-box { background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 48px; max-width: 480px; width: 100%; margin: 0 24px; animation: fadeUp 0.5s ease both; }
     .contact-box h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
-    .contact-box p { font-size: 13px; color: #5a6a72; margin-bottom: 28px; line-height: 1.6; }
+    .contact-box p { font-size: 13px; color: #6a8a9e; margin-bottom: 28px; line-height: 1.6; }
     .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
     .field label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); }
-    .field input, .field textarea { font-family: 'Inconsolata', monospace; font-size: 13px; color: var(--text-primary); background: #f4f7f9; border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 10px 12px; outline: none; resize: none; transition: border-color 0.18s; }
-    .field input:focus, .field textarea:focus { border-color: var(--teal); background: #fff; }
-    #resume { background: #f4f7f9; }
-    .resume-box { background: #fff; border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 48px; max-width: 560px; width: 100%; margin: 0 24px; animation: fadeUp 0.5s ease both; }
+    .field input, .field textarea { font-family: 'Inconsolata', monospace; font-size: 13px; color: var(--text-primary); background: #0d1519; border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 10px 12px; outline: none; resize: none; transition: border-color 0.18s; }
+    .field input:focus, .field textarea:focus { border-color: var(--teal); background: #111e28; }
+    .field input::placeholder, .field textarea::placeholder { color: #3a5060; }
+    #resume { background: transparent; }
+    .resume-box { background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 48px; max-width: 560px; width: 100%; margin: 0 24px; animation: fadeUp 0.5s ease both; }
     .resume-box h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; }
     .resume-item { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--stroke); }
     .resume-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     .resume-role { font-size: 13px; font-weight: 600; }
     .resume-org { font-size: 12px; color: var(--teal); margin: 2px 0 6px; font-weight: 500; }
-    .resume-date { font-size: 10px; color: #8a9aa3; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
-    .resume-desc { font-size: 12px; color: #5a6a72; line-height: 1.6; }
+    .resume-date { font-size: 10px; color: #4a6878; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+    .resume-desc { font-size: 12px; color: #6a8a9e; line-height: 1.6; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
+  <canvas id="bg-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
   <nav>
     <a class="tab active" data-section="home">Home</a>
     <a class="tab" data-section="contact">Contact</a>
@@ -110,6 +112,91 @@
       <div class="resume-item"><p class="resume-role">BFA Graphic Design</p><p class="resume-org">University Name</p><p class="resume-date">2015 — 2019</p><p class="resume-desc">Studied visual communication, typography, and interaction design.</p></div>
     </div>
   </section>
+  <script>
+    (function () {
+      const canvas = document.getElementById('bg-canvas');
+      const ctx = canvas.getContext('2d');
+      // (u,v) coord system: u = perp to movement, v = along movement (top-left direction)
+      // u = (x - y) / √2,  v = -(x + y) / √2
+      // back: x = (u - v) / √2,  y = -(u + v) / √2
+      const R2 = Math.SQRT2;
+      const ROT = -Math.PI / 4;
+      const COLORS = ['rgba(22, 62, 90, 0.14)', 'rgba(14, 40, 60, 0.17)', 'rgba(32, 84, 118, 0.22)'];
+      const SHAPE_W = 60;
+      const N_LANES = 12; // evenly spaced lanes, one shape per lane
+      let shapes = [];
+
+      const GAP = 4; // px gap between shapes in same lane
+
+      function initShapes() {
+        shapes = [];
+        const W = canvas.width, H = canvas.height;
+        const periodPx = (W + H) / R2;
+        for (let i = 0; i < N_LANES; i++) {
+          const speed = 0.024 + Math.random() * 0.006;
+          const uFrac = (i + 0.5) / N_LANES;
+          // Build chain with random gaps (min 4px) until we exceed the period
+          const chain = [];
+          let totalPx = 0;
+          while (totalPx < periodPx * 1.15) {
+            const height = 180 + Math.random() * 280;
+            const gap    = GAP + Math.random() * 160;   // 4px min, up to ~164px
+            chain.push({ height, gap });
+            totalPx += height + gap;
+          }
+          const chainPer = totalPx / periodPx;
+          const phase    = Math.random() * chainPer;
+          let vOff = -phase;
+          for (const seg of chain) {
+            shapes.push({
+              uFrac, v: vOff, speed,
+              height: seg.height,
+              color:  COLORS[Math.floor(Math.random() * 3)], // random per shape
+              chainPer,
+            });
+            vOff -= (seg.height + seg.gap) / periodPx;
+          }
+        }
+      }
+
+      function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ctx.fillStyle = '#0d1519';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      window.addEventListener('resize', resize);
+      resize();
+      initShapes();
+
+      function animate() {
+        const W = canvas.width, H = canvas.height;
+        const period = (W + H) / R2;
+        const uMin = -H / R2, uRange = (W + H) / R2;
+
+        ctx.fillStyle = 'rgba(13,21,25,0.14)';
+        ctx.fillRect(0, 0, W, H);
+        shapes.forEach(s => {
+          s.v += s.speed / period;
+          if (s.v > 0.1) s.v -= s.chainPer;  // wrap by exact chain length → 4px gap preserved
+          const u = uMin + s.uFrac * uRange;
+          const v = s.v * period;
+          const x = (u - v) / R2;
+          const y = -(u + v) / R2;
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(ROT);
+          ctx.fillStyle = s.color;
+          ctx.beginPath();
+          ctx.roundRect(-SHAPE_W / 2, -s.height / 2, SHAPE_W, s.height, 4);
+          ctx.fill();
+          ctx.restore();
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+  </script>
   <script>
     function navigate(id) {
       document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
