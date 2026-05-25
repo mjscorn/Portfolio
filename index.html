@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Michael Young — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wdth,wght@75..125,200..900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --teal: #16587a; --teal-light: rgba(22, 88, 122, 0.12); --text-primary: #2b3135; --stroke: #e2e9ed; --bg: #ffffff; --radius-md: 6px; --radius-full: 9999px; }
+    html, body { height: 100%; font-family: 'Inconsolata', monospace; background: #f4f7f9; color: var(--text-primary); }
+    nav { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; align-items: center; gap: 10px; background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 4px 12px; white-space: nowrap; box-shadow: 0 2px 12px rgba(22,88,122,0.08); }
+    .tab { display: flex; align-items: center; justify-content: center; padding: 4px 8px; border-radius: var(--radius-md); min-width: 70px; cursor: pointer; transition: background 0.18s ease; text-decoration: none; color: var(--text-primary); font-size: 12px; font-weight: 400; }
+    .tab:hover { background: var(--teal-light); }
+    .tab.active { background: var(--teal-light); font-weight: 500; }
+    .brand { display: flex; align-items: center; gap: 4px; padding: 4px 40px; border-radius: var(--radius-md); cursor: default; }
+    .brand-icon { width: 32px; height: 32px; flex-shrink: 0; }
+    .brand-name { font-size: 12px; font-weight: 500; letter-spacing: 0.04em; color: var(--text-primary); }
+    section { display: none; min-height: 100vh; padding-top: 100px; }
+    section.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    #home { background: linear-gradient(135deg, #f0f6fa 0%, #e8f2f8 100%); }
+    .hero { text-align: center; max-width: 600px; padding: 0 24px; animation: fadeUp 0.6s ease both; }
+    .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 16px; }
+    .hero h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 700; color: var(--text-primary); line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.02em; }
+    .hero p { font-size: 15px; font-weight: 400; color: #5a6a72; line-height: 1.7; margin-bottom: 36px; }
+    .cta { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #fff; font-family: 'Inconsolata', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 24px; border-radius: var(--radius-md); text-decoration: none; cursor: pointer; border: none; transition: opacity 0.18s ease, transform 0.18s ease; }
+    .cta:hover { opacity: 0.85; transform: translateY(-1px); }
+    #portfolio { background: #f4f7f9; padding: 100px 24px 60px; align-items: flex-start; }
+    .section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-bottom: 32px; width: 100%; max-width: 900px; margin-left: auto; margin-right: auto; animation: fadeUp 0.5s ease both; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; width: 100%; max-width: 900px; margin: 0 auto; }
+    .card { background: #fff; border: 1px solid var(--stroke); border-radius: var(--radius-md); overflow: hidden; transition: box-shadow 0.2s ease, transform 0.2s ease; animation: fadeUp 0.5s ease both; cursor: pointer; }
+    .card:hover { box-shadow: 0 8px 28px rgba(22,88,122,0.12); transform: translateY(-3px); }
+    .card-thumb { width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, var(--teal-light), var(--stroke)); display: flex; align-items: center; justify-content: center; color: var(--teal); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; }
+    .card-body { padding: 16px; }
+    .card-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .card-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); background: var(--teal-light); display: inline-block; padding: 2px 8px; border-radius: 4px; }
+    #contact { background: #f0f6fa; }
+    .contact-box { background: #fff; border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 48px; max-width: 480px; width: 100%; margin: 0 24px; animation: fadeUp 0.5s ease both; }
+    .contact-box h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+    .contact-box p { font-size: 13px; color: #5a6a72; margin-bottom: 28px; line-height: 1.6; }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .field label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); }
+    .field input, .field textarea { font-family: 'Inconsolata', monospace; font-size: 13px; color: var(--text-primary); background: #f4f7f9; border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 10px 12px; outline: none; resize: none; transition: border-color 0.18s; }
+    .field input:focus, .field textarea:focus { border-color: var(--teal); background: #fff; }
+    #resume { background: #f4f7f9; }
+    .resume-box { background: #fff; border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 48px; max-width: 560px; width: 100%; margin: 0 24px; animation: fadeUp 0.5s ease both; }
+    .resume-box h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; }
+    .resume-item { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--stroke); }
+    .resume-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .resume-role { font-size: 13px; font-weight: 600; }
+    .resume-org { font-size: 12px; color: var(--teal); margin: 2px 0 6px; font-weight: 500; }
+    .resume-date { font-size: 10px; color: #8a9aa3; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+    .resume-desc { font-size: 12px; color: #5a6a72; line-height: 1.6; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="tab active" data-section="home">Home</a>
+    <a class="tab" data-section="contact">Contact</a>
+    <div class="brand">
+      <svg class="brand-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16C32 24.8366 24.8366 32 16 32C7.16344 32 0 24.8366 0 16Z" fill="#16587A"/>
+        <path d="M17.9324 9.02118L16.153 9.02119L17.9748 12.7918L20.1778 17.7699H21.1523L25.3254 9H23.5672L20.7286 15.2067L17.9324 9.02118Z" fill="white"/>
+        <path d="M22.1078 15.8807L23.3008 13.2549L21.6737 13.2549L17.3986 22.2391L19.1998 22.2391L22.1078 15.8807Z" fill="white"/>
+        <path d="M7.82178 22.2391V9.04187H9.60118L12.3974 15.2274L15.236 9.02069H16.9942V18.8565H15.1512V12.7702L12.8211 17.7906H11.8466L9.64355 12.8125V22.2391H7.82178Z" fill="white"/>
+        <path d="M7.82178 22.2391L7.82178 20.4174L6 20.4174L6 22.2391L7.82178 22.2391Z" fill="white"/>
+        <path d="M26.1949 10.8218L26.1949 9L24.3731 9L24.3731 10.8218L26.1949 10.8218Z" fill="white"/>
+        <path d="M18.6206 22.2391L18.6206 20.4174L15.1786 20.4174L15.1786 22.2391L18.6206 22.2391Z" fill="white"/>
+      </svg>
+      <span class="brand-name">MICHAEL YOUNG</span>
+    </div>
+    <a class="tab" data-section="portfolio">Portfolio</a>
+    <a class="tab" data-section="resume">Resume</a>
+  </nav>
+  <section id="home" class="active">
+    <div class="hero">
+      <p class="hero-eyebrow">Designer & Creative</p>
+      <h1>Michael Young</h1>
+      <p>I design thoughtful, human-centered experiences — from product interfaces to visual identities. Based in Los Angeles.</p>
+      <a class="cta" data-section="portfolio" onclick="navigate('portfolio')">View Portfolio →</a>
+    </div>
+  </section>
+  <section id="portfolio">
+    <p class="section-title">Selected Work</p>
+    <div class="grid">
+      <div class="card"><div class="card-thumb">PROJECT PREVIEW</div><div class="card-body"><p class="card-title">Project One</p><span class="card-tag">UI/UX</span></div></div>
+      <div class="card"><div class="card-thumb">PROJECT PREVIEW</div><div class="card-body"><p class="card-title">Project Two</p><span class="card-tag">Branding</span></div></div>
+      <div class="card"><div class="card-thumb">PROJECT PREVIEW</div><div class="card-body"><p class="card-title">Project Three</p><span class="card-tag">Web Design</span></div></div>
+      <div class="card"><div class="card-thumb">PROJECT PREVIEW</div><div class="card-body"><p class="card-title">Project Four</p><span class="card-tag">Motion</span></div></div>
+    </div>
+  </section>
+  <section id="contact">
+    <div class="contact-box">
+      <h2>Get in touch</h2>
+      <p>Have a project in mind or just want to say hello? Drop me a message.</p>
+      <div class="field"><label>Name</label><input type="text" placeholder="Your name" /></div>
+      <div class="field"><label>Email</label><input type="email" placeholder="your@email.com" /></div>
+      <div class="field"><label>Message</label><textarea rows="4" placeholder="Tell me about your project..."></textarea></div>
+      <button class="cta" style="width:100%;justify-content:center;">Send Message</button>
+    </div>
+  </section>
+  <section id="resume">
+    <div class="resume-box">
+      <h2>Resume</h2>
+      <div class="resume-item"><p class="resume-role">Senior Product Designer</p><p class="resume-org">Company Name</p><p class="resume-date">2022 — Present</p><p class="resume-desc">Led end-to-end design for core product features, collaborating with engineering and product teams to ship high-quality user experiences.</p></div>
+      <div class="resume-item"><p class="resume-role">UI/UX Designer</p><p class="resume-org">Previous Company</p><p class="resume-date">2019 — 2022</p><p class="resume-desc">Designed and iterated on mobile and web interfaces across a suite of B2B products.</p></div>
+      <div class="resume-item"><p class="resume-role">BFA Graphic Design</p><p class="resume-org">University Name</p><p class="resume-date">2015 — 2019</p><p class="resume-desc">Studied visual communication, typography, and interaction design.</p></div>
+    </div>
+  </section>
+  <script>
+    function navigate(id) {
+      document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.querySelector('[data-section="' + id + '"]').classList.add('active');
+    }
+    document.querySelectorAll('[data-section]').forEach(el => {
+      el.addEventListener('click', () => navigate(el.dataset.section));
+    });
+  </script>
+</body>
+</html>
