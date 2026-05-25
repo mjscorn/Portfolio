@@ -138,7 +138,8 @@
     .field input:focus, .field textarea:focus { border-color: var(--teal); background: rgba(0,0,0,0.35); }
     .field input::placeholder, .field textarea::placeholder { color: #3a5060; }
     #contact .page-body * { font-size: 16px; }
-    #contact .cta { background: transparent; border: 1px solid #fff; border-radius: 4px; }
+    #contact .cta { background: transparent; border: 1px solid #fff; border-radius: 4px; transition: background 0.18s ease, border-color 0.18s ease; }
+    #contact .cta:hover { opacity: 1; transform: none; background: rgba(33, 150, 200, 0.12); border-color: var(--teal); }
 
     /* ── Resume ── */
     .resume-box { max-width: 560px; width: 100%; }
@@ -221,7 +222,10 @@
           <div class="field"><label>Name</label><input type="text" placeholder="Your name" /></div>
           <div class="field"><label>Email</label><input type="email" placeholder="your@email.com" /></div>
           <div class="field"><label>Message</label><textarea rows="4" placeholder="Tell me about your project..."></textarea></div>
-          <button class="cta" style="width:100%;justify-content:center;">Send</button>
+          <button class="cta" style="width:100%;justify-content:center;gap:8px;">
+          <svg width="16" height="16" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.2838 14.6802C18.1246 11.58 32.664 6.51327 39.9888 5.58286C41.1968 5.42942 42.2065 6.43917 42.0531 7.64714C41.1249 14.9547 36.0476 29.5229 32.9558 37.3522M10.2838 14.6802C7.0187 16.14 4.26506 17.5586 2.387 18.7561C1.26788 19.4697 1.44062 20.9864 2.60445 21.6245L17.7229 29.9132L26.0115 45.0315C26.6496 46.1954 28.1663 46.3681 28.8799 45.249C30.0774 43.3709 31.496 40.6173 32.9558 37.3522" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M42 6L22.5 25.5L19 29" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Send
+        </button>
         </div>
       </div>
     </section>
