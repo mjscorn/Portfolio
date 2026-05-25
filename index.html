@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -10,43 +10,132 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --teal: #2196c8; --teal-light: rgba(33, 150, 200, 0.15); --text-primary: #dce8f0; --stroke: #1e2d3a; --bg: #141d26; --radius-md: 12px; --radius-full: 9999px; }
-    html, body { height: 100%; font-family: 'Inconsolata', monospace; background: #0d1519; color: var(--text-primary); cursor: url('cursors/arrow.cur'), auto; }
+
+    /* ── Cursor mapping ── dark (default) ───────────────────────── */
+    *                                              { cursor: url('cursors/dark/arrow.cur'), auto; }
+    a, button, [role="button"], select,
+    label[for], summary, .tab, .card, .cta        { cursor: url('cursors/dark/hand.cur'), pointer; }
+    input[type="text"], input[type="email"],
+    input[type="password"], input[type="number"],
+    input[type="search"], input[type="url"],
+    input[type="tel"], textarea, [contenteditable] { cursor: url('cursors/dark/ibeam.cur'), text; }
+    [disabled], [aria-disabled="true"],
+    input:disabled, button:disabled,
+    textarea:disabled, select:disabled             { cursor: url('cursors/dark/no.cur'), not-allowed; }
+    [draggable="true"]                             { cursor: url('cursors/dark/sizeall.cur'), move; }
+    abbr[title]                                    { cursor: url('cursors/dark/help.cur'), help; }
+    .cursor-progress                               { cursor: url('cursors/dark/appstarting.ani'), progress; }
+    .cursor-wait                                   { cursor: url('cursors/dark/wait.ani'), wait; }
+    .cursor-crosshair                              { cursor: url('cursors/dark/crosshair.cur'), crosshair; }
+    .cursor-col-resize                             { cursor: url('cursors/dark/sizewe.cur'), col-resize; }
+    .cursor-row-resize                             { cursor: url('cursors/dark/sizens.cur'), row-resize; }
+    .cursor-nwse-resize                            { cursor: url('cursors/dark/sizenwse.cur'), nwse-resize; }
+    .cursor-nesw-resize                            { cursor: url('cursors/dark/sizenesw.cur'), nesw-resize; }
+    .cursor-all-scroll                             { cursor: url('cursors/dark/sizeall.cur'), all-scroll; }
+
+    /* ── Cursor mapping ── light override ───────────────────────── */
+    body.light *                                              { cursor: url('cursors/light/arrow.cur'), auto; }
+    body.light a, body.light button, body.light [role="button"],
+    body.light select, body.light label[for], body.light summary,
+    body.light .tab, body.light .card, body.light .cta        { cursor: url('cursors/light/hand.cur'), pointer; }
+    body.light input[type="text"], body.light input[type="email"],
+    body.light input[type="password"], body.light input[type="number"],
+    body.light input[type="search"], body.light input[type="url"],
+    body.light input[type="tel"], body.light textarea,
+    body.light [contenteditable]                              { cursor: url('cursors/light/ibeam.cur'), text; }
+    body.light [disabled], body.light [aria-disabled="true"],
+    body.light input:disabled, body.light button:disabled,
+    body.light textarea:disabled, body.light select:disabled  { cursor: url('cursors/light/no.cur'), not-allowed; }
+    body.light [draggable="true"]                             { cursor: url('cursors/light/sizeall.cur'), move; }
+    body.light abbr[title]                                    { cursor: url('cursors/light/help.cur'), help; }
+    body.light .cursor-progress                               { cursor: url('cursors/light/appstarting.ani'), progress; }
+    body.light .cursor-wait                                   { cursor: url('cursors/light/wait.ani'), wait; }
+    body.light .cursor-crosshair                              { cursor: url('cursors/light/crosshair.cur'), crosshair; }
+    body.light .cursor-col-resize                             { cursor: url('cursors/light/sizewe.cur'), col-resize; }
+    body.light .cursor-row-resize                             { cursor: url('cursors/light/sizens.cur'), row-resize; }
+    body.light .cursor-nwse-resize                            { cursor: url('cursors/light/sizenwse.cur'), nwse-resize; }
+    body.light .cursor-nesw-resize                            { cursor: url('cursors/light/sizenesw.cur'), nesw-resize; }
+    body.light .cursor-all-scroll                             { cursor: url('cursors/light/sizeall.cur'), all-scroll; }
+
+    /* ── Base ── */
+    html, body { height: 100%; font-family: 'Inconsolata', monospace; background: #0d1519; color: var(--text-primary); }
+
+    /* ── Nav ── */
     nav { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; align-items: center; gap: 20px; background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 8px 12px; white-space: nowrap; box-shadow: 0 2px 24px rgba(0,0,0,0.4); overflow: visible; }
-    .tab { display: flex; align-items: center; justify-content: center; padding: 4px 8px; border-radius: var(--radius-md); flex: 0 0 130px; cursor: url('cursors/hand.cur'), pointer; transition: background 0.18s ease; text-decoration: none; color: var(--text-primary); font-size: 20px; font-weight: 400; }
+    .tab { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 4px 28px; border-radius: var(--radius-md); flex: 0 0 auto; transition: background 0.18s ease; text-decoration: none; color: var(--text-primary); font-size: 20px; font-weight: 400; }
+    .tab-icon { width: 18px; height: 18px; flex-shrink: 0; }
     .tab:hover { background: rgba(33, 150, 200, 0.12); }
     .tab.active { background: rgba(33, 150, 200, 0.12); font-weight: 500; }
-    .brand { display: flex; align-items: center; gap: 8px; padding: 0 40px; border-radius: var(--radius-md); cursor: url('cursors/arrow.cur'), auto; height: 0; overflow: visible; }
+    .brand { display: flex; align-items: center; gap: 8px; padding: 0 40px; border-radius: var(--radius-md); height: 0; overflow: visible; }
     .brand-icon { width: 52px; height: 52px; flex-shrink: 0; }
     .brand-name { font-size: 20px; font-weight: 500; letter-spacing: 0.04em; color: var(--text-primary); }
-    section { display: none; min-height: 100vh; padding-top: 100px; position: relative; z-index: 1; }
-    section.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    #home { background: transparent; }
-    .hero { text-align: center; max-width: 600px; padding: 0 24px; animation: fadeUp 0.6s ease both; }
+
+    /* ── Cards — each section is its own full card ── */
+    section {
+      position: fixed;
+      top: 110px;
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+      background: var(--bg);
+      border: 1px solid var(--stroke);
+      border-radius: 12px;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.35);
+      z-index: 10;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 24px;
+      visibility: hidden;
+      will-change: transform;
+      scrollbar-width: thin;
+      scrollbar-color: var(--stroke) transparent;
+    }
+    section.active { visibility: visible; }
+
+    /* ── Page title + body layout ── */
+    .page-title { font-size: 32px; font-weight: 400; flex-shrink: 0; margin-bottom: 24px; }
+    .page-body { flex: 1; display: flex; flex-direction: column; align-items: center; width: 100%; }
+    #home .page-body, #contact .page-body { justify-content: center; }
+
+    /* WebKit scrollbar */
+    section::-webkit-scrollbar { width: 4px; }
+    section::-webkit-scrollbar-track { background: transparent; }
+    section::-webkit-scrollbar-thumb { background: var(--stroke); border-radius: 2px; }
+    section::-webkit-scrollbar-thumb:hover { background: var(--teal); }
+
+    /* ── Hero (Home) ── */
+    .hero { text-align: center; max-width: 600px; padding: 0 24px; }
     .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 16px; }
     .hero h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 700; color: var(--text-primary); line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.02em; }
     .hero p { font-size: 15px; font-weight: 400; color: #6a8a9e; line-height: 1.7; margin-bottom: 36px; }
-    .cta { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #fff; font-family: 'Inconsolata', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 24px; border-radius: var(--radius-md); text-decoration: none; cursor: url('cursors/hand.cur'), pointer; border: none; transition: opacity 0.18s ease, transform 0.18s ease; }
+    .cta { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #fff; font-family: 'Inconsolata', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 24px; border-radius: var(--radius-md); text-decoration: none; border: none; transition: opacity 0.18s ease, transform 0.18s ease; }
     .cta:hover { opacity: 0.85; transform: translateY(-1px); }
-    #portfolio { background: transparent; padding: 100px 24px 60px; align-items: flex-start; }
-    .section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-bottom: 32px; width: 100%; max-width: 900px; margin-left: auto; margin-right: auto; animation: fadeUp 0.5s ease both; }
+
+    /* ── Portfolio ── */
+    .section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-bottom: 32px; width: 100%; max-width: 900px; margin-left: auto; margin-right: auto; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; width: 100%; max-width: 900px; margin: 0 auto; }
-    .card { background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); overflow: hidden; transition: box-shadow 0.2s ease, transform 0.2s ease; animation: fadeUp 0.5s ease both; cursor: url('cursors/hand.cur'), pointer; }
+    .card { background: rgba(255,255,255,0.03); border: 1px solid var(--stroke); border-radius: var(--radius-md); overflow: hidden; transition: box-shadow 0.2s ease, transform 0.2s ease; }
     .card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.5); transform: translateY(-3px); }
     .card-thumb { width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, var(--teal-light), var(--stroke)); display: flex; align-items: center; justify-content: center; color: var(--teal); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; }
     .card-body { padding: 16px; }
     .card-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
     .card-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); background: var(--teal-light); display: inline-block; padding: 2px 8px; border-radius: 4px; }
-    #contact { background: transparent; }
-    .contact-box { background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 48px; max-width: 480px; width: 100%; margin: 0 24px; animation: fadeUp 0.5s ease both; }
+
+    /* ── Contact ── */
+    .contact-box { max-width: 480px; width: 100%; }
     .contact-box h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
     .contact-box p { font-size: 13px; color: #6a8a9e; margin-bottom: 28px; line-height: 1.6; }
     .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
     .field label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); }
-    .field input, .field textarea { font-family: 'Inconsolata', monospace; font-size: 13px; color: var(--text-primary); background: #0d1519; border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 10px 12px; outline: none; resize: none; transition: border-color 0.18s; }
-    .field input:focus, .field textarea:focus { border-color: var(--teal); background: #111e28; }
+    .field input, .field textarea { font-family: 'Inconsolata', monospace; font-size: 13px; color: var(--text-primary); background: rgba(0,0,0,0.25); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 10px 12px; outline: none; resize: none; transition: border-color 0.18s; }
+    .field input:focus, .field textarea:focus { border-color: var(--teal); background: rgba(0,0,0,0.35); }
     .field input::placeholder, .field textarea::placeholder { color: #3a5060; }
-    #resume { background: transparent; }
-    .resume-box { background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 48px; max-width: 560px; width: 100%; margin: 0 24px; animation: fadeUp 0.5s ease both; }
+
+    /* ── Resume ── */
+    .resume-box { max-width: 560px; width: 100%; }
     .resume-box h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; }
     .resume-item { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--stroke); }
     .resume-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
@@ -54,14 +143,20 @@
     .resume-org { font-size: 12px; color: var(--teal); margin: 2px 0 6px; font-weight: 500; }
     .resume-date { font-size: 10px; color: #4a6878; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
     .resume-desc { font-size: 12px; color: #6a8a9e; line-height: 1.6; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
   <canvas id="bg-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+
   <nav>
-    <a class="tab active" data-section="home">Home</a>
-    <a class="tab" data-section="contact">Contact</a>
+    <a class="tab active" data-section="home">
+      <svg class="tab-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.1125 38.6602C10.9276 37.0318 4 29.744 4 21C4 11.0589 12.9543 3 24 3C34.6729 3 43.3931 10.524 43.9697 20H44V32.5C44 36.6499 43.8793 39.3618 43.7488 41.0807C43.6191 42.7888 42.5179 44.1347 40.8289 44.4205C39.0758 44.7171 36.2815 45 32 45C27.7185 45 24.9242 44.7171 23.1711 44.4205C21.4821 44.1347 20.3809 42.7888 20.2512 41.0807C20.2015 40.4261 20.1533 39.6274 20.1125 38.6602Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 23C36 25.7614 37.7909 28 40 28C42.2091 28 44 25.7614 44 23C44 20.2386 42.2091 18 40 18C37.7909 18 36 20.2386 36 23Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 28C28.2091 28 30 25.7614 30 23C30 20.2386 28.2091 18 26 18C23.7909 18 22 20.2386 22 23C22 25.7614 23.7909 28 26 28Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M29 39V44.75" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 39V44.75" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Home
+    </a>
+    <a class="tab" data-section="contact">
+      <svg class="tab-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 11.002C15.1207 11.0232 10.3785 11.2614 7.48765 11.4737C5.36438 11.6296 3.70643 13.2138 3.50597 15.3333C3.25837 17.9513 3 22.0974 3 28.0004C3 33.9035 3.25837 38.0496 3.50597 40.6675C3.70642 42.787 5.36591 44.3714 7.48918 44.5273C10.5182 44.7496 15.579 45.0004 23 45.0004C30.421 45.0004 35.4818 44.7497 38.5108 44.5273C40.6341 44.3714 42.2936 42.787 42.494 40.6675C42.7416 38.0496 43 33.9035 43 28.0004C43 26.5642 42.9847 25.2319 42.958 24.0004" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 27.0001C4.25013 27.7082 17.2636 35 22.9999 35C28.7365 35 41.7509 27.7075 43 27" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 3C40.9706 3 45 7.02944 45 12C45 16.9706 40.9706 21 36 21C31.0294 21 27 16.9706 27 12C27 7.02944 31.0294 3 36 3Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+      Contact
+    </a>
     <div class="brand">
       <svg class="brand-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16C32 24.8366 24.8366 32 16 32C7.16344 32 0 24.8366 0 16Z" fill="#16587A"/>
@@ -74,59 +169,93 @@
       </svg>
       <span class="brand-name">MICHAEL YOUNG</span>
     </div>
-    <a class="tab" data-section="portfolio">Portfolio</a>
-    <a class="tab" data-section="resume">Resume</a>
+    <a class="tab" data-section="portfolio">
+      <svg class="tab-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M35.5999 39.731C35.4347 41.4658 34.2788 42.8128 32.5642 43.1242C30.2584 43.543 26.2058 44.0001 19.5 44.0001C12.7942 44.0001 8.74157 43.543 6.43582 43.1242C4.72117 42.8128 3.56525 41.4658 3.40008 39.731C3.20127 37.6429 3 34.1239 3 28.434C3 22.744 3.20127 19.225 3.40008 17.1369C3.56525 15.4021 4.72365 14.0545 6.43832 13.7432C6.61515 13.7111 6.80224 13.6788 7 13.6465" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.7738 4.19291C21.6044 4.03607 23.3846 4.80794 24.5919 6.19283L25.6544 7.41163C26.414 8.28303 27.5135 8.78318 28.6695 8.78318H39.1361C42.2569 8.78318 44.8533 11.1764 44.9367 14.2961C44.9761 15.7712 45 17.4736 45 19.4337C45 25.1237 44.7987 28.6427 44.5999 30.7307C44.4347 32.4656 43.2788 33.8125 41.5642 34.124C39.2584 34.5427 35.2058 34.9998 28.5 34.9998C21.7942 34.9998 17.7416 34.5427 15.4358 34.124C13.7212 33.8125 12.5653 32.4656 12.4001 30.7307C12.2013 28.6427 12 25.1237 12 19.4337C12 13.7437 12.2013 10.2247 12.4001 8.13666C12.5653 6.40181 13.7237 5.05426 15.4383 4.74298C16.491 4.55187 17.9075 4.35283 19.7738 4.19291Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Portfolio
+    </a>
+    <a class="tab" data-section="resume">
+      <svg class="tab-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 35H33" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 26H29" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 35H15" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 26H15" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M29.368 3.08035C30.2652 3.35935 33.145 4.50204 37.3046 8.55862C41.2253 12.3823 42.4915 15.0971 42.8635 16.129C42.9472 18.3704 42.9998 20.9801 42.9998 24.0001C42.9998 32.0645 42.6249 37.2041 42.283 40.2144C42.033 42.4159 40.3803 44.0624 38.1796 44.3191C35.3646 44.6476 30.7668 45.0001 23.9999 45.0001C17.233 45.0001 12.6352 44.6476 9.82016 44.3191C7.61949 44.0624 5.96679 42.4159 5.71677 40.2144C5.37489 37.2041 5 32.0645 5 24.0001C5 15.9356 5.37489 10.796 5.71677 7.78567C5.96679 5.58423 7.6195 3.93771 9.82016 3.68097C12.6352 3.35255 17.233 3 23.9999 3C25.9699 3 27.7562 3.02988 29.368 3.08035Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M42.8758 16.6068C40.6208 16.9412 36.5237 16.6707 33.494 16.3863C31.2476 16.1754 29.4808 14.4215 29.2607 12.1759C28.9701 9.21081 28.7 5.24074 29.0511 3.07227" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Resume
+    </a>
   </nav>
+
   <section id="home" class="active">
-    <div class="hero">
-      <p class="hero-eyebrow">Designer & Creative</p>
-      <h1>Michael Young</h1>
-      <p>I design thoughtful, human-centered experiences — from product interfaces to visual identities. Based in Los Angeles.</p>
-      <a class="cta" data-section="portfolio" onclick="navigate('portfolio')">View Portfolio →</a>
+    <p class="page-title">Home</p>
+    <div class="page-body">
+      <div class="hero">
+        <p class="hero-eyebrow">Designer & Creative</p>
+        <h1>Michael Young</h1>
+        <p>I design thoughtful, human-centered experiences — from product interfaces to visual identities. Based in Los Angeles.</p>
+        <a class="cta" data-section="portfolio">View Portfolio →</a>
+      </div>
     </div>
   </section>
-  <section id="portfolio">
-    <p class="section-title">Selected Work</p>
-    <div class="grid">
-      <div class="card"><div class="card-thumb">PROJECT PREVIEW</div><div class="card-body"><p class="card-title">Project One</p><span class="card-tag">UI/UX</span></div></div>
-      <div class="card"><div class="card-thumb">PROJECT PREVIEW</div><div class="card-body"><p class="card-title">Project Two</p><span class="card-tag">Branding</span></div></div>
-      <div class="card"><div class="card-thumb">PROJECT PREVIEW</div><div class="card-body"><p class="card-title">Project Three</p><span class="card-tag">Web Design</span></div></div>
-      <div class="card"><div class="card-thumb">PROJECT PREVIEW</div><div class="card-body"><p class="card-title">Project Four</p><span class="card-tag">Motion</span></div></div>
-    </div>
-  </section>
-  <section id="contact">
-    <div class="contact-box">
-      <h2>Get in touch</h2>
-      <p>Have a project in mind or just want to say hello? Drop me a message.</p>
-      <div class="field"><label>Name</label><input type="text" placeholder="Your name" /></div>
-      <div class="field"><label>Email</label><input type="email" placeholder="your@email.com" /></div>
-      <div class="field"><label>Message</label><textarea rows="4" placeholder="Tell me about your project..."></textarea></div>
-      <button class="cta" style="width:100%;justify-content:center;">Send Message</button>
-    </div>
-  </section>
-  <section id="resume">
-    <div class="resume-box">
-      <h2>Resume</h2>
-      <div class="resume-item"><p class="resume-role">Senior Product Designer</p><p class="resume-org">Company Name</p><p class="resume-date">2022 — Present</p><p class="resume-desc">Led end-to-end design for core product features, collaborating with engineering and product teams to ship high-quality user experiences.</p></div>
-      <div class="resume-item"><p class="resume-role">UI/UX Designer</p><p class="resume-org">Previous Company</p><p class="resume-date">2019 — 2022</p><p class="resume-desc">Designed and iterated on mobile and web interfaces across a suite of B2B products.</p></div>
-      <div class="resume-item"><p class="resume-role">BFA Graphic Design</p><p class="resume-org">University Name</p><p class="resume-date">2015 — 2019</p><p class="resume-desc">Studied visual communication, typography, and interaction design.</p></div>
-    </div>
-  </section>
+
+    <section id="portfolio">
+      <p class="page-title">Portfolio</p>
+      <div class="page-body">
+        <p class="section-title">Selected Work</p>
+        <div class="grid">
+          <div class="card"><div class="card-thumb">PROJECT PREVIEW</div><div class="card-body"><p class="card-title">Project One</p><span class="card-tag">UI/UX</span></div></div>
+          <div class="card"><div class="card-thumb">PROJECT PREVIEW</div><div class="card-body"><p class="card-title">Project Two</p><span class="card-tag">Branding</span></div></div>
+          <div class="card"><div class="card-thumb">PROJECT PREVIEW</div><div class="card-body"><p class="card-title">Project Three</p><span class="card-tag">Web Design</span></div></div>
+          <div class="card"><div class="card-thumb">PROJECT PREVIEW</div><div class="card-body"><p class="card-title">Project Four</p><span class="card-tag">Motion</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <p class="page-title">Contact</p>
+      <div class="page-body">
+        <div class="contact-box">
+          <h2>Get in touch</h2>
+          <p>Have a project in mind or just want to say hello? Drop me a message.</p>
+          <div class="field"><label>Name</label><input type="text" placeholder="Your name" /></div>
+          <div class="field"><label>Email</label><input type="email" placeholder="your@email.com" /></div>
+          <div class="field"><label>Message</label><textarea rows="4" placeholder="Tell me about your project..."></textarea></div>
+          <button class="cta" style="width:100%;justify-content:center;">Send Message</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="resume">
+      <p class="page-title">Resume</p>
+      <div class="page-body">
+        <div class="resume-box">
+          <div class="resume-item">
+            <p class="resume-role">Senior Product Designer</p>
+            <p class="resume-org">Company Name</p>
+            <p class="resume-date">2022 — Present</p>
+            <p class="resume-desc">Led end-to-end design for core product features, collaborating with engineering and product teams to ship high-quality user experiences.</p>
+          </div>
+          <div class="resume-item">
+            <p class="resume-role">UI/UX Designer</p>
+            <p class="resume-org">Previous Company</p>
+            <p class="resume-date">2019 — 2022</p>
+            <p class="resume-desc">Designed and iterated on mobile and web interfaces across a suite of B2B products.</p>
+          </div>
+          <div class="resume-item">
+            <p class="resume-role">BFA Graphic Design</p>
+            <p class="resume-org">University Name</p>
+            <p class="resume-date">2015 — 2019</p>
+            <p class="resume-desc">Studied visual communication, typography, and interaction design.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   <script>
+    /* ── Canvas background animation ── */
     (function () {
       const canvas = document.getElementById('bg-canvas');
       const ctx = canvas.getContext('2d');
-      // (u,v) coord system: u = perp to movement, v = along movement (top-left direction)
-      // u = (x - y) / √2,  v = -(x + y) / √2
-      // back: x = (u - v) / √2,  y = -(u + v) / √2
       const R2 = Math.SQRT2;
       const ROT = -Math.PI / 4;
-      const COLORS = ['rgba(22, 62, 90, 0.14)', 'rgba(14, 40, 60, 0.17)', 'rgba(32, 84, 118, 0.22)'];
+      const COLORS = ['rgba(22, 62, 90, 0.11)', 'rgba(14, 40, 60, 0.17)', 'rgba(32, 84, 118, 0.18)'];
       const SHAPE_W = 60;
-      const N_LANES = 12; // evenly spaced lanes, one shape per lane
+      const N_LANES = 12;
+      const GAP = 4;
       let shapes = [];
-
-      const GAP = 4; // px gap between shapes in same lane
 
       function initShapes() {
         shapes = [];
@@ -135,12 +264,11 @@
         for (let i = 0; i < N_LANES; i++) {
           const speed = 0.024 + Math.random() * 0.006;
           const uFrac = (i + 0.5) / N_LANES;
-          // Build chain with random gaps (min 4px) until we exceed the period
           const chain = [];
           let totalPx = 0;
           while (totalPx < periodPx * 1.15) {
             const height = 180 + Math.random() * 280;
-            const gap    = GAP + Math.random() * 160;   // 4px min, up to ~164px
+            const gap    = GAP + Math.random() * 160;
             chain.push({ height, gap });
             totalPx += height + gap;
           }
@@ -148,12 +276,7 @@
           const phase    = Math.random() * chainPer;
           let vOff = -phase;
           for (const seg of chain) {
-            shapes.push({
-              uFrac, v: vOff, speed,
-              height: seg.height,
-              color:  COLORS[Math.floor(Math.random() * 3)], // random per shape
-              chainPer,
-            });
+            shapes.push({ uFrac, v: vOff, speed, height: seg.height, color: COLORS[Math.floor(Math.random() * 3)], chainPer });
             vOff -= (seg.height + seg.gap) / periodPx;
           }
         }
@@ -173,12 +296,11 @@
         const W = canvas.width, H = canvas.height;
         const period = (W + H) / R2;
         const uMin = -H / R2, uRange = (W + H) / R2;
-
         ctx.fillStyle = 'rgba(13,21,25,0.14)';
         ctx.fillRect(0, 0, W, H);
         shapes.forEach(s => {
           s.v += s.speed / period;
-          if (s.v > 0.1) s.v -= s.chainPer;  // wrap by exact chain length → 4px gap preserved
+          if (s.v > 0.1) s.v -= s.chainPer;
           const u = uMin + s.uFrac * uRange;
           const v = s.v * period;
           const x = (u - v) / R2;
@@ -197,16 +319,67 @@
       animate();
     })();
   </script>
+
   <script>
-    function navigate(id) {
-      document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.querySelector('[data-section="' + id + '"]').classList.add('active');
-    }
-    document.querySelectorAll('[data-section]').forEach(el => {
-      el.addEventListener('click', () => navigate(el.dataset.section));
-    });
+    /* ── Navigation with directional slide ── */
+    (function () {
+      const NAV_ORDER = ['home', 'contact', 'portfolio', 'resume'];
+      let currentId = 'home';
+      let animating = false;
+      const DUR = 440;
+      const EASE = 'cubic-bezier(0.8, 0, 0.16, 1)';
+
+      function navigate(id) {
+        if (id === currentId || animating) return;
+
+        const fromEl  = document.getElementById(currentId);
+        const toEl    = document.getElementById(id);
+        const goRight = NAV_ORDER.indexOf(id) > NAV_ORDER.indexOf(currentId);
+
+        animating = true;
+
+        /* Snap toEl into off-screen start position, no transition */
+        toEl.style.transition = 'none';
+        toEl.style.transform  = `translateX(calc(${goRight ? '100% + 24px' : '-100% - 24px'}))`;
+        toEl.style.visibility = 'visible';
+        toEl.offsetHeight; /* force reflow */
+
+        /* Slide both panels simultaneously */
+        const tStr = `transform ${DUR}ms ${EASE}`;
+        toEl.style.transition   = tStr;
+        toEl.style.transform    = 'translateX(0)';
+        fromEl.style.transition = tStr;
+        fromEl.style.transform  = `translateX(calc(${goRight ? '-100% - 24px' : '100% + 24px'}))`;
+
+        /* Update nav highlight immediately */
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+        document.querySelector(`[data-section="${id}"]`).classList.add('active');
+
+        currentId = id;
+
+        setTimeout(() => {
+          /* Park fromEl off-screen without animating */
+          fromEl.style.transition = 'none';
+          fromEl.classList.remove('active');
+          fromEl.style.visibility = '';
+          fromEl.style.transform  = '';
+
+          /* Settle toEl — rely on .active class now */
+          toEl.classList.add('active');
+          toEl.style.transition = '';
+          toEl.style.transform  = '';
+          toEl.style.visibility = '';
+
+          animating = false;
+        }, DUR + 20);
+      }
+
+      window.navigate = navigate;
+
+      document.querySelectorAll('[data-section]').forEach(el => {
+        el.addEventListener('click', () => navigate(el.dataset.section));
+      });
+    })();
   </script>
 </body>
 </html>
