@@ -337,44 +337,62 @@
       function navigate(id) {
         if (id === currentId || animating) return;
 
-        const fromEl  = document.getElementById(currentId);
-        const toEl    = document.getElementById(id);
-        const goRight = NAV_ORDER.indexOf(id) > NAV_ORDER.indexOf(currentId);
+        const fromIndex = NAV_ORDER.indexOf(currentId);
+        const toIndex   = NAV_ORDER.indexOf(id);
+        const goRight   = toIndex > fromIndex;
+        const step      = goRight ? 1 : -1;
+        const distance  = Math.abs(toIndex - fromIndex);
+
+        /* Build ordered card list: from → intermediates → to */
+        const cards = [];
+        for (let i = fromIndex; i !== toIndex + step; i += step) {
+          cards.push(document.getElementById(NAV_ORDER[i]));
+        }
 
         animating = true;
 
-        /* Snap toEl into off-screen start position, no transition */
-        toEl.style.transition = 'none';
-        toEl.style.transform  = `translateX(calc(${goRight ? '100% + 24px' : '-100% - 24px'}))`;
-        toEl.style.visibility = 'visible';
-        toEl.offsetHeight; /* force reflow */
+        /* Snap all cards into their starting train positions (no transition) */
+        cards.forEach((card, i) => {
+          card.style.transition = 'none';
+          const mult = goRight ? i : -i;
+          card.style.transform  = mult === 0
+            ? 'translateX(0)'
+            : `translateX(calc(${mult} * (100% + 24px)))`;
+          if (i > 0) card.style.visibility = 'visible';
+        });
 
-        /* Slide both panels simultaneously */
+        /* Force reflow so snap positions are committed before transitions */
+        void cards[distance].offsetHeight;
+
+        /* Slide the whole train simultaneously */
         const tStr = `transform ${DUR}ms ${EASE}`;
-        toEl.style.transition   = tStr;
-        toEl.style.transform    = 'translateX(0)';
-        fromEl.style.transition = tStr;
-        fromEl.style.transform  = `translateX(calc(${goRight ? '-100% - 24px' : '100% + 24px'}))`;
+        cards.forEach((card, i) => {
+          card.style.transition = tStr;
+          const finalMult = goRight ? i - distance : distance - i;
+          card.style.transform  = finalMult === 0
+            ? 'translateX(0)'
+            : `translateX(calc(${finalMult} * (100% + 24px)))`;
+        });
 
         /* Update nav highlight immediately */
         document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
         document.querySelector(`[data-section="${id}"]`).classList.add('active');
-
         currentId = id;
 
         setTimeout(() => {
-          /* Park fromEl off-screen without animating */
-          fromEl.style.transition = 'none';
-          fromEl.classList.remove('active');
-          fromEl.style.visibility = '';
-          fromEl.style.transform  = '';
-
-          /* Settle toEl — rely on .active class now */
+          /* Park the from card and all intermediates */
+          cards.slice(0, distance).forEach(card => {
+            card.style.transition = 'none';
+            card.classList.remove('active');
+            card.style.visibility = '';
+            card.style.transform  = '';
+          });
+          /* Settle the destination card */
+          const toEl = cards[distance];
           toEl.classList.add('active');
           toEl.style.transition = '';
           toEl.style.transform  = '';
           toEl.style.visibility = '';
-
           animating = false;
         }, DUR + 20);
       }
