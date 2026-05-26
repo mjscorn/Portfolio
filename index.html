@@ -364,14 +364,20 @@
       resize();
       initShapes();
 
+      /* Speed multiplier — lerped so it ramps up/down smoothly */
+      let bgSpeedTarget = 1;
+      let bgSpeedNow    = 1;
+      window._bgSpeedTarget = v => { bgSpeedTarget = v; };
+
       function animate() {
         const W = canvas.width, H = canvas.height;
         const period = (W + H) / R2;
         const uMin = -H / R2, uRange = (W + H) / R2;
+        bgSpeedNow += (bgSpeedTarget - bgSpeedNow) * 0.12;
         ctx.fillStyle = 'rgba(13,21,25,0.14)';
         ctx.fillRect(0, 0, W, H);
         shapes.forEach(s => {
-          s.v += s.speed / period;
+          s.v += s.speed * bgSpeedNow / period;
           if (s.v > 0.1) s.v -= s.chainPer;
           const u = uMin + s.uFrac * uRange;
           const v = s.v * period;
@@ -417,6 +423,7 @@
         }
 
         animating = true;
+        window._bgSpeedTarget(8); /* ramp bg up to 8× while cards move */
 
         /* Snap all cards into their starting train positions (no transition) */
         cards.forEach((card, i) => {
@@ -424,7 +431,7 @@
           const mult = goRight ? i : -i;
           card.style.transform  = mult === 0
             ? 'translateX(0)'
-            : `translateX(calc(${mult} * (100% + 24px)))`;
+            : `translateX(calc(${mult} * (100% + 240px)))`;
           if (i > 0) card.style.visibility = 'visible';
         });
 
@@ -438,7 +445,7 @@
           const finalMult = goRight ? i - distance : distance - i;
           card.style.transform  = finalMult === 0
             ? 'translateX(0)'
-            : `translateX(calc(${finalMult} * (100% + 24px)))`;
+            : `translateX(calc(${finalMult} * (100% + 240px)))`;
         });
 
         /* Update nav + flyout highlights immediately */
@@ -464,6 +471,7 @@
           toEl.style.transition = '';
           toEl.style.transform  = '';
           toEl.style.visibility = '';
+          window._bgSpeedTarget(1); /* lerp bg back to normal speed */
           animating = false;
         }, DUR + 20);
       }
