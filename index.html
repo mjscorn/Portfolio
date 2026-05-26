@@ -79,13 +79,14 @@
     .nav-menu-btn {
       position: fixed; top: 24px; left: 24px; z-index: 101;
       display: none; align-items: center; justify-content: center;
-      width: 46px; height: 46px;
+      width: 46px; height: var(--nav-h, 47px);
       background: var(--bg); border: 1px solid var(--stroke);
       border-radius: var(--radius-md); box-shadow: 0 2px 24px rgba(0,0,0,0.4);
+      color: #fff;
     }
     body.nav-collapsed .nav-menu-btn { display: flex; }
     body.nav-collapsed nav .tab { display: none; }
-    body.nav-collapsed nav .brand { height: auto; padding: 4px 20px; }
+    body.nav-collapsed nav { height: var(--nav-h, 47px); }
     .nav-flyout {
       position: fixed; left: 24px; top: 82px; z-index: 200;
       min-width: 200px; display: flex; flex-direction: column; overflow: hidden;
@@ -480,8 +481,10 @@
       const menuBtn  = document.getElementById('nav-menu-btn');
       const flyout   = document.getElementById('nav-flyout');
 
-      /* Measure full nav width once (before any collapse) */
+      /* Measure full nav dimensions once (before any collapse) */
       const fullNavW = nav.scrollWidth;
+      const fullNavH = nav.getBoundingClientRect().height;
+      document.documentElement.style.setProperty('--nav-h', fullNavH + 'px');
 
       function positionFlyout() {
         const r = nav.getBoundingClientRect();
