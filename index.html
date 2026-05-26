@@ -87,6 +87,7 @@
     body.nav-collapsed .nav-menu-btn { display: flex; }
     body.nav-collapsed nav .tab { display: none; }
     body.nav-collapsed nav { height: var(--nav-h, 47px); }
+    body.brand-minimal .brand-name { display: none; }
     .nav-flyout {
       position: fixed; left: 24px; top: 82px; z-index: 200;
       min-width: 200px; display: flex; flex-direction: column; overflow: hidden;
@@ -494,7 +495,14 @@
       function updateCollapse() {
         const collapsed = window.innerWidth <= fullNavW + 20;
         document.body.classList.toggle('nav-collapsed', collapsed);
-        if (!collapsed) flyout.classList.remove('open');
+        if (!collapsed) {
+          flyout.classList.remove('open');
+          document.body.classList.remove('brand-minimal');
+        } else {
+          const navLeft      = nav.getBoundingClientRect().left;
+          const menuBtnRight = menuBtn.getBoundingClientRect().right;
+          document.body.classList.toggle('brand-minimal', navLeft <= menuBtnRight + 8);
+        }
         positionFlyout();
       }
 
