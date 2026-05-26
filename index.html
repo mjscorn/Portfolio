@@ -479,31 +479,44 @@
   <script>
     /* ── Responsive nav collapse ── */
     (function () {
-      const nav      = document.querySelector('nav');
-      const menuBtn  = document.getElementById('nav-menu-btn');
-      const flyout   = document.getElementById('nav-flyout');
+      const nav     = document.querySelector('nav');
+      const menuBtn = document.getElementById('nav-menu-btn');
+      const flyout  = document.getElementById('nav-flyout');
 
       /* Measure full nav dimensions once (before any collapse) */
       const fullNavW = nav.scrollWidth;
       const fullNavH = nav.getBoundingClientRect().height;
       document.documentElement.style.setProperty('--nav-h', fullNavH + 'px');
 
+      /* Minimal threshold is computed once on first collapse, then reused.
+         Comparing window.innerWidth (stable) avoids the nav-position feedback
+         loop that caused jitter when toggling brand-minimal. */
+      const MENU_BTN_RIGHT = 24 + 46; /* left + width, fixed by CSS */
+      let minimalThresholdW = 0;
+
       function positionFlyout() {
-        const r = nav.getBoundingClientRect();
-        flyout.style.top = (r.bottom + 8) + 'px';
+        flyout.style.top = (nav.getBoundingClientRect().bottom + 8) + 'px';
       }
 
       function updateCollapse() {
-        const collapsed = window.innerWidth <= fullNavW + 20;
-        document.body.classList.toggle('nav-collapsed', collapsed);
-        if (!collapsed) {
+        const vw = window.innerWidth;
+        const shouldCollapse = vw <= fullNavW + 20;
+
+        document.body.classList.toggle('nav-collapsed', shouldCollapse);
+
+        if (!shouldCollapse) {
           flyout.classList.remove('open');
           document.body.classList.remove('brand-minimal');
+          minimalThresholdW = 0;
         } else {
-          const navLeft      = nav.getBoundingClientRect().left;
-          const menuBtnRight = menuBtn.getBoundingClientRect().right;
-          document.body.classList.toggle('brand-minimal', navLeft <= menuBtnRight + 8);
+          /* Measure collapsed nav width (icon + title) once, with brand-minimal off */
+          if (!minimalThresholdW) {
+            document.body.classList.remove('brand-minimal');
+            minimalThresholdW = nav.getBoundingClientRect().width + 2 * (MENU_BTN_RIGHT + 8);
+          }
+          document.body.classList.toggle('brand-minimal', vw <= minimalThresholdW);
         }
+
         positionFlyout();
       }
 
