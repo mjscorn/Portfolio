@@ -75,6 +75,37 @@
     .brand-icon { width: 52px; height: 52px; flex-shrink: 0; }
     .brand-name { font-size: 20px; font-weight: 500; letter-spacing: 0.04em; color: var(--text-primary); }
 
+    /* ── Collapsed nav / hamburger menu ── */
+    .nav-menu-btn {
+      position: fixed; top: 24px; left: 24px; z-index: 101;
+      display: none; align-items: center; justify-content: center;
+      width: 46px; height: 46px;
+      background: var(--bg); border: 1px solid var(--stroke);
+      border-radius: var(--radius-md); box-shadow: 0 2px 24px rgba(0,0,0,0.4);
+    }
+    body.nav-collapsed .nav-menu-btn { display: flex; }
+    body.nav-collapsed nav .tab { display: none; }
+    body.nav-collapsed nav .brand { height: auto; padding: 4px 20px; }
+    .nav-flyout {
+      position: fixed; left: 24px; top: 82px; z-index: 200;
+      min-width: 200px; display: flex; flex-direction: column; overflow: hidden;
+      background: var(--bg); border: 1px solid var(--stroke);
+      border-radius: var(--radius-md); box-shadow: 0 4px 32px rgba(0,0,0,0.5);
+      opacity: 0; transform: translateY(-8px); pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .nav-flyout.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .flyout-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; text-decoration: none;
+      color: var(--text-primary); font-size: 14px; font-weight: 400;
+      transition: background 0.15s ease;
+    }
+    .flyout-item:hover, .flyout-item.active { background: rgba(33, 150, 200, 0.12); }
+    .flyout-item.active { font-weight: 500; }
+    .flyout-icon { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.8; }
+    .flyout-item.active .flyout-icon { opacity: 1; }
+
     /* ── Cards — each section is its own full card ── */
     section {
       position: fixed;
@@ -155,6 +186,31 @@
 </head>
 <body>
   <canvas id="bg-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+
+  <!-- Hamburger button (collapsed nav only) -->
+  <button class="nav-menu-btn" id="nav-menu-btn" aria-label="Open navigation">
+    <svg width="20" height="20" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M44.0361 4.3125H4.06735C3.80603 4.3125 3.55123 4.41426 3.37398 4.60627C0.594239 7.6176 2.62217 10.333 3.39494 11.1718C3.55971 11.3507 3.79386 11.4375 4.03705 11.4375H44.0773C44.3311 11.4375 44.5747 11.3429 44.7392 11.1497C45.4657 10.2969 47.2622 7.65325 44.7609 4.64087C44.5832 4.4269 44.3142 4.3125 44.0361 4.3125Z" stroke="currentColor" stroke-width="3"/><path d="M44.0361 20.4375H4.06735C3.80603 20.4375 3.55123 20.5393 3.37398 20.7313C0.594239 23.7426 2.62217 26.458 3.39494 27.2968C3.55971 27.4757 3.79386 27.5625 4.03705 27.5625H44.0773C44.3311 27.5625 44.5747 27.4679 44.7392 27.2747C45.4657 26.4219 47.2622 23.7782 44.7609 20.7659C44.5832 20.5519 44.3142 20.4375 44.0361 20.4375Z" stroke="currentColor" stroke-width="3"/><path d="M44.0361 36.5625H4.06735C3.80603 36.5625 3.55123 36.6643 3.37398 36.8563C0.594239 39.8676 2.62217 42.583 3.39494 43.4218C3.55971 43.6007 3.79386 43.6875 4.03705 43.6875H44.0773C44.3311 43.6875 44.5747 43.5929 44.7392 43.3997C45.4657 42.5469 47.2622 39.9032 44.7609 36.8909C44.5832 36.6769 44.3142 36.5625 44.0361 36.5625Z" stroke="currentColor" stroke-width="3"/></svg>
+  </button>
+
+  <!-- Fly-out nav menu -->
+  <div class="nav-flyout" id="nav-flyout">
+    <a class="flyout-item active" data-section="home">
+      <svg class="flyout-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.1125 38.6602C10.9276 37.0318 4 29.744 4 21C4 11.0589 12.9543 3 24 3C34.6729 3 43.3931 10.524 43.9697 20H44V32.5C44 36.6499 43.8793 39.3618 43.7488 41.0807C43.6191 42.7888 42.5179 44.1347 40.8289 44.4205C39.0758 44.7171 36.2815 45 32 45C27.7185 45 24.9242 44.7171 23.1711 44.4205C21.4821 44.1347 20.3809 42.7888 20.2512 41.0807C20.2015 40.4261 20.1533 39.6274 20.1125 38.6602Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 23C36 25.7614 37.7909 28 40 28C42.2091 28 44 25.7614 44 23C44 20.2386 42.2091 18 40 18C37.7909 18 36 20.2386 36 23Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 28C28.2091 28 30 25.7614 30 23C30 20.2386 28.2091 18 26 18C23.7909 18 22 20.2386 22 23C22 25.7614 23.7909 28 26 28Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M29 39V44.75" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 39V44.75" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Home
+    </a>
+    <a class="flyout-item" data-section="contact">
+      <svg class="flyout-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 11.002C15.1207 11.0232 10.3785 11.2614 7.48765 11.4737C5.36438 11.6296 3.70643 13.2138 3.50597 15.3333C3.25837 17.9513 3 22.0974 3 28.0004C3 33.9035 3.25837 38.0496 3.50597 40.6675C3.70642 42.787 5.36591 44.3714 7.48918 44.5273C10.5182 44.7496 15.579 45.0004 23 45.0004C30.421 45.0004 35.4818 44.7497 38.5108 44.5273C40.6341 44.3714 42.2936 42.787 42.494 40.6675C42.7416 38.0496 43 33.9035 43 28.0004C43 26.5642 42.9847 25.2319 42.958 24.0004" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 27.0001C4.25013 27.7082 17.2636 35 22.9999 35C28.7365 35 41.7509 27.7075 43 27" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 3C40.9706 3 45 7.02944 45 12C45 16.9706 40.9706 21 36 21C31.0294 21 27 16.9706 27 12C27 7.02944 31.0294 3 36 3Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+      Contact
+    </a>
+    <a class="flyout-item" data-section="portfolio">
+      <svg class="flyout-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M35.5999 39.731C35.4347 41.4658 34.2788 42.8128 32.5642 43.1242C30.2584 43.543 26.2058 44.0001 19.5 44.0001C12.7942 44.0001 8.74157 43.543 6.43582 43.1242C4.72117 42.8128 3.56525 41.4658 3.40008 39.731C3.20127 37.6429 3 34.1239 3 28.434C3 22.744 3.20127 19.225 3.40008 17.1369C3.56525 15.4021 4.72365 14.0545 6.43832 13.7432C6.61515 13.7111 6.80224 13.6788 7 13.6465" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.7738 4.19291C21.6044 4.03607 23.3846 4.80794 24.5919 6.19283L25.6544 7.41163C26.414 8.28303 27.5135 8.78318 28.6695 8.78318H39.1361C42.2569 8.78318 44.8533 11.1764 44.9367 14.2961C44.9761 15.7712 45 17.4736 45 19.4337C45 25.1237 44.7987 28.6427 44.5999 30.7307C44.4347 32.4656 43.2788 33.8125 41.5642 34.124C39.2584 34.5427 35.2058 34.9998 28.5 34.9998C21.7942 34.9998 17.7416 34.5427 15.4358 34.124C13.7212 33.8125 12.5653 32.4656 12.4001 30.7307C12.2013 28.6427 12 25.1237 12 19.4337C12 13.7437 12.2013 10.2247 12.4001 8.13666C12.5653 6.40181 13.7237 5.05426 15.4383 4.74298C16.491 4.55187 17.9075 4.35283 19.7738 4.19291Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Portfolio
+    </a>
+    <a class="flyout-item" data-section="resume">
+      <svg class="flyout-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 35H33" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 26H29" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 35H15" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 26H15" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M29.368 3.08035C30.2652 3.35935 33.145 4.50204 37.3046 8.55862C41.2253 12.3823 42.4915 15.0971 42.8635 16.129C42.9472 18.3704 42.9998 20.9801 42.9998 24.0001C42.9998 32.0645 42.6249 37.2041 42.283 40.2144C42.033 42.4159 40.3803 44.0624 38.1796 44.3191C35.3646 44.6476 30.7668 45.0001 23.9999 45.0001C17.233 45.0001 12.6352 44.6476 9.82016 44.3191C7.61949 44.0624 5.96679 42.4159 5.71677 40.2144C5.37489 37.2041 5 32.0645 5 24.0001C5 15.9356 5.37489 10.796 5.71677 7.78567C5.96679 5.58423 7.6195 3.93771 9.82016 3.68097C12.6352 3.35255 17.233 3 23.9999 3C25.9699 3 27.7562 3.02988 29.368 3.08035Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M42.8758 16.6068C40.6208 16.9412 36.5237 16.6707 33.494 16.3863C31.2476 16.1754 29.4808 14.4215 29.2607 12.1759C28.9701 9.21081 28.7 5.24074 29.0511 3.07227" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Resume
+    </a>
+  </div>
 
   <nav>
     <a class="tab active" data-section="home">
@@ -382,9 +438,13 @@
             : `translateX(calc(${finalMult} * (100% + 24px)))`;
         });
 
-        /* Update nav highlight immediately */
+        /* Update nav + flyout highlights immediately */
         document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-        document.querySelector(`[data-section="${id}"]`).classList.add('active');
+        document.querySelector(`.tab[data-section="${id}"]`).classList.add('active');
+        document.querySelectorAll('.flyout-item').forEach(el => el.classList.remove('active'));
+        const fi = document.querySelector(`.flyout-item[data-section="${id}"]`);
+        if (fi) fi.classList.add('active');
+        document.getElementById('nav-flyout')?.classList.remove('open');
         currentId = id;
 
         setTimeout(() => {
@@ -410,6 +470,47 @@
       document.querySelectorAll('[data-section]').forEach(el => {
         el.addEventListener('click', () => navigate(el.dataset.section));
       });
+    })();
+  </script>
+
+  <script>
+    /* ── Responsive nav collapse ── */
+    (function () {
+      const nav      = document.querySelector('nav');
+      const menuBtn  = document.getElementById('nav-menu-btn');
+      const flyout   = document.getElementById('nav-flyout');
+
+      /* Measure full nav width once (before any collapse) */
+      const fullNavW = nav.scrollWidth;
+
+      function positionFlyout() {
+        const r = nav.getBoundingClientRect();
+        flyout.style.top = (r.bottom + 8) + 'px';
+      }
+
+      function updateCollapse() {
+        const collapsed = window.innerWidth <= fullNavW + 20;
+        document.body.classList.toggle('nav-collapsed', collapsed);
+        if (!collapsed) flyout.classList.remove('open');
+        positionFlyout();
+      }
+
+      /* Hamburger toggle */
+      menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        positionFlyout();
+        flyout.classList.toggle('open');
+      });
+
+      /* Close when clicking outside */
+      document.addEventListener('click', (e) => {
+        if (!flyout.contains(e.target) && e.target !== menuBtn) {
+          flyout.classList.remove('open');
+        }
+      });
+
+      window.addEventListener('resize', updateCollapse);
+      updateCollapse();
     })();
   </script>
 </body>
