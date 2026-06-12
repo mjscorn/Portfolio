@@ -32,6 +32,18 @@
     .cursor-nwse-resize                            { cursor: url('cursors/dark/sizenwse.cur'), nwse-resize; }
     .cursor-nesw-resize                            { cursor: url('cursors/dark/sizenesw.cur'), nesw-resize; }
     .cursor-all-scroll                             { cursor: url('cursors/dark/sizeall.cur'), all-scroll; }
+    /* Custom hand cursor on every interactable element AND its inner content
+       (overrides the universal arrow on children + any cursor:pointer rules) */
+    a, a *, button, button *, [role="button"], [role="button"] *,
+    label[for], summary, .tab, .tab *, .card, .card *, .cta, .cta *,
+    .poetry-link, .sublink, .suggest, .card-link,
+    .reachout-item, .reachout-item * {
+      cursor: url('cursors/dark/hand.cur'), pointer !important;
+    }
+    /* Non-interactive cards (e.g. "Coming soon") show the not-allowed cursor */
+    .card:not(.card-link), .card:not(.card-link) * {
+      cursor: url('cursors/dark/no.cur'), not-allowed !important;
+    }
 
     /* ── Cursor mapping ── light override ───────────────────────── */
     body.light *                                              { cursor: url('cursors/light/arrow.cur'), auto; }
@@ -153,13 +165,14 @@
     .scroll-top {
       position: fixed; right: 44px; bottom: 44px; z-index: 60;
       width: 46px; height: 46px; display: flex; align-items: center; justify-content: center;
-      background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-full);
-      color: var(--text-primary); box-shadow: 0 4px 24px rgba(0,0,0,0.45); cursor: pointer;
+      background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius-full);
+      color: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.25); cursor: pointer;
       opacity: 0; transform: translateY(10px) scale(0.9); pointer-events: none;
       transition: opacity 0.2s ease, transform 0.2s ease, background 0.18s ease, border-color 0.18s ease;
     }
     .scroll-top.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-    .scroll-top:hover { background: rgba(33,150,200,0.12); border-color: var(--teal); }
+    .scroll-top:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
 
     /* WebKit scrollbar */
     section::-webkit-scrollbar { width: 4px; }
@@ -169,10 +182,10 @@
 
     /* ── Hero (Home) ── */
     .hero { text-align: center; max-width: 600px; padding: 0 24px; }
-    .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 16px; }
-    .hero h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 700; color: var(--text-primary); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.02em; }
+    .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 24px; }
+    .hero h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 700; color: var(--text-primary); line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.02em; }
     .hero .hero-quote { font-size: 16px; font-style: italic; color: var(--teal); margin-bottom: 20px; }
-    .hero p { font-size: 15px; font-weight: 400; color: #6a8a9e; line-height: 1.7; margin-bottom: 36px; }
+    .hero p { font-size: 15px; font-weight: 400; color: #6a8a9e; line-height: 1.7; margin-bottom: 24px; }
     .cta { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #fff; font-family: 'Inconsolata', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; padding: 10px 24px; border-radius: var(--radius-md); text-decoration: none; border: none; transition: opacity 0.18s ease, transform 0.18s ease; }
     .cta:hover { opacity: 0.85; transform: translateY(-1px); }
 
@@ -221,7 +234,20 @@
     .resume-section { display: flex; flex-direction: column; gap: 16px; }
     .resume-section-label { font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-primary); opacity: 0.45; }
     .resume-entry { display: flex; flex-direction: column; gap: 4px; }
-    .resume-company { font-size: 14px; font-weight: 600; color: var(--text-primary); line-height: 1.6; }
+    .resume-company { font-size: 14px; font-weight: 700; color: var(--text-primary); line-height: 1.6; }
+    .resume-edu-meta { font-size: 14px; line-height: 1.6; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; white-space: nowrap; }
+    .resume-edu-meta .edu-school { color: var(--text-primary); }
+    .resume-edu-meta .edu-sep { display: none; color: rgba(220,232,240,0.45); margin: 0 8px; }
+    .resume-edu-meta .edu-date { color: rgba(220,232,240,0.45); flex-shrink: 0; }
+    /* Mobile/cramped (work dates stacked): education shows "School | Date" inline */
+    #resume.stack-dates .resume-edu-meta { justify-content: flex-start; gap: 0; }
+    #resume.stack-dates .resume-edu-meta .edu-sep { display: inline; }
+    /* Education: tighten degree → school|date to match the role→date gap */
+    .resume-section--edu .resume-company { margin-bottom: 0; }
+    .resume-section--edu .resume-entry { gap: 2px; }
+    /* Double the space between entries in design experience + education (label→entry stays 16px) */
+    .resume-section--work .resume-entry + .resume-entry,
+    .resume-section--edu .resume-entry + .resume-entry { margin-top: 16px; }
     .resume-role-line { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; line-height: 1.6; }
     .resume-role-name { font-size: 14px; color: var(--text-primary); line-height: 1.6; }
     .resume-role-date { font-size: 14px; color: rgba(220,232,240,0.45); white-space: nowrap; flex-shrink: 0; line-height: 1.6; }
@@ -316,6 +342,14 @@
     @media (max-width: 300px) {
       .resume-role-line { flex-direction: row; flex-wrap: nowrap; align-items: baseline; gap: 16px; }
     }
+
+    /* Mobile (phones): 16px gutters from each card to the screen edge.
+       Overrides the 24px desktop gutters and the resume full-bleed cover mode. */
+    @media (max-width: 640px) {
+      section { left: 16px; right: 16px; bottom: 16px; }
+      #resume.resume-cover { left: 16px; right: 16px; bottom: 16px; border-radius: 12px; }
+      .subpage { left: 16px; right: 16px; bottom: 16px; }
+    }
   </style>
 </head>
 <body>
@@ -387,7 +421,7 @@
       <div class="hero">
         <p class="hero-eyebrow">UX/UI</p>
         <h1>Michael Young</h1>
-        <p>I believe design is an empathetic process. I try to apply that to everything I touch. Based in Pacific Grove, CA.</p>
+        <p>I believe design is an empathetic process.<br>Based in Pacific Grove, CA.</p>
         <a class="cta" data-section="portfolio">View Portfolio →</a>
       </div>
     </div>
@@ -415,7 +449,7 @@
       <p class="page-title">Contact</p>
       <div class="page-body">
         <div class="contact-box">
-          <h2>Reach out about anything</h2>
+          <h2>Feel free to reach out</h2>
           <form id="contact-form" novalidate>
             <input type="text" name="botcheck" id="contact-botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" />
             <div class="field">
@@ -447,11 +481,11 @@
           <!-- Left: main content -->
           <div class="resume-main">
 
-            <div class="resume-section">
+            <div class="resume-section resume-section--work">
               <p class="resume-section-label">design experience</p>
               <div class="resume-entry">
                 <p class="resume-company">Intuit | QuickBooks</p>
-                <div class="resume-role-line"><span class="resume-role-name">Senior Staff Product Designer</span><span class="resume-role-date">Feb '26–now</span></div>
+                <div class="resume-role-line"><span class="resume-role-name">Sr. Staff Product Designer</span><span class="resume-role-date">Feb '26–now</span></div>
                 <div class="resume-role-line"><span class="resume-role-name">Staff Product Designer</span><span class="resume-role-date">Feb '23–Feb '26</span></div>
                 <div class="resume-role-line"><span class="resume-role-name">Senior Product Designer</span><span class="resume-role-date">Aug '22–Feb '23</span></div>
                 <div class="resume-role-line"><span class="resume-role-name">Senior Content Designer</span><span class="resume-role-date">Aug '20–Aug '22</span></div>
@@ -479,19 +513,19 @@
               </div>
             </div>
 
-            <div class="resume-section">
+            <div class="resume-section resume-section--edu">
               <p class="resume-section-label">education</p>
               <div class="resume-entry">
                 <p class="resume-company">Teaching Credential</p>
-                <div class="resume-role-line"><span class="resume-role-name">SFSU</span><span class="resume-role-date">Dec '16–Jun '18</span></div>
+                <p class="resume-edu-meta"><span class="edu-school">SFSU</span><span class="edu-sep">|</span><span class="edu-date">Dec '16–Jun '18</span></p>
               </div>
               <div class="resume-entry">
                 <p class="resume-company">M.A. in English Literature</p>
-                <div class="resume-role-line"><span class="resume-role-name">CSU East Bay</span><span class="resume-role-date">Sep '11–'13</span></div>
+                <p class="resume-edu-meta"><span class="edu-school">CSU East Bay</span><span class="edu-sep">|</span><span class="edu-date">Sep '11–'13</span></p>
               </div>
               <div class="resume-entry">
                 <p class="resume-company">B.A. in English Literature</p>
-                <div class="resume-role-line"><span class="resume-role-name">CSU East Bay</span><span class="resume-role-date">Sep '06–'09</span></div>
+                <p class="resume-edu-meta"><span class="edu-school">CSU East Bay</span><span class="edu-sep">|</span><span class="edu-date">Sep '06–'09</span></p>
               </div>
             </div>
 
