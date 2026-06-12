@@ -289,9 +289,14 @@
     .lightbox-close { position: fixed; top: 24px; right: 24px; z-index: 201; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius-full); color: #fff; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease; }
     .lightbox-close:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
 
-    /* ── Resume: poetry sub-view ── */
+    /* ── Resume: poetry sub-view ──
+       #resume is a non-scrolling frame; each pane scrolls its own content so
+       the sticky header stays put and the off-screen poem is clipped. */
+    #resume { overflow: hidden; padding: 0; }
     .resume-slider { display: flex; gap: 48px; width: 100%; flex: 1; min-height: 0; transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1); }
-    .resume-pane, .poetry-pane { width: 100%; flex-shrink: 0; display: flex; flex-direction: column; }
+    .resume-pane, .poetry-pane { width: 100%; flex-shrink: 0; min-height: 0; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; padding: 24px 24px 0; scrollbar-width: thin; scrollbar-color: var(--stroke) transparent; }
+    .resume-pane::-webkit-scrollbar, .poetry-pane::-webkit-scrollbar { width: 4px; }
+    .resume-pane::-webkit-scrollbar-thumb, .poetry-pane::-webkit-scrollbar-thumb { background: var(--stroke); border-radius: 2px; }
     #resume.show-poetry .resume-slider { transform: translateX(calc(-100% - 48px)); }
     .poetry-header { display: flex; align-items: center; gap: 16px; flex-shrink: 0; position: sticky; top: -24px; z-index: 5; background: var(--bg); margin: -24px -24px 12px; padding: 24px 24px 12px; }
     .poetry-header .page-title { position: static; margin: 0; padding: 0; background: transparent; }
@@ -302,10 +307,11 @@
     .poem-nav { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: transparent; border: 1px solid var(--stroke); border-radius: var(--radius-md); color: var(--text-primary); transition: background 0.18s ease, border-color 0.18s ease, opacity 0.18s ease; }
     .poem-nav:hover:not(:disabled) { background: rgba(33, 150, 200, 0.12); border-color: var(--teal); }
     .poem-nav:disabled { opacity: 0.25; pointer-events: none; }
-    .poetry-body { flex: 1; display: flex; }
-    .poem-slider { display: flex; gap: 48px; width: 100%; flex: 1; transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1); }
-    .poem-page { width: 100%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-    .poem { max-width: 560px; }
+    .poetry-body { width: 100%; }
+    .poem-slider { display: flex; gap: 48px; width: 100%; align-items: flex-start; transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1); }
+    /* Poems start at the same offset below the header as the resume content (12px header margin + 68px) */
+    .poem-page { width: 100%; flex-shrink: 0; display: flex; align-items: flex-start; justify-content: center; padding-top: 68px; }
+    .poem { max-width: 560px; width: 100%; }
     .poem .poem-title { font-size: 18px; font-weight: 600; margin-bottom: 28px; }
     .poem p { white-space: pre-line; font-size: 14px; line-height: 1.9; margin-bottom: 24px; }
     .poem p:last-child { margin-bottom: 0; }
@@ -349,6 +355,7 @@
       section { left: 16px; right: 16px; bottom: 16px; }
       #resume.resume-cover { left: 16px; right: 16px; bottom: 16px; border-radius: 12px; }
       .subpage { left: 16px; right: 16px; bottom: 16px; }
+      .poem p { font-size: 12px; }
     }
   </style>
 </head>
@@ -586,7 +593,7 @@
               <button class="poem-nav" id="poem-prev" aria-label="Previous poem">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
-              <span class="poem-count" id="poem-count">1 of 2</span>
+              <span class="poem-count" id="poem-count">1 / 2</span>
               <button class="poem-nav" id="poem-next" aria-label="Next poem">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
@@ -817,6 +824,7 @@ in the middle of a lake.</p>
 
         /* Destination always opens at its default scroll position */
         cards[distance].scrollTop = 0;
+        cards[distance].querySelectorAll('.resume-pane, .poetry-pane').forEach(p => p.scrollTop = 0);
 
         /* Force reflow so snap positions are committed before transitions */
         void cards[distance].offsetHeight;
@@ -978,6 +986,7 @@ in the middle of a lake.</p>
         if (el.classList.contains(s.cls)) {
           el.classList.remove(s.cls);
           el.scrollTop = 0;            /* return the page to its default scroll */
+          el.querySelectorAll('.resume-pane, .poetry-pane').forEach(p => p.scrollTop = 0);
           closed = true;
         }
       });
@@ -994,6 +1003,7 @@ in the middle of a lake.</p>
       document.getElementById(s.openId).addEventListener('click', () => {
         const sec = document.getElementById(s.sectionId);
         sec.scrollTop = 0;            /* open the sub-page at the top */
+        sec.querySelectorAll('.resume-pane, .poetry-pane').forEach(p => p.scrollTop = 0);
         sec.classList.add(s.cls);
         history.pushState({ subpage: s.cls }, '');
       });
@@ -1020,7 +1030,7 @@ in the middle of a lake.</p>
     function updatePoemPager() {
       document.getElementById('poem-slider').style.transform =
         poemIndex === 0 ? '' : `translateX(calc(${-poemIndex} * (100% + 48px)))`;
-      document.getElementById('poem-count').textContent = (poemIndex + 1) + ' of ' + POEM_COUNT;
+      document.getElementById('poem-count').textContent = (poemIndex + 1) + ' / ' + POEM_COUNT;
       document.getElementById('poem-prev').disabled = poemIndex === 0;
       document.getElementById('poem-next').disabled = poemIndex === POEM_COUNT - 1;
     }
@@ -1119,7 +1129,12 @@ in the middle of a lake.</p>
       /* The scroller is the open sub-page overlay if there is one, else the active card */
       function activeScroller() {
         const sub = document.querySelector('.subpage.open');
-        return sub || document.querySelector('section.active');
+        if (sub) return sub;
+        const resume = document.getElementById('resume');
+        if (resume && resume.classList.contains('active')) {
+          return resume.querySelector(resume.classList.contains('show-poetry') ? '.poetry-pane' : '.resume-pane');
+        }
+        return document.querySelector('section.active');
       }
       function refresh() {
         const s = activeScroller();
@@ -1127,7 +1142,7 @@ in the middle of a lake.</p>
       }
       window._refreshScrollFab = refresh;   /* let navigation re-evaluate after a tab switch */
 
-      document.querySelectorAll('section, .subpage').forEach(s =>
+      document.querySelectorAll('section, .subpage, .resume-pane, .poetry-pane').forEach(s =>
         s.addEventListener('scroll', refresh, { passive: true }));
 
       fab.addEventListener('click', () => {
