@@ -228,33 +228,43 @@
     #contact .cta:hover { opacity: 1; transform: none; background: rgba(33, 150, 200, 0.12); border-color: var(--teal); }
 
     /* ── Resume ── */
-    .resume-layout { display: flex; gap: clamp(20px, calc((100vw - 780px) * 0.5), 120px); width: 100%; max-width: 760px; align-items: flex-start; }
-    .resume-main { flex: 1; min-width: 0; max-width: 420px; display: flex; flex-direction: column; gap: 32px; }
-    .resume-sidebar { width: 190px; flex-shrink: 0; display: flex; flex-direction: column; gap: 32px; }
-    .resume-section { display: flex; flex-direction: column; gap: 16px; }
-    .resume-section-label { font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-primary); opacity: 0.45; }
-    .resume-entry { display: flex; flex-direction: column; gap: 4px; }
-    .resume-company { font-size: 14px; font-weight: 700; color: var(--text-primary); line-height: 1.6; }
-    .resume-edu-meta { font-size: 14px; line-height: 1.6; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; white-space: nowrap; }
-    .resume-edu-meta .edu-school { color: var(--text-primary); }
-    .resume-edu-meta .edu-sep { display: none; color: rgba(220,232,240,0.45); margin: 0 8px; }
-    .resume-edu-meta .edu-date { color: rgba(220,232,240,0.45); flex-shrink: 0; }
-    /* Mobile/cramped (work dates stacked): education shows "School | Date" inline */
-    #resume.stack-dates .resume-edu-meta { justify-content: flex-start; gap: 0; }
-    #resume.stack-dates .resume-edu-meta .edu-sep { display: inline; }
-    /* Education: tighten degree → school|date to match the role→date gap */
-    .resume-section--edu .resume-company { margin-bottom: 0; }
-    .resume-section--edu .resume-entry { gap: 2px; }
-    /* Double the space between entries in design experience + education (label→entry stays 16px) */
-    .resume-section--work .resume-entry + .resume-entry,
-    .resume-section--edu .resume-entry + .resume-entry { margin-top: 16px; }
-    .resume-role-line { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; line-height: 1.6; }
-    .resume-role-name { font-size: 14px; color: var(--text-primary); line-height: 1.6; }
-    .resume-role-date { font-size: 14px; color: rgba(220,232,240,0.45); white-space: nowrap; flex-shrink: 0; line-height: 1.6; }
-    .resume-single { font-size: 14px; color: var(--text-primary); line-height: 1.6; }
-    .resume-sidebar-item { display: flex; flex-direction: column; gap: 4px; }
-    .resume-sidebar-item p { font-size: 14px; color: var(--text-primary); line-height: 1.6; }
+    .resume-summary { width: 100%; max-width: 720px; margin: 0 auto 36px; }
+    .resume-statement { font-size: var(--rfs); line-height: 1.7; color: var(--text-primary); }
+    @media (max-width: 540px) { .resume-bottom { flex-direction: column; gap: 32px; } }
+    .resume-content { width: 100%; max-width: 720px; margin: 0 auto; padding-bottom: 20px; display: flex; flex-direction: column; gap: 36px; }
+    .resume-bottom { display: flex; gap: 56px; align-items: flex-start; }
+    .resume-bottom > .resume-section { flex: 1; min-width: 0; }
+    .resume-section { display: flex; flex-direction: column; }
+    .resume-section-label { font-size: calc(var(--rfs) - 2px); letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-primary); opacity: 0.45; margin-bottom: 16px; }
+    /* "Title | date" inline pipe format (matches the Figma resume) */
+    .r-line .nm { color: var(--text-primary); }
+    .r-line .sep { color: rgba(220,232,240,0.3); margin: 0 7px; }
+    .r-line .dt { color: rgba(220,232,240,0.5); font-weight: 400; }
+    /* Experience: company → roles → bullets */
+    .xp + .xp { margin-top: 22px; }
+    .xp-company { font-size: var(--rfs); font-weight: 700; line-height: 1.5; }
+    .xp-role { margin-top: 16px; }
+    .xp-company + .xp-role { margin-top: 10px; }
+    .xp-role-title { font-size: var(--rfs); font-weight: 600; line-height: 1.5; }
+    .xp-bullets { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+    .xp-bullets li { position: relative; padding-left: 15px; font-size: var(--rfs); line-height: 1.5; color: rgba(220,232,240,0.6); }
+    .xp-bullets li::before { content: '•'; position: absolute; left: 2px; top: 0; color: var(--teal); }
+    /* Compact entries: secondary experience + education */
+    .r-entry + .r-entry { margin-top: 14px; }
+    .r-entry .r-name { font-size: var(--rfs); font-weight: 700; line-height: 1.5; color: var(--text-primary); }
+    .r-entry .r-sub { font-size: var(--rfs); line-height: 1.5; margin-top: 2px; color: rgba(220,232,240,0.6); }
+    .r-entry .r-sub .nm { color: rgba(220,232,240,0.75); }
+    .resume-sidebar-item { display: flex; flex-direction: column; gap: 5px; }
+    .resume-sidebar-item p { font-size: var(--rfs); color: var(--text-primary); line-height: 1.5; }
     .resume-sidebar-item .muted { color: rgba(220,232,240,0.45); }
+    /* Collapsible sections (experience, other experience) */
+    .collapse-toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: calc(100% + 16px); margin: 0 -8px; padding: 6px 8px 8px; background: none; border: none; border-bottom: 1px solid rgba(220,232,240,0.13); border-radius: 6px 6px 0 0; font-family: inherit; text-align: left; cursor: pointer; transition: background 0.16s ease; }
+    .collapse-toggle:hover { background: rgba(255,255,255,0.045); }
+    .collapse-toggle .chev { flex-shrink: 0; transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1); }
+    .collapsible.collapsed .collapse-toggle .chev { transform: rotate(-90deg); }
+    .collapse-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.44s cubic-bezier(0.8, 0, 0.16, 1); }
+    .collapse-body > * { min-height: 0; overflow: hidden; padding-top: 16px; }
+    .collapsible.collapsed .collapse-body { grid-template-rows: 0fr; }
     .poetry-link, .sublink { display: inline-flex; align-items: center; gap: 4px; color: var(--text-primary); cursor: pointer; transition: color 0.18s ease; }
     .poetry-link:hover, .sublink:hover { color: var(--teal); }
     .poetry-link svg, .sublink svg { width: 12px; height: 12px; flex-shrink: 0; transition: transform 0.18s ease; }
@@ -292,9 +302,11 @@
     /* ── Resume: poetry sub-view ──
        #resume is a non-scrolling frame; each pane scrolls its own content so
        the sticky header stays put and the off-screen poem is clipped. */
-    #resume { overflow: hidden; padding: 0; }
+    #resume { overflow: hidden; padding: 0; --rfs: 16px; }
+    @media (max-width: 767px) { #resume { --rfs: 14px; } }
+    @media (max-width: 640px) { #resume { --rfs: 12px; } }
     .resume-slider { display: flex; gap: 48px; width: 100%; flex: 1; min-height: 0; transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1); }
-    .resume-pane, .poetry-pane { width: 100%; flex-shrink: 0; min-height: 0; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; padding: 24px 24px 0; scrollbar-width: thin; scrollbar-color: var(--stroke) transparent; }
+    .resume-pane, .poetry-pane { width: 100%; flex-shrink: 0; min-height: 0; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable; padding: 24px 24px 0; scrollbar-width: thin; scrollbar-color: var(--stroke) transparent; }
     .resume-pane::-webkit-scrollbar, .poetry-pane::-webkit-scrollbar { width: 4px; }
     .resume-pane::-webkit-scrollbar-thumb, .poetry-pane::-webkit-scrollbar-thumb { background: var(--stroke); border-radius: 2px; }
     #resume.show-poetry .resume-slider { transform: translateX(calc(-100% - 48px)); }
@@ -483,102 +495,110 @@
         <div class="resume-pane">
       <p class="page-title">Resume</p>
       <div class="page-body">
-        <div class="resume-layout">
-
-          <!-- Left: main content -->
-          <div class="resume-main">
-
-            <div class="resume-section resume-section--work">
-              <p class="resume-section-label">design experience</p>
-              <div class="resume-entry">
-                <p class="resume-company">Intuit | QuickBooks</p>
-                <div class="resume-role-line"><span class="resume-role-name">Sr. Staff Product Designer</span><span class="resume-role-date">Feb '26–now</span></div>
-                <div class="resume-role-line"><span class="resume-role-name">Staff Product Designer</span><span class="resume-role-date">Feb '23–Feb '26</span></div>
-                <div class="resume-role-line"><span class="resume-role-name">Senior Product Designer</span><span class="resume-role-date">Aug '22–Feb '23</span></div>
-                <div class="resume-role-line"><span class="resume-role-name">Senior Content Designer</span><span class="resume-role-date">Aug '20–Aug '22</span></div>
-                <div class="resume-role-line"><span class="resume-role-name">Content Designer</span><span class="resume-role-date">Feb '19–Aug '20</span></div>
-              </div>
-              <div class="resume-entry">
-                <p class="resume-company">ReachOut USA</p>
-                <div class="resume-role-line"><span class="resume-role-name">Program Manager & Designer</span><span class="resume-role-date">Aug '13–Apr '15</span></div>
-              </div>
-              <div class="resume-entry">
-                <p class="resume-company">Arroyo Literary Magazine</p>
-                <div class="resume-role-line"><span class="resume-role-name">Design Editor</span><span class="resume-role-date">Aug '10–Apr '12</span></div>
-              </div>
-              <div class="resume-entry">
-                <p class="resume-company">Freelance design</p>
-                <div class="resume-role-line"><span class="resume-role-name">UX/UI, graphic, & video</span><span class="resume-role-date">May '03–now</span></div>
-              </div>
-            </div>
-
-            <div class="resume-section">
-              <p class="resume-section-label">other experience</p>
-              <div class="resume-sidebar-item">
-                <p class="resume-single">High School English Teacher</p>
-                <p class="resume-single">Musician on Pure Noise Records</p>
-              </div>
-            </div>
-
-            <div class="resume-section resume-section--edu">
-              <p class="resume-section-label">education</p>
-              <div class="resume-entry">
-                <p class="resume-company">Teaching Credential</p>
-                <p class="resume-edu-meta"><span class="edu-school">SFSU</span><span class="edu-sep">|</span><span class="edu-date">Dec '16–Jun '18</span></p>
-              </div>
-              <div class="resume-entry">
-                <p class="resume-company">M.A. in English Literature</p>
-                <p class="resume-edu-meta"><span class="edu-school">CSU East Bay</span><span class="edu-sep">|</span><span class="edu-date">Sep '11–'13</span></p>
-              </div>
-              <div class="resume-entry">
-                <p class="resume-company">B.A. in English Literature</p>
-                <p class="resume-edu-meta"><span class="edu-school">CSU East Bay</span><span class="edu-sep">|</span><span class="edu-date">Sep '06–'09</span></p>
-              </div>
-            </div>
-
+        <div class="resume-summary collapsible">
+          <button class="resume-section-label collapse-toggle" type="button" aria-expanded="true">summary<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="collapse-body">
+            <p class="resume-statement">Product Designer with 20+ years experience in design driving measurable outcomes across QuickBooks—from $3.7M in incremental revenue to 44% retention lifts—with a customer-problem first mindset and growing focus on AI-first design workflows.</p>
           </div>
+        </div>
+        <div class="resume-content">
 
-          <!-- Right: sidebar -->
-          <div class="resume-sidebar">
-
-            <div class="resume-section">
-              <p class="resume-section-label">skill set</p>
-              <div class="resume-sidebar-item">
-                <p>Product design</p>
-                <p>User interface</p>
-                <p>User experience</p>
-                <p>Interaction design</p>
-                <p>Visual design</p>
-                <p>Content design</p>
-                <p>Design research</p>
+            <div class="resume-section collapsible">
+              <button class="resume-section-label collapse-toggle" type="button" aria-expanded="true">Recent experience<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <div class="collapse-body">
+              <div class="xp">
+                <p class="xp-company r-line"><span class="nm">Intuit QuickBooks</span><span class="sep">|</span><span class="dt">Feb '19–now</span></p>
+                <div class="xp-role">
+                  <p class="xp-role-title r-line"><span class="nm">Sr. Staff Product Designer</span><span class="sep">|</span><span class="dt">Dec '24–now</span></p>
+                  <ul class="xp-bullets">
+                    <li>Current IC design lead on QuickBooks shared experiences team</li>
+                    <li>Leading redesign of QuickBooks navigation and onboarding experiences</li>
+                    <li>Championing AI-first design with 80-90% spent designing in tools like Cursor/Claude</li>
+                  </ul>
+                </div>
+                <div class="xp-role">
+                  <p class="xp-role-title r-line"><span class="nm">Staff Product Designer</span><span class="sep">|</span><span class="dt">Dec '22–Dec '24</span></p>
+                  <ul class="xp-bullets">
+                    <li>Led design launch for Tap to Pay on iPhone and other QuickBooks Payments work</li>
+                    <li>Achieved $3.7M in incremental annualized revenue on findability and feature gap work</li>
+                    <li>Frequent component contributor to design systems to help scale solutions</li>
+                  </ul>
+                </div>
+                <div class="xp-role">
+                  <p class="xp-role-title r-line"><span class="nm">Senior Product Designer</span><span class="sep">|</span><span class="dt">Dec '20–Dec '22</span></p>
+                  <ul class="xp-bullets">
+                    <li>Led design on 0-to-1 mobile-first, stand-alone payments offering</li>
+                    <li>Delivered ~3x increase in signup-to-activation rates and 44% retention lift on the QuickBooks Money mobile product</li>
+                    <li>Winner of “Dare Greatly” award for quality raising work across mobile experiences</li>
+                  </ul>
+                </div>
+                <div class="xp-role">
+                  <p class="xp-role-title r-line"><span class="nm">Content Designer</span><span class="sep">|</span><span class="dt">Feb '19–Dec '20</span></p>
+                  <ul class="xp-bullets">
+                    <li>Redesigned Intuit’s entire content guidelines during COVID-19</li>
+                    <li>Early multi-disciplinary designer across content, interaction, and visual</li>
+                  </ul>
+                </div>
+              </div>
               </div>
             </div>
 
-            <div class="resume-section">
-              <p class="resume-section-label">design tools</p>
-              <div class="resume-sidebar-item">
-                <p>Figma</p>
-                <p>Adobe Ps, Pr, Ai</p>
-                <p>Claude</p>
-                <p>Cursor</p>
-                <p>Lovable</p>
-                <p>Procreate</p>
-                <p>Sketch</p>
-                <p>Pencil <span class="muted">(lofi fav.)</span></p>
+            <div class="resume-section collapsible">
+              <button class="resume-section-label collapse-toggle" type="button" aria-expanded="true">Past Experience<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <div class="collapse-body">
+              <div class="collapse-inner">
+              <div class="r-entry">
+                <p class="r-name r-line"><span class="nm">ReachOut USA</span><span class="sep">|</span><span class="dt">Aug '13–Apr '15</span></p>
+                <p class="r-sub">Program Manager &amp; Designer</p>
+              </div>
+              <div class="r-entry">
+                <p class="r-name r-line"><span class="nm">Arroyo Literary Magazine</span><span class="sep">|</span><span class="dt">Aug '10–Apr '12</span></p>
+                <p class="r-sub">Design Editor</p>
+              </div>
+              <div class="r-entry">
+                <p class="r-name r-line"><span class="nm">Freelance design</span><span class="sep">|</span><span class="dt">May '03–now</span></p>
+                <p class="r-sub">UI, graphic, &amp; video</p>
+              </div>
+              <div class="r-entry">
+                <p class="r-name r-line"><span class="nm">H.S. English Teacher</span><span class="sep">|</span><span class="dt">Dec '16–Jun '18</span></p>
+              </div>
+              <div class="r-entry">
+                <p class="r-name r-line"><span class="nm">Professional Musician</span><span class="sep">|</span><span class="dt">Dec '11–Dec '15</span></p>
+              </div>
+              </div>
               </div>
             </div>
 
-            <div class="resume-section">
-              <p class="resume-section-label">interests</p>
-              <div class="resume-sidebar-item">
-                <p>Woodworking</p>
-                <p>Analogue music</p>
-                <p>Fly fishing</p>
-                <p><a class="poetry-link" id="poetry-link">Poetry<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+            <div class="resume-bottom">
+
+              <div class="resume-section">
+                <p class="resume-section-label">education</p>
+                <div class="r-entry">
+                  <p class="r-name">Teaching Credential</p>
+                  <p class="r-sub r-line"><span class="nm">SFSU</span><span class="sep">|</span><span class="dt">Dec '16–Jun '18</span></p>
+                </div>
+                <div class="r-entry">
+                  <p class="r-name">M.A. in English Literature</p>
+                  <p class="r-sub r-line"><span class="nm">CSU East Bay</span><span class="sep">|</span><span class="dt">Sep '11–'13</span></p>
+                </div>
+                <div class="r-entry">
+                  <p class="r-name">B.A. in English Literature</p>
+                  <p class="r-sub r-line"><span class="nm">CSU East Bay</span><span class="sep">|</span><span class="dt">Sep '06–'09</span></p>
+                </div>
               </div>
+
+              <div class="resume-section">
+                <p class="resume-section-label">interests</p>
+                <div class="resume-sidebar-item">
+                  <p>Woodworking</p>
+                  <p>Analogue music</p>
+                  <p>Fly fishing</p>
+                  <p><a class="poetry-link" id="poetry-link">Poetry<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+                </div>
+              </div>
+
             </div>
 
-          </div>
         </div>
       </div>
         </div>
@@ -1152,6 +1172,15 @@ in the middle of a lake.</p>
 
       refresh();
     })();
+
+    /* ── Collapsible resume sections ── */
+    document.querySelectorAll('.collapse-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sec = btn.closest('.collapsible');
+        const collapsed = sec.classList.toggle('collapsed');
+        btn.setAttribute('aria-expanded', String(!collapsed));
+      });
+    });
   </script>
 
   <script>
