@@ -173,6 +173,8 @@
     }
     .scroll-top.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
     .scroll-top:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
+    /* The QB case-study deck has its own 1/N nav, so suppress the back-to-top FAB there */
+    body.deck-open .scroll-top { display: none; }
 
     /* WebKit scrollbar */
     section::-webkit-scrollbar { width: 4px; }
@@ -261,8 +263,8 @@
     .resume-sidebar-item p { font-size: var(--rfs); color: var(--text-primary); line-height: 1.5; }
     .resume-sidebar-item .muted { color: rgba(220,232,240,0.45); }
     /* Collapsible sections (experience, other experience) */
-    .collapse-toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: calc(100% + 16px); margin: 0 -8px; padding: 6px 8px 8px; background: none; border: none; border-bottom: 1px solid rgba(220,232,240,0.13); border-radius: 6px 6px 0 0; font-family: inherit; text-align: left; cursor: pointer; transition: background 0.16s ease; }
-    .collapse-toggle:hover { background: rgba(255,255,255,0.045); }
+    .collapse-toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: calc(100% + 16px); margin: 0 -8px; padding: 6px 8px 8px; background: none; border: none; border-bottom: 1px solid rgba(220,232,240,0.13); border-radius: 6px 6px 0 0; font-family: inherit; text-align: left; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: background 0.16s ease; }
+    @media (hover: hover) { .collapse-toggle:hover { background: rgba(255,255,255,0.045); } }
     .collapse-toggle .chev { flex-shrink: 0; transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1); }
     .collapsible.collapsed .collapse-toggle .chev { transform: rotate(-90deg); }
     .collapse-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.44s cubic-bezier(0.8, 0, 0.16, 1); }
@@ -346,7 +348,16 @@
        the sticky header stays put and the off-screen poem is clipped. */
     #resume { overflow: hidden; padding: 0; --rfs: 16px; }
     @media (max-width: 767px) { #resume { --rfs: 14px; } }
-    @media (max-width: 640px) { #resume { --rfs: 12px; } }
+    @media (max-width: 640px) {
+      #resume { --rfs: 14px; }
+      .r-line .sep { display: none; }
+      /* Company / org names: keep the date on the same row, pushed to the right */
+      .r-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+      .r-line .dt { white-space: nowrap; }
+      /* Role titles: drop the date onto its own line, under the title */
+      .xp-role-title.r-line { display: block; }
+      .xp-role-title.r-line .dt { display: block; white-space: normal; margin-top: 1px; }
+    }
     .resume-slider { display: flex; gap: 48px; width: 100%; flex: 1; min-height: 0; transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1); }
     .resume-pane, .poetry-pane { width: 100%; flex-shrink: 0; min-height: 0; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable; padding: 24px 24px 0; scrollbar-width: thin; scrollbar-color: var(--stroke) transparent; }
     .resume-pane::-webkit-scrollbar, .poetry-pane::-webkit-scrollbar { width: 4px; }
@@ -410,6 +421,13 @@
       #resume.resume-cover { left: 16px; right: 16px; bottom: 16px; border-radius: 12px; }
       .subpage { left: 16px; right: 16px; bottom: 16px; }
       .poem p { font-size: 12px; }
+      /* Tighten the oversized desktop gap below the page title on phones */
+      #portfolio .page-body, #resume .page-body { margin-top: 20px; }
+      /* Shrink long sub-page header titles (e.g. "QuickBooks Mobile") so they don't crop */
+      .poetry-header .page-title { font-size: 23px; }
+      .qb-section-title { font-size: 19px; }
+      /* Home tagline flows as one sentence (no forced break) on phones */
+      .hero-break { display: none; }
     }
   </style>
 </head>
@@ -482,7 +500,7 @@
       <div class="hero">
         <p class="hero-eyebrow">UX/UI</p>
         <h1>Michael Young</h1>
-        <p>I believe design is an empathetic process.<br>Based in Pacific Grove, CA.</p>
+        <p>I believe design is an empathetic process. <br class="hero-break">Based in Pacific Grove, CA.</p>
         <a class="cta" data-section="portfolio">View Portfolio →</a>
       </div>
     </div>
@@ -1147,7 +1165,11 @@ in the middle of a lake.</p>
         }
       });
       /* Once the sub-page has slid off-screen, reset its inner state to default */
-      if (closed) setTimeout(() => { poemIndex = 0; updatePoemPager(); if (window._resetDeck) window._resetDeck(); }, SUBPAGE_DUR + 40);
+      if (closed) {
+        document.body.classList.remove('deck-open');
+        if (window._refreshScrollFab) window._refreshScrollFab();
+        setTimeout(() => { poemIndex = 0; updatePoemPager(); if (window._resetDeck) window._resetDeck(); }, SUBPAGE_DUR + 40);
+      }
       return closed;
     }
 
@@ -1160,6 +1182,8 @@ in the middle of a lake.</p>
       sec.scrollTop = 0;            /* open the sub-page at the top */
       sec.querySelectorAll('.resume-pane, .poetry-pane').forEach(p => p.scrollTop = 0);
       sec.classList.add(s.cls);
+      document.body.classList.toggle('deck-open', sec.classList.contains('deck'));
+      if (window._refreshScrollFab) window._refreshScrollFab();
       history.pushState({ subpage: s.cls }, '');
     }
 
@@ -1290,43 +1314,10 @@ in the middle of a lake.</p>
       }
     });
 
-    /* ── Resume: coordinate date stacking ──
-       In one-column mode, if ANY role line is too tight to keep its date
-       inline, stack the date under the title for ALL of them so the column
-       reads consistently. Above 820px (two columns) or at/below 300px
-       (let the screen cover the overflow) we leave the rows inline. */
-    (function () {
-      const resume = document.getElementById('resume');
-      if (!resume) return;
-      const main = resume.querySelector('.resume-main');
-
-      function update() {
-        const vw = window.innerWidth;
-        if (vw > 820) { resume.classList.remove('stack-dates', 'resume-cover'); return; }
-        if (vw <= 300) {
-          /* Below 300: dates back inline, but still no wrap — screen covers it */
-          resume.classList.remove('stack-dates');
-          resume.classList.add('resume-cover');
-          return;
-        }
-        /* Measure in the un-stacked, un-covered state so the read is consistent */
-        resume.classList.remove('stack-dates', 'resume-cover');
-        let anyWrapped = false;
-        main.querySelectorAll('.resume-role-line').forEach(line => {
-          const name = line.querySelector('.resume-role-name');
-          const date = line.querySelector('.resume-role-date');
-          if (name && date && date.offsetTop > name.offsetTop + 1) anyWrapped = true;
-        });
-        /* Once any date drops, stack them all AND switch to cover mode so no
-           text wraps from here down — overflow is clipped by the screen. */
-        resume.classList.toggle('stack-dates', anyWrapped);
-        resume.classList.toggle('resume-cover', anyWrapped);
-      }
-
-      window.addEventListener('resize', update);
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(update);
-      update();
-    })();
+    /* Resume date stacking is handled purely in CSS now (see the ≤640px
+       media query): company lines keep the date inline/right, role titles
+       drop it underneath. The old measuring script referenced markup that no
+       longer exists and threw on mobile, so it was removed. */
 
     /* ── Back-to-top FAB ──
        Appears once the active card is scrolled (content slides under the
