@@ -199,6 +199,9 @@
     .card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.5); transform: translateY(-3px); }
     .card-thumb { width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, var(--teal-light), var(--stroke)); display: flex; align-items: center; justify-content: center; color: var(--teal); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; overflow: hidden; }
     .card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* ReachOut: show the full logo square centered, never cropped */
+    #reachout-link .card-thumb { background: #0d1519; }
+    #reachout-link .card-thumb img { object-fit: contain; }
     .card-link { cursor: pointer; }
     .card-body { padding: 16px; }
     .card-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
@@ -298,6 +301,45 @@
     .lightbox.open img { transform: scale(1); }
     .lightbox-close { position: fixed; top: 24px; right: 24px; z-index: 201; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius-full); color: #fff; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease; }
     .lightbox-close:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
+
+    /* ── QuickBooks Mobile case-study (scrolling page) ── */
+    .subpage.deck { overflow: hidden; display: flex; flex-direction: column; }
+    .qb-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-gutter: stable; padding: 0 24px; scrollbar-width: thin; scrollbar-color: var(--stroke) transparent; }
+    .qb-scroll::-webkit-scrollbar { width: 4px; }
+    .qb-scroll::-webkit-scrollbar-thumb { background: var(--stroke); border-radius: 2px; }
+    .qb-section { padding-bottom: 72px; }
+    .qb-section:last-child { padding-bottom: 96px; }
+    .qb-section-title { position: sticky; top: 0; z-index: 5; background: var(--bg); margin: 0 -24px; padding: 16px 24px; font-size: 22px; font-weight: 600; color: var(--text-primary); border-bottom: 1px solid rgba(220,232,240,0.1); }
+    .qb-row { display: flex; gap: 48px; align-items: center; padding-top: 36px; }
+    .qb-section:nth-child(even) .qb-row { flex-direction: row-reverse; }
+    .qb-text { flex: 1 1 0; min-width: 0; }
+    .qb-body { font-size: 15px; line-height: 1.7; color: var(--text-primary); margin: 0 0 20px; }
+    .qb-bullets { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 11px; }
+    .qb-bullets li { position: relative; padding-left: 18px; font-size: 14px; line-height: 1.55; color: rgba(220,232,240,0.72); }
+    .qb-bullets li::before { content: '•'; position: absolute; left: 2px; color: var(--teal); }
+    .qb-img { flex: 1 1 0; min-width: 0; display: flex; align-items: center; justify-content: center; }
+    .qb-img img { width: 100%; height: auto; max-height: 62vh; object-fit: contain; display: block; background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 6px 40px rgba(0,0,0,0.4); }
+    @media (max-width: 640px) {
+      .qb-row, .qb-section:nth-child(even) .qb-row { flex-direction: column; gap: 28px; }
+    }
+    .deck-nav { position: absolute; bottom: 18px; right: 18px; display: flex; align-items: center; gap: 8px; z-index: 6; padding: 5px 6px; background: rgba(13,21,25,0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.14); border-radius: 9999px; }
+    .deck-count { font-size: 13px; color: #fff; opacity: 0.75; white-space: nowrap; padding: 0 6px; }
+    .deck-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; border-radius: 9999px; color: #fff; cursor: pointer; transition: background 0.18s ease, opacity 0.18s ease; }
+    .deck-btn:hover:not(:disabled) { background: rgba(255,255,255,0.14); }
+    .deck-btn:disabled { opacity: 0.28; pointer-events: none; }
+
+    /* ── Passkey modal (locks the QuickBooks portfolio sections) ── */
+    .passkey-overlay { position: fixed; inset: 0; z-index: 250; display: flex; align-items: center; justify-content: center; background: rgba(10,16,22,0.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); opacity: 0; visibility: hidden; transition: opacity 0.22s ease, visibility 0.22s ease; }
+    .passkey-overlay.open { opacity: 1; visibility: visible; }
+    .passkey-card { width: min(92vw, 340px); background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 32px 28px 28px; text-align: center; transform: translateY(8px) scale(0.98); transition: transform 0.22s ease; }
+    .passkey-overlay.open .passkey-card { transform: none; }
+    .passkey-card h3 { margin: 0 0 22px; font-size: 18px; font-weight: 600; color: var(--text-primary); }
+    .pk-fields { display: flex; gap: 12px; justify-content: center; }
+    .pk-digit { width: 46px; height: 56px; text-align: center; font-family: 'Inconsolata', monospace; font-size: 24px; color: var(--text-primary); background: rgba(0,0,0,0.25); border: 1px solid var(--stroke); border-radius: var(--radius-md); outline: none; transition: border-color 0.18s, background 0.18s; }
+    .pk-digit:focus { border-color: var(--teal); background: rgba(0,0,0,0.35); }
+    .pk-digit.pk-bad { border-color: #e0915a; }
+    .pk-error { margin: 16px 0 0; font-size: 12px; line-height: 1.4; color: #e0915a; min-height: 14px; opacity: 0; transition: opacity 0.18s; }
+    .pk-error.show { opacity: 1; }
 
     /* ── Resume: poetry sub-view ──
        #resume is a non-scrolling frame; each pane scrolls its own content so
@@ -454,8 +496,8 @@
           <p>Using this portfolio as an example of how I think about UI/UX, things like responsive behavior, navigation, and interaction.</p>
         </div>
         <div class="grid">
-          <div class="card card-link" id="reachout-link"><div class="card-thumb"><img src="reachout/1.jpg" alt="ReachOut USA"></div><div class="card-body"><p class="card-title">ReachOut USA</p><span class="card-tag">Branding</span></div></div>
-          <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">QuickBooks Mobile</p><span class="card-tag">UX/UI</span></div></div>
+          <div class="card card-link" id="reachout-link"><div class="card-thumb"><img src="reachout/12.jpg" alt="ReachOut USA"></div><div class="card-body"><p class="card-title">ReachOut USA</p><span class="card-tag">Branding</span></div></div>
+          <div class="card card-link" id="qbmobile-link"><div class="card-thumb">CASE STUDY</div><div class="card-body"><p class="card-title">QuickBooks Mobile</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">QuickBooks Payments</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">QuickBooks Navigation</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">Project 5</p><span class="card-tag">UX/UI</span></div></div>
@@ -498,7 +540,7 @@
         <div class="resume-summary collapsible">
           <button class="resume-section-label collapse-toggle" type="button" aria-expanded="true">summary<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <div class="collapse-body">
-            <p class="resume-statement">Product Designer with 20+ years experience in design driving measurable outcomes across QuickBooks—from $3.7M in incremental revenue to 44% retention lifts—with a customer-problem first mindset and growing focus on AI-first design workflows.</p>
+            <p class="resume-statement">Product Designer with 20+ years experience in design driving measurable outcomes across QuickBooks—from $3.7M in incremental revenue to 44% retention lifts—with a customer-problem first mindset and growing focus on AI design workflows.</p>
           </div>
         </div>
         <div class="resume-content">
@@ -689,19 +731,19 @@ in the middle of a lake.</p>
       <p class="page-title">ReachOut USA</p>
     </div>
     <div class="reachout-grid">
-      <figure class="reachout-item"><img src="reachout/1.jpg" loading="lazy" alt="ReachOut 1"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
-      <figure class="reachout-item"><img src="reachout/2.jpg" loading="lazy" alt="ReachOut 2"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
-      <figure class="reachout-item"><img src="reachout/3.jpg" loading="lazy" alt="ReachOut 3"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
-      <figure class="reachout-item"><img src="reachout/4.jpg" loading="lazy" alt="ReachOut 4"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
-      <figure class="reachout-item"><img src="reachout/5.jpg" loading="lazy" alt="ReachOut 5"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
-      <figure class="reachout-item"><img src="reachout/6.jpg" loading="lazy" alt="ReachOut 6"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
-      <figure class="reachout-item"><img src="reachout/7.jpg" loading="lazy" alt="ReachOut 7"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
-      <figure class="reachout-item"><img src="reachout/8.jpg" loading="lazy" alt="ReachOut 8"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
-      <figure class="reachout-item"><img src="reachout/9.jpg" loading="lazy" alt="ReachOut 9"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
-      <figure class="reachout-item"><img src="reachout/10.jpg" loading="lazy" alt="ReachOut 10"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
-      <figure class="reachout-item"><img src="reachout/12.jpg" loading="lazy" alt="ReachOut 12"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
-      <figure class="reachout-item"><img src="reachout/15.jpg" loading="lazy" alt="ReachOut 15"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
-      <figure class="reachout-item"><img src="reachout/16.jpg" loading="lazy" alt="ReachOut 16"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
+      <figure class="reachout-item"><img src="reachout/1.jpg" alt="ReachOut 1"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
+      <figure class="reachout-item"><img src="reachout/2.jpg" alt="ReachOut 2"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
+      <figure class="reachout-item"><img src="reachout/3.jpg" alt="ReachOut 3"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
+      <figure class="reachout-item"><img src="reachout/4.jpg" alt="ReachOut 4"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
+      <figure class="reachout-item"><img src="reachout/5.jpg" alt="ReachOut 5"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
+      <figure class="reachout-item"><img src="reachout/6.jpg" alt="ReachOut 6"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
+      <figure class="reachout-item"><img src="reachout/7.jpg" alt="ReachOut 7"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
+      <figure class="reachout-item"><img src="reachout/8.jpg" alt="ReachOut 8"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
+      <figure class="reachout-item"><img src="reachout/9.jpg" alt="ReachOut 9"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
+      <figure class="reachout-item"><img src="reachout/10.jpg" alt="ReachOut 10"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
+      <figure class="reachout-item"><img src="reachout/12.jpg" alt="ReachOut 12"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
+      <figure class="reachout-item"><img src="reachout/15.jpg" alt="ReachOut 15"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
+      <figure class="reachout-item"><img src="reachout/16.jpg" alt="ReachOut 16"><div class="reachout-scrim"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 12C2.5 12 6 5.5 12 5.5C18 5.5 21.5 12 21.5 12C21.5 12 18 18.5 12 18.5C6 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></div></figure>
     </div>
   </div>
 
@@ -713,10 +755,103 @@ in the middle of a lake.</p>
     <img id="lightbox-img" src="" alt="">
   </div>
 
+  <!-- QuickBooks Mobile case-study slide deck -->
+  <div class="subpage deck" id="qbmobile-view">
+    <div class="poetry-header">
+      <button class="poetry-back" id="qbmobile-back" aria-label="Back to portfolio">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <p class="page-title">QuickBooks Mobile</p>
+    </div>
+    <div class="qb-scroll" id="qb-scroll">
+      <div class="qb-section">
+        <p class="qb-section-title">QBM payments</p>
+        <div class="qb-row">
+          <div class="qb-text">
+            <p class="qb-body"><strong>Ask:</strong> Increase mobile TPV.<br><strong>Approach:</strong> Listen to customers, iterate, listen to customers, iterate, test.</p>
+            <ul class="qb-bullets">
+              <li>F.M.H.</li>
+              <li>Feature purchasing</li>
+              <li>Comic strip reading</li>
+              <li>Prototype tasks via lofi designs</li>
+            </ul>
+          </div>
+          <div class="qb-img"><img src="qbmobile/img1.png" alt="Lofi payment flow sketches"></div>
+        </div>
+      </div>
+      <div class="qb-section">
+        <p class="qb-section-title">Learnings</p>
+        <div class="qb-row">
+          <div class="qb-text">
+            <p class="qb-body">What testing surfaced about how merchants actually take payments on mobile.</p>
+            <ul class="qb-bullets">
+              <li>Payments is a primary mobile use case but not reflective in the current IA</li>
+              <li>Users can't take a quick payment</li>
+              <li>Paying open invoices hides features and asks questions in the wrong order</li>
+            </ul>
+          </div>
+          <div class="qb-img"><img src="qbmobile/img2.png" alt="Invoice and payment screens"></div>
+        </div>
+      </div>
+      <div class="qb-section">
+        <p class="qb-section-title">Solutions</p>
+        <div class="qb-row">
+          <div class="qb-text">
+            <p class="qb-body">Restructure payments around customers' mental models and remove friction from taking a payment.</p>
+            <ul class="qb-bullets">
+              <li>Make payments a primary navigation item to reflect customers' mental models</li>
+              <li>Create an easy way to take payment</li>
+              <li>Reorder IA and expose all payment capabilities in one expanded screen</li>
+            </ul>
+          </div>
+          <div class="qb-img"><img src="qbmobile/img3.png" alt="Redesigned payment screens"></div>
+        </div>
+      </div>
+      <div class="qb-section">
+        <p class="qb-section-title">Impact</p>
+        <div class="qb-row">
+          <div class="qb-text">
+            <p class="qb-body">Shipped on iOS &amp; Android: receive payment on invoice, new sale + tap to pay, and a dedicated Sales tab.</p>
+            <ul class="qb-bullets">
+              <li>$3.7M in incremental annualized revenue</li>
+              <li>Sales tab most visited screen in QBM (still live with new nav)</li>
+              <li>Newer merchants have higher engagement (ITC as measured by TPV)</li>
+              <li>4 new components contributed to design systems</li>
+            </ul>
+          </div>
+          <div class="qb-img"><img src="qbmobile/img4.png" alt="Shipped dashboard and charge screens"></div>
+        </div>
+      </div>
+    </div>
+    <div class="deck-nav">
+      <span class="deck-count" id="deck-count">1 / 4</span>
+      <button class="deck-btn" id="deck-prev" aria-label="Previous section">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 15L12 9L18 15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="deck-btn" id="deck-next" aria-label="Next section">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
   <!-- Back-to-top FAB (appears once a card is scrolled) -->
   <button class="scroll-top" id="scroll-top" aria-label="Back to top">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
+
+  <!-- Passkey modal: gates the locked QuickBooks portfolio sections -->
+  <div class="passkey-overlay" id="passkey-modal" role="dialog" aria-modal="true" aria-labelledby="pk-title">
+    <div class="passkey-card">
+      <h3 id="pk-title">Enter passkey</h3>
+      <div class="pk-fields">
+        <input class="pk-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Passkey digit 1">
+        <input class="pk-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Passkey digit 2">
+        <input class="pk-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Passkey digit 3">
+        <input class="pk-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Passkey digit 4">
+      </div>
+      <p class="pk-error" id="pk-error">Wrong passkey</p>
+    </div>
+  </div>
 
   <script>
     /* ── Canvas background animation ── */
@@ -993,6 +1128,7 @@ in the middle of a lake.</p>
     const SUBPAGES = [
       { sectionId: 'resume', cls: 'show-poetry', openId: 'poetry-link', backId: 'poetry-back' },
       { sectionId: 'reachout-view', cls: 'open', openId: 'reachout-link', backId: 'reachout-back' },
+      { sectionId: 'qbmobile-view', cls: 'open', openId: 'qbmobile-link', backId: 'qbmobile-back', locked: true },
     ];
     const SUBPAGE_DUR = 440; /* matches the .resume-slider transition */
 
@@ -1011,7 +1147,7 @@ in the middle of a lake.</p>
         }
       });
       /* Once the sub-page has slid off-screen, reset its inner state to default */
-      if (closed) setTimeout(() => { poemIndex = 0; updatePoemPager(); }, SUBPAGE_DUR + 40);
+      if (closed) setTimeout(() => { poemIndex = 0; updatePoemPager(); if (window._resetDeck) window._resetDeck(); }, SUBPAGE_DUR + 40);
       return closed;
     }
 
@@ -1019,13 +1155,18 @@ in the middle of a lake.</p>
       return SUBPAGES.some(s => document.getElementById(s.sectionId).classList.contains(s.cls));
     }
 
+    function openSubpage(s) {
+      const sec = document.getElementById(s.sectionId);
+      sec.scrollTop = 0;            /* open the sub-page at the top */
+      sec.querySelectorAll('.resume-pane, .poetry-pane').forEach(p => p.scrollTop = 0);
+      sec.classList.add(s.cls);
+      history.pushState({ subpage: s.cls }, '');
+    }
+
     SUBPAGES.forEach(s => {
       document.getElementById(s.openId).addEventListener('click', () => {
-        const sec = document.getElementById(s.sectionId);
-        sec.scrollTop = 0;            /* open the sub-page at the top */
-        sec.querySelectorAll('.resume-pane, .poetry-pane').forEach(p => p.scrollTop = 0);
-        sec.classList.add(s.cls);
-        history.pushState({ subpage: s.cls }, '');
+        if (s.locked && !window._qbUnlocked) { window._openPasskey(s); return; }
+        openSubpage(s);
       });
       document.getElementById(s.backId).addEventListener('click', () => {
         if (history.state && history.state.subpage) history.back();
@@ -1043,6 +1184,55 @@ in the middle of a lake.</p>
         if (history.state && history.state.subpage) history.replaceState(null, '');
       }
     };
+
+    /* ── Passkey gate for locked portfolio sections ── */
+    (function () {
+      const PASSKEY = '8000';
+      const overlay = document.getElementById('passkey-modal');
+      const digits  = [...overlay.querySelectorAll('.pk-digit')];
+      const errEl   = document.getElementById('pk-error');
+      let pending = null;
+
+      function clearError() { errEl.classList.remove('show'); digits.forEach(d => d.classList.remove('pk-bad')); }
+      function reset() { digits.forEach(d => d.value = ''); clearError(); }
+
+      window._openPasskey = function (s) {
+        pending = s;
+        reset();
+        overlay.classList.add('open');
+        setTimeout(() => digits[0].focus(), 60);
+      };
+      function close() { overlay.classList.remove('open'); pending = null; }
+
+      function check() {
+        if (digits.some(d => !d.value)) return;
+        if (digits.map(d => d.value).join('') === PASSKEY) {
+          const s = pending;
+          close();
+          window._qbUnlocked = true;
+          if (s) openSubpage(s);
+        } else {
+          errEl.classList.add('show');
+          digits.forEach(d => d.classList.add('pk-bad'));
+          setTimeout(() => { digits.forEach(d => d.value = ''); digits[0].focus(); }, 120);
+        }
+      }
+
+      digits.forEach((inp, i) => {
+        inp.addEventListener('input', () => {
+          inp.value = inp.value.replace(/[^0-9]/g, '').slice(0, 1);
+          clearError();
+          if (inp.value && i < digits.length - 1) digits[i + 1].focus();
+          check();
+        });
+        inp.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && !inp.value && i > 0) { digits[i - 1].focus(); }
+        });
+      });
+
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('open')) close(); });
+    })();
 
     /* ── Poem pager ── */
     const POEM_COUNT = 2;
@@ -1181,6 +1371,46 @@ in the middle of a lake.</p>
         btn.setAttribute('aria-expanded', String(!collapsed));
       });
     });
+
+    /* ── QuickBooks Mobile case-study: scroll between sections ── */
+    (function () {
+      const scroller = document.getElementById('qb-scroll');
+      if (!scroller) return;
+      const sections = [...scroller.querySelectorAll('.qb-section')];
+      const total = sections.length;
+      const prev = document.getElementById('deck-prev');
+      const next = document.getElementById('deck-next');
+      const count = document.getElementById('deck-count');
+      function currentIdx() {
+        if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 4) return total - 1;
+        const base = sections[0].offsetTop;
+        const top = scroller.scrollTop + 8;
+        let idx = 0;
+        sections.forEach((s, i) => { if (s.offsetTop - base <= top) idx = i; });
+        return idx;
+      }
+      function update() {
+        const idx = currentIdx();
+        count.textContent = (idx + 1) + ' / ' + total;
+        prev.disabled = idx === 0;
+        next.disabled = idx === total - 1;
+      }
+      function goTo(i) {
+        i = Math.max(0, Math.min(total - 1, i));
+        scroller.scrollTo({ top: sections[i].offsetTop - sections[0].offsetTop, behavior: 'smooth' });
+      }
+      prev.addEventListener('click', () => goTo(currentIdx() - 1));
+      next.addEventListener('click', () => goTo(currentIdx() + 1));
+      scroller.addEventListener('scroll', update, { passive: true });
+      /* Arrow keys step between sections while open */
+      document.addEventListener('keydown', (e) => {
+        if (!document.getElementById('qbmobile-view').classList.contains('open')) return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); goTo(currentIdx() + 1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); goTo(currentIdx() - 1); }
+      });
+      window._resetDeck = () => { scroller.scrollTop = 0; update(); };
+      update();
+    })();
   </script>
 
   <script>
