@@ -129,6 +129,11 @@
       left: 24px;
       right: 24px;
       bottom: 24px;
+      /* Stop the panel from scaling wider than this; center it and let the
+         background canvas fill the extra width on wide screens. */
+      max-width: 1440px;
+      margin-left: auto;
+      margin-right: auto;
       background: var(--bg);
       border: 1px solid var(--stroke);
       border-radius: 12px;
@@ -280,10 +285,11 @@
     body { overflow: hidden; } /* keep the off-screen overlay from adding scroll */
     .subpage {
       position: fixed; top: 110px; left: 24px; right: 24px; bottom: 24px;
+      max-width: 1440px; margin-left: auto; margin-right: auto;
       background: var(--bg); border: 1px solid var(--stroke); border-radius: 12px;
       box-shadow: 0 4px 40px rgba(0,0,0,0.35); z-index: 40;
       overflow-x: hidden; overflow-y: auto; padding: 24px;
-      transform: translateX(calc(100% + 48px)); pointer-events: none;
+      transform: translateX(110vw); pointer-events: none;
       transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1);
       scrollbar-width: thin; scrollbar-color: var(--stroke) transparent;
     }
@@ -354,6 +360,9 @@
     .qb-cards { display: flex; flex-direction: column; gap: 20px; }
     .qb-card { background: rgba(255,255,255,0.04); border: 1px solid var(--stroke); border-radius: 12px; padding: 14px 16px; font-size: 14px; line-height: 1.6; color: rgba(220,232,240,0.72); transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.2s ease; cursor: default; }
     .qb-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(33,150,200,0.45); color: var(--text-primary); transform: scale(1.03); }
+    .qb-card-interactive { cursor: pointer; }
+    /* Clicked-locked card: hold the scale, lighten the border, pin the image */
+    .qb-card.qb-card-locked { background: rgba(255,255,255,0.08); border-color: var(--teal); color: var(--text-primary); transform: scale(1.03); box-shadow: 0 0 0 1px rgba(33,150,200,0.55), 0 6px 20px rgba(0,0,0,0.35); }
     @media (max-width: 640px) {
       .qb-row, .qb-section:nth-child(even) .qb-row { flex-direction: column; gap: 28px; }
     }
@@ -1336,6 +1345,8 @@ in the middle of a lake.</p>
     document.addEventListener('keydown', (e) => {
       if (e.key !== 'Escape') return;
       if (window._lightboxOpen && window._lightboxOpen()) { window._closeLightbox(); return; }
+      /* A pinned QB card takes priority: unlock it without leaving the sub-page */
+      if (window._qbCardIsLocked && window._qbCardIsLocked()) { window._unlockQbCard(); return; }
       if (subpageIsOpen()) {
         if (history.state && history.state.subpage) history.back();
         else closeOpenSubpage();
@@ -1579,30 +1590,72 @@ in the middle of a lake.</p>
     })();
   </script>
   <script>
-    document.querySelectorAll('[data-hover-img]').forEach(card => {
-      const section = card.closest('.qb-section');
-      if (!section) return;
-      const container = section.querySelector('.qb-img');
-      if (!container) return;
-      card.addEventListener('mouseenter', () => container.classList.add('hover-active'));
-      card.addEventListener('mouseleave', () => container.classList.remove('hover-active'));
-    });
-    document.querySelectorAll('[data-hover-img2]').forEach(card => {
-      const section = card.closest('.qb-section');
-      if (!section) return;
-      const container = section.querySelector('.qb-img');
-      if (!container) return;
-      card.addEventListener('mouseenter', () => container.classList.add('hover-active-2'));
-      card.addEventListener('mouseleave', () => container.classList.remove('hover-active-2'));
-    });
-    document.querySelectorAll('[data-hover-img3]').forEach(card => {
-      const section = card.closest('.qb-section');
-      if (!section) return;
-      const container = section.querySelector('.qb-img');
-      if (!container) return;
-      card.addEventListener('mouseenter', () => container.classList.add('hover-active-3'));
-      card.addEventListener('mouseleave', () => container.classList.remove('hover-active-3'));
-    });
+    (function () {
+      /* Each insight card swaps the image in its section's .qb-img on hover,
+         and clicking pins (locks) that state until Escape / click elsewhere. */
+      const ATTR_CLS = [
+        ['data-hover-img',  'hover-active'],
+        ['data-hover-img2', 'hover-active-2'],
+        ['data-hover-img3', 'hover-active-3'],
+      ];
+      const entries = [];
+      ATTR_CLS.forEach(([attr, cls]) => {
+        document.querySelectorAll('[' + attr + ']').forEach(card => {
+          const section = card.closest('.qb-section');
+          if (!section) return;
+          const container = section.querySelector('.qb-img');
+          if (!container) return;
+          entries.push({ card, container, cls });
+          card.classList.add('qb-card-interactive');
+        });
+      });
+
+      const ALL_CLS = ATTR_CLS.map(([, cls]) => cls);
+      function clearImg(container) { container.classList.remove(...ALL_CLS); }
+
+      let locked = null;
+
+      function unlock() {
+        if (!locked) return;
+        locked.card.classList.remove('qb-card-locked');
+        clearImg(locked.container);
+        locked = null;
+      }
+      function lock(entry) {
+        if (locked && locked !== entry) locked.card.classList.remove('qb-card-locked');
+        locked = entry;
+        entry.card.classList.add('qb-card-locked');
+        clearImg(entry.container);            /* only one image state shows at a time */
+        entry.container.classList.add(entry.cls);
+      }
+
+      entries.forEach(entry => {
+        entry.card.addEventListener('mouseenter', () => {
+          if (locked) return;                 /* a pin holds; ignore previews */
+          clearImg(entry.container);
+          entry.container.classList.add(entry.cls);
+        });
+        entry.card.addEventListener('mouseleave', () => {
+          if (locked) return;
+          entry.container.classList.remove(entry.cls);
+        });
+        entry.card.addEventListener('click', (e) => {
+          e.stopPropagation();                /* don't trigger the unlock-on-outside-click */
+          if (locked === entry) unlock(); else lock(entry);
+        });
+      });
+
+      document.addEventListener('click', () => { if (locked) unlock(); });
+
+      /* Escape handling for a locked card lives in the central keydown handler
+         (which runs first) so it can unlock without also closing the sub-page. */
+      window._qbCardIsLocked = () => !!locked;
+      window._unlockQbCard = unlock;
+
+      /* Clear any pin when the QB sub-page is reset/closed */
+      const prevReset = window._resetDeck;
+      window._resetDeck = function () { unlock(); if (prevReset) prevReset(); };
+    })();
   </script>
 </body>
 </html>
