@@ -290,10 +290,14 @@
       box-shadow: 0 4px 40px rgba(0,0,0,0.35); z-index: 40;
       overflow-x: hidden; overflow-y: auto; padding: 24px;
       transform: translateX(110vw); pointer-events: none;
-      transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1);
+      /* Hidden when closed so it can never peek into view while the window is
+         resized (the transform is vw-based); visibility flips only after the
+         slide-out finishes, so the open/close animation is unaffected. */
+      visibility: hidden;
+      transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1), visibility 0s linear 0.44s;
       scrollbar-width: thin; scrollbar-color: var(--stroke) transparent;
     }
-    .subpage.open { transform: translateX(0); pointer-events: auto; }
+    .subpage.open { transform: translateX(0); pointer-events: auto; visibility: visible; transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1), visibility 0s; }
     .subpage::-webkit-scrollbar { width: 4px; }
     .subpage::-webkit-scrollbar-thumb { background: var(--stroke); border-radius: 2px; }
     .reachout-grid { columns: 2; column-gap: 20px; margin-top: 12px; }
@@ -946,17 +950,28 @@ in the middle of a lake.</p>
         }
       }
 
+      let _bgRebuildTimer;
       function resize() {
         canvas.width  = window.innerWidth;
         canvas.height = window.innerHeight;
         ctx.fillStyle = '#0d1519';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        /* (Re)build the shapes for the current size. Critical: if the first
-           load happened at 0 width, the original one-time build produced no
-           shapes and the background stayed blank forever. */
-        if (canvas.width && canvas.height) initShapes();
+        /* Build shapes only on the first valid size. Rebuilding on every
+           resize tick reseeds random positions each frame, which makes the
+           field flicker and lurch (looking fast). The shapes are parametric
+           (uFrac/v) and adapt to the canvas size on their own, so they keep
+           flowing smoothly at the same slow speed as the window changes. */
+        if (canvas.width && canvas.height && shapes.length === 0) initShapes();
       }
-      window.addEventListener('resize', resize);
+      window.addEventListener('resize', () => {
+        resize();
+        /* After the drag settles, reseed once so a much larger canvas gets
+           full lane coverage — a single rebuild, not one per frame. */
+        clearTimeout(_bgRebuildTimer);
+        _bgRebuildTimer = setTimeout(() => {
+          if (canvas.width && canvas.height) initShapes();
+        }, 260);
+      });
       resize();
 
       /* Speed multiplier — lerped so it ramps up/down smoothly */
