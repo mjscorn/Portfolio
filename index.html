@@ -1044,6 +1044,9 @@ in the middle of a lake.</p>
           card.style.transform  = mult === 0
             ? 'translateX(0)'
             : `translateX(calc(${mult} * (100% + 240px)))`;
+          /* Destination starts transparent and fades in with the slide so it
+             doesn't pop into the gutter on wide (capped-width) screens. */
+          card.style.opacity = (i === distance) ? '0' : '1';
           if (i > 0) card.style.visibility = 'visible';
         });
 
@@ -1055,13 +1058,15 @@ in the middle of a lake.</p>
         void cards[distance].offsetHeight;
 
         /* Slide the whole train simultaneously */
-        const tStr = `transform ${DUR}ms ${EASE}`;
+        const tStr = `transform ${DUR}ms ${EASE}, opacity ${DUR}ms ease`;
         cards.forEach((card, i) => {
           card.style.transition = tStr;
           const finalMult = goRight ? i - distance : distance - i;
           card.style.transform  = finalMult === 0
             ? 'translateX(0)'
             : `translateX(calc(${finalMult} * (100% + 240px)))`;
+          /* Fade the destination in and the outgoing/intermediate cards out. */
+          card.style.opacity = (i === distance) ? '1' : '0';
         });
 
         /* Update nav + flyout highlights immediately */
@@ -1080,6 +1085,7 @@ in the middle of a lake.</p>
             card.classList.remove('active');
             card.style.visibility = '';
             card.style.transform  = '';
+            card.style.opacity    = '';
           });
           /* Settle the destination card */
           const toEl = cards[distance];
@@ -1087,6 +1093,7 @@ in the middle of a lake.</p>
           toEl.style.transition = '';
           toEl.style.transform  = '';
           toEl.style.visibility = '';
+          toEl.style.opacity    = '';
           window._bgSpeedTarget(1); /* lerp bg back to normal speed */
           window._refreshScrollFab && window._refreshScrollFab();
           animating = false;
