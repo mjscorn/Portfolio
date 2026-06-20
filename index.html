@@ -202,8 +202,9 @@
     .card-thumb { width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, var(--teal-light), var(--stroke)); display: flex; align-items: center; justify-content: center; color: var(--teal); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; overflow: hidden; }
     .card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
     /* ReachOut: show the full logo square centered, never cropped */
-    #reachout-link .card-thumb { background: #0d1519; }
     #reachout-link .card-thumb img { object-fit: contain; }
+    #qbmobile-link .card-thumb { position: relative; }
+    #qbmobile-link .card-thumb img { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 45%; height: auto; display: block; border-radius: 12px 12px 0 0; box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 8px 24px rgba(0,0,0,0.4); }
     .card-link { cursor: pointer; }
     .card-body { padding: 16px; }
     .card-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
@@ -312,15 +313,47 @@
     .qb-section { padding-bottom: 72px; }
     .qb-section:last-child { padding-bottom: 96px; }
     .qb-section-title { position: sticky; top: 0; z-index: 5; background: var(--bg); margin: 0 -24px; padding: 16px 24px; font-size: 22px; font-weight: 600; color: var(--text-primary); border-bottom: 1px solid rgba(220,232,240,0.1); }
-    .qb-row { display: flex; gap: 48px; align-items: center; padding-top: 36px; }
+    .qb-section:nth-child(even) .qb-section-title { padding-left: calc(50% + 48px); }
+    .qb-section:nth-child(odd) .qb-section-title { padding-right: calc(50% + 48px); }
+    .qb-row { display: flex; gap: 48px; align-items: stretch; padding-top: 36px; }
     .qb-section:nth-child(even) .qb-row { flex-direction: row-reverse; }
     .qb-text { flex: 1 1 0; min-width: 0; }
     .qb-body { font-size: 15px; line-height: 1.7; color: var(--text-primary); margin: 0 0 20px; }
     .qb-bullets { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 11px; }
     .qb-bullets li { position: relative; padding-left: 18px; font-size: 14px; line-height: 1.55; color: rgba(220,232,240,0.72); }
     .qb-bullets li::before { content: '•'; position: absolute; left: 2px; color: var(--teal); }
-    .qb-img { flex: 1 1 0; min-width: 0; display: flex; align-items: center; justify-content: center; }
-    .qb-img img { width: 100%; height: auto; max-height: 62vh; object-fit: contain; display: block; background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 6px 40px rgba(0,0,0,0.4); }
+    .qb-img { flex: 1 1 0; min-width: 0; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--stroke); border-radius: 12px; background: rgba(255,255,255,0.025); padding: 20px; min-height: 240px; }
+    .qb-img img { width: 100%; height: auto; object-fit: contain; display: block; background: transparent; border-radius: 0; padding: 0; box-shadow: none; transition: opacity 0.25s; }
+    .qb-img .qb-hover-img { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 80%; height: auto; max-height: none; padding: 0; background: transparent; box-shadow: none; border-radius: 10px; opacity: 0; }
+    .qb-img.hover-active .qb-default-img { opacity: 0; }
+    .qb-img.hover-active .qb-hover-img { opacity: 1; }
+    .qb-apps-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .qb-img.hover-active-2 .qb-default-img { opacity: 0; transition: opacity 0.3s; }
+    .qb-img.hover-active-2 .qb-apps-overlay { opacity: 1; }
+    .qb-img .qb-apps-phone { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); height: calc(100% - 40px); width: auto; max-width: none; object-fit: contain; border-radius: 8px; box-shadow: none; background: transparent; padding: 0; }
+    .app-float { position: absolute; border-radius: 9px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+    .app-float--cashapp { left: 16%; top: 20%; animation: qbfloat-a 6.4s ease-in-out infinite; }
+    .app-float--square  { left: 16%; bottom: 20%; animation: qbfloat-b 7.6s ease-in-out infinite; }
+    .app-float--paypal  { right: 16%; top: 20%; animation: qbfloat-c 8.2s ease-in-out infinite; }
+    .app-float--venmo   { right: 16%; bottom: 20%; animation: qbfloat-d 5.8s ease-in-out infinite; }
+    @keyframes qbfloat-a { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+    @keyframes qbfloat-b { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+    @keyframes qbfloat-c { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+    @keyframes qbfloat-d { 0%,100%{transform:translateY(0)} 50%{transform:translateY(10px)} }
+    .qb-c3-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: stretch; gap: 20px; padding: 12px; pointer-events: none; }
+    .qb-img.hover-active-3 .qb-default-img { opacity: 0; transition: opacity 0.25s; }
+    .qb-c3-labels { display: flex; gap: 8px; flex-shrink: 0; }
+    .qb-c3-label { flex: 1 1 0; min-width: 0; font-size: 8px; font-family: -apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Helvetica Neue', sans-serif; font-weight: 400; color: rgba(220,232,240,0.9); text-align: left; white-space: nowrap; line-height: 1.2; opacity: 0; transform: translateY(-10px); }
+    .qb-c3-phones { flex: 0 0 auto; display: flex; gap: 8px; align-items: flex-end; }
+    .qb-img .qb-c3-phone { flex: 1 1 0; min-width: 0; width: 100%; height: auto; max-height: none; border-radius: 6px; object-fit: contain; object-position: left center; display: block; opacity: 0; transform: translateY(28px); box-shadow: none; padding: 0; background: transparent; }
+    .qb-img.hover-active-3 .qb-c3-label { animation: qbc3-label-in 0.32s ease-out calc(var(--c3-delay) * 1ms) forwards; }
+    .qb-img.hover-active-3 .qb-c3-phone { animation: qbc3-phone-in 0.38s ease-out calc(var(--c3-delay) * 1ms + 60ms) forwards; }
+    @keyframes qbc3-label-in { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes qbc3-phone-in { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    .qb-body:has(+ .qb-cards) { font-size: 18px; }
+    .qb-cards { display: flex; flex-direction: column; gap: 20px; }
+    .qb-card { background: rgba(255,255,255,0.04); border: 1px solid var(--stroke); border-radius: 12px; padding: 14px 16px; font-size: 14px; line-height: 1.6; color: rgba(220,232,240,0.72); transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.2s ease; cursor: default; }
+    .qb-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(33,150,200,0.45); color: var(--text-primary); transform: scale(1.03); }
     @media (max-width: 640px) {
       .qb-row, .qb-section:nth-child(even) .qb-row { flex-direction: column; gap: 28px; }
     }
@@ -515,7 +548,7 @@
         </div>
         <div class="grid">
           <div class="card card-link" id="reachout-link"><div class="card-thumb"><img src="reachout/12.jpg" alt="ReachOut USA"></div><div class="card-body"><p class="card-title">ReachOut USA</p><span class="card-tag">Branding</span></div></div>
-          <div class="card card-link" id="qbmobile-link"><div class="card-thumb">CASE STUDY</div><div class="card-body"><p class="card-title">QuickBooks Mobile</p><span class="card-tag">UX/UI</span></div></div>
+          <div class="card card-link" id="qbmobile-link"><div class="card-thumb"><img src="qbmobile/thumb.png" alt="QuickBooks Mobile"></div><div class="card-body"><p class="card-title">QuickBooks Mobile</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">QuickBooks Payments</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">QuickBooks Navigation</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">Project 5</p><span class="card-tag">UX/UI</span></div></div>
@@ -783,44 +816,39 @@ in the middle of a lake.</p>
     </div>
     <div class="qb-scroll" id="qb-scroll">
       <div class="qb-section">
-        <p class="qb-section-title">QBM payments</p>
+        <p class="qb-section-title">Where we started</p>
         <div class="qb-row">
           <div class="qb-text">
-            <p class="qb-body"><strong>Ask:</strong> Increase mobile TPV.<br><strong>Approach:</strong> Listen to customers, iterate, listen to customers, iterate, test.</p>
-            <ul class="qb-bullets">
-              <li>F.M.H.</li>
-              <li>Feature purchasing</li>
-              <li>Comic strip reading</li>
-              <li>Prototype tasks via lofi designs</li>
-            </ul>
+            <p class="qb-body">When this project began, the team had a fairly large goal: find opportunities to increase the payments processing volume on QuickBooks mobile.</p>
+            <p class="qb-body">So we launched into research mode and started talking to customers. From what we heard, we started iterating, prototyping concepts, and refining ideas with their input. These early &ldquo;follow me homes,&rdquo; comic strip readings, feature purchasing exercises, and low fidelity prototypes were what ultimately shaped our future roadmaps and launches.</p>
           </div>
           <div class="qb-img"><img src="qbmobile/img1.png" alt="Lofi payment flow sketches"></div>
         </div>
       </div>
       <div class="qb-section">
-        <p class="qb-section-title">Learnings</p>
+        <p class="qb-section-title">What we learned</p>
         <div class="qb-row">
           <div class="qb-text">
-            <p class="qb-body">What testing surfaced about how merchants actually take payments on mobile.</p>
-            <ul class="qb-bullets">
-              <li>Payments is a primary mobile use case but not reflective in the current IA</li>
-              <li>Users can't take a quick payment</li>
-              <li>Paying open invoices hides features and asks questions in the wrong order</li>
-            </ul>
+            <p class="qb-body">What testing surfaced about how merchants actually take payments on mobile:</p>
+            <div class="qb-cards">
+              <div class="qb-card" data-hover-img="qbmobile/img2-hover.png">Payments is a primary mobile use case, but wasn't reflected in the IA (which was more accounting-first focused)</div>
+              <div class="qb-card" data-hover-img2="qbmobile/img2-hover2.png">Users couldn't take a quick payment and expected they could, so were supplementing our app with other tools (which was causing double the work and time)</div>
+              <div class="qb-card" data-hover-img3>When customers went to pay an open invoice, the workflow buried critical features and asked questions in an order counter to most payment mental-models</div>
+            </div>
           </div>
-          <div class="qb-img"><img src="qbmobile/img2.png" alt="Invoice and payment screens"></div>
+          <div class="qb-img"><img src="qbmobile/img2.png" alt="Invoice and payment screens" class="qb-default-img"><img src="qbmobile/img2-hover.png" alt="" class="qb-hover-img" aria-hidden="true"><div class="qb-apps-overlay" aria-hidden="true"><img src="qbmobile/img2-hover2-phone.png" class="qb-apps-phone"><div class="app-float app-float--cashapp"><svg width="60" height="60" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#00D632"/><text x="20" y="28" text-anchor="middle" font-family="monospace" font-size="20" font-weight="700" fill="white">$</text></svg></div><div class="app-float app-float--square"><svg width="60" height="60" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#121212"/><rect x="9" y="9" width="22" height="22" rx="2" fill="none" stroke="white" stroke-width="3"/></svg></div><div class="app-float app-float--paypal"><svg width="60" height="60" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#003087"/><text x="20" y="28" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="700" fill="white">P</text></svg></div><div class="app-float app-float--venmo"><svg width="60" height="60" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#3D95CE"/><text x="20" y="28" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="700" fill="white">V</text></svg></div></div><div class="qb-c3-overlay" aria-hidden="true"><div class="qb-c3-labels"><span class="qb-c3-label" style="--c3-delay:0">Charge or record?</span><span class="qb-c3-label" style="--c3-delay:1600">What customer?</span><span class="qb-c3-label" style="--c3-delay:3200">Which invoices?</span><span class="qb-c3-label" style="--c3-delay:4800">Method type?</span></div><div class="qb-c3-phones"><img src="qbmobile/card3-s1.png" class="qb-c3-phone" style="--c3-delay:0" alt=""><img src="qbmobile/card3-s2.png" class="qb-c3-phone" style="--c3-delay:1600" alt=""><img src="qbmobile/card3-s3.png" class="qb-c3-phone" style="--c3-delay:3200" alt=""><img src="qbmobile/card3-s4.png" class="qb-c3-phone" style="--c3-delay:4800" alt=""></div></div></div>
         </div>
       </div>
       <div class="qb-section">
-        <p class="qb-section-title">Solutions</p>
+        <p class="qb-section-title">What we did about it</p>
         <div class="qb-row">
           <div class="qb-text">
-            <p class="qb-body">Restructure payments around customers' mental models and remove friction from taking a payment.</p>
-            <ul class="qb-bullets">
-              <li>Make payments a primary navigation item to reflect customers' mental models</li>
-              <li>Create an easy way to take payment</li>
-              <li>Reorder IA and expose all payment capabilities in one expanded screen</li>
-            </ul>
+            <p class="qb-body">So the team restructured the QuickBooks Mobile app (which in a large company where you are one vertical team contributing to an ownership team with different incentives, isn't always easy). What we did was:</p>
+            <div class="qb-cards">
+              <div class="qb-card">Made payments a primary navigation item to reflect customers' mental models</div>
+              <div class="qb-card">Created a new, simplified workflow to let customers take a quick payment without needing to create an invoice</div>
+              <div class="qb-card">When paying an invoice, customers' mental models were now reflected in the IA where all the once-buried payments features were now exposed in one consolidated, scalable screen</div>
+            </div>
           </div>
           <div class="qb-img"><img src="qbmobile/img3.png" alt="Redesigned payment screens"></div>
         </div>
@@ -1549,6 +1577,32 @@ in the middle of a lake.</p>
         }
       });
     })();
+  </script>
+  <script>
+    document.querySelectorAll('[data-hover-img]').forEach(card => {
+      const section = card.closest('.qb-section');
+      if (!section) return;
+      const container = section.querySelector('.qb-img');
+      if (!container) return;
+      card.addEventListener('mouseenter', () => container.classList.add('hover-active'));
+      card.addEventListener('mouseleave', () => container.classList.remove('hover-active'));
+    });
+    document.querySelectorAll('[data-hover-img2]').forEach(card => {
+      const section = card.closest('.qb-section');
+      if (!section) return;
+      const container = section.querySelector('.qb-img');
+      if (!container) return;
+      card.addEventListener('mouseenter', () => container.classList.add('hover-active-2'));
+      card.addEventListener('mouseleave', () => container.classList.remove('hover-active-2'));
+    });
+    document.querySelectorAll('[data-hover-img3]').forEach(card => {
+      const section = card.closest('.qb-section');
+      if (!section) return;
+      const container = section.querySelector('.qb-img');
+      if (!container) return;
+      card.addEventListener('mouseenter', () => container.classList.add('hover-active-3'));
+      card.addEventListener('mouseleave', () => container.classList.remove('hover-active-3'));
+    });
   </script>
 </body>
 </html>
