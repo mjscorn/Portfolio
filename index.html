@@ -394,8 +394,11 @@
     .deck-btn:disabled { opacity: 0.28; pointer-events: none; }
 
     /* ── Passkey modal (locks the QuickBooks portfolio sections) ── */
-    .passkey-overlay { position: fixed; inset: 0; z-index: 250; display: flex; align-items: center; justify-content: center; background: rgba(10,16,22,0.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); opacity: 0; visibility: hidden; transition: opacity 0.22s ease, visibility 0.22s ease; }
-    .passkey-overlay.open { opacity: 1; visibility: visible; }
+    /* visibility flips to visible immediately on open (0s) so the first field
+       is focusable inside the triggering tap and mobile raises the keyboard;
+       on close it stays visible through the 0.22s fade-out then hides. */
+    .passkey-overlay { position: fixed; inset: 0; z-index: 250; display: flex; align-items: center; justify-content: center; background: rgba(10,16,22,0.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); opacity: 0; visibility: hidden; transition: opacity 0.22s ease, visibility 0s linear 0.22s; }
+    .passkey-overlay.open { opacity: 1; visibility: visible; transition: opacity 0.22s ease, visibility 0s; }
     .passkey-card { width: min(92vw, 340px); background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 32px 28px 28px; text-align: center; transform: translateY(8px) scale(0.98); transition: transform 0.22s ease; }
     .passkey-overlay.open .passkey-card { transform: none; }
     .passkey-card h3 { margin: 0 0 22px; font-size: 18px; font-weight: 600; color: var(--text-primary); }
@@ -1300,7 +1303,13 @@ in the middle of a lake.</p>
         pending = s;
         reset();
         overlay.classList.add('open');
-        setTimeout(() => digits[0].focus(), 60);
+        /* Focus the first field synchronously, still inside the triggering tap,
+           so mobile browsers raise the on-screen keyboard. A focus() in a
+           setTimeout is detached from the user gesture and iOS Safari then
+           refuses to show the keyboard. offsetWidth forces the visibility
+           change to commit first so the field is focusable. */
+        void overlay.offsetWidth;
+        digits[0].focus({ preventScroll: true });
       };
       function close() { overlay.classList.remove('open'); pending = null; }
 
