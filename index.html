@@ -352,8 +352,11 @@
     @keyframes qbfloat-d { 0%,100%{transform:translateY(0)} 50%{transform:translateY(10px)} }
     .qb-c3-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: stretch; gap: 20px; padding: 12px; pointer-events: none; }
     .qb-img.hover-active-3 .qb-default-img { opacity: 0; transition: opacity 0.25s; }
-    .qb-c3-labels { display: flex; gap: 8px; flex-shrink: 0; }
-    .qb-c3-label { flex: 1 1 0; min-width: 0; font-size: 8px; font-family: -apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Helvetica Neue', sans-serif; font-weight: 400; color: rgba(220,232,240,0.9); text-align: left; white-space: nowrap; line-height: 1.2; opacity: 0; transform: translateY(-10px); }
+    .qb-c3-labels { display: flex; gap: 8px; flex-shrink: 0; align-items: flex-start; }
+    /* Labels wrap (and break long words) instead of staying on one line, so a
+       question can never overflow its narrow column and overlap the next — this
+       applies at every width, including narrow two-column desktop sizes. */
+    .qb-c3-label { flex: 1 1 0; min-width: 0; font-size: 8px; font-family: -apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Helvetica Neue', sans-serif; font-weight: 400; color: rgba(220,232,240,0.9); text-align: left; white-space: normal; overflow-wrap: break-word; line-height: 1.2; opacity: 0; transform: translateY(-10px); }
     .qb-c3-phones { flex: 0 0 auto; display: flex; gap: 8px; align-items: flex-end; }
     .qb-img .qb-c3-phone { flex: 1 1 0; min-width: 0; width: 100%; height: auto; max-height: none; border-radius: 6px; object-fit: contain; object-position: left center; display: block; opacity: 0; transform: translateY(28px); box-shadow: none; padding: 0; background: transparent; }
     .qb-img.hover-active-3 .qb-c3-label { animation: qbc3-label-in 0.32s ease-out calc(var(--c3-delay) * 1ms) forwards; }
@@ -373,6 +376,16 @@
          and their content all left-align. */
       .qb-section:nth-child(odd) .qb-section-title,
       .qb-section:nth-child(even) .qb-section-title { padding-left: 24px; padding-right: 24px; text-align: left; }
+      /* One column makes the image columns narrow, so the card-3 question
+         labels can't fit on one line. Let them wrap (instead of overflowing
+         and overlapping) at a readable size, aligned to the top of the cell. */
+      /* Tighter inter-column gaps widen each cell (labels stay aligned with
+         their phones), and bump the wrapped labels to a readable 10px. */
+      .qb-c3-labels, .qb-c3-phones { gap: 4px; }
+      .qb-c3-label { font-size: 10px; line-height: 1.25; }
+      /* Taller (wrapped) labels need a tighter gap/padding so the overlay
+         still fits the full-width image box without clipping. */
+      .qb-c3-overlay { gap: 8px; padding: 8px; }
     }
     .deck-nav { position: absolute; bottom: 18px; right: 18px; display: flex; align-items: center; gap: 8px; z-index: 6; padding: 5px 6px; background: rgba(13,21,25,0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.14); border-radius: 9999px; }
     .deck-count { font-size: 13px; color: #fff; opacity: 0.75; white-space: nowrap; padding: 0 6px; }
