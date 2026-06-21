@@ -369,6 +369,10 @@
     .qb-card.qb-card-locked { background: rgba(255,255,255,0.08); border-color: var(--teal); color: var(--text-primary); transform: scale(1.03); box-shadow: 0 0 0 1px rgba(33,150,200,0.55), 0 6px 20px rgba(0,0,0,0.35); }
     @media (max-width: 640px) {
       .qb-row, .qb-section:nth-child(even) .qb-row { flex-direction: column; gap: 28px; }
+      /* One column: drop the alternating half-width indent so section titles
+         and their content all left-align. */
+      .qb-section:nth-child(odd) .qb-section-title,
+      .qb-section:nth-child(even) .qb-section-title { padding-left: 24px; padding-right: 24px; text-align: left; }
     }
     .deck-nav { position: absolute; bottom: 18px; right: 18px; display: flex; align-items: center; gap: 8px; z-index: 6; padding: 5px 6px; background: rgba(13,21,25,0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.14); border-radius: 9999px; }
     .deck-count { font-size: 13px; color: #fff; opacity: 0.75; white-space: nowrap; padding: 0 6px; }
@@ -832,7 +836,7 @@ in the middle of a lake.</p>
         <p class="qb-section-title">Where we started</p>
         <div class="qb-row">
           <div class="qb-text">
-            <p class="qb-body">When this project began, the team had a fairly large goal: find opportunities to increase the payments processing volume on QuickBooks mobile.</p>
+            <p class="qb-body">When this project began, the team had a fairly large charter: find opportunities to increase the payments processing volume on QuickBooks mobile.</p>
             <p class="qb-body">So we launched into research mode and started talking to customers. From what we heard, we started iterating, prototyping concepts, and refining ideas with their input. These early &ldquo;follow me homes,&rdquo; comic strip readings, feature purchasing exercises, and low fidelity prototypes were what ultimately shaped our future roadmaps and launches.</p>
           </div>
           <div class="qb-img"><img src="qbmobile/img1.png" alt="Lofi payment flow sketches"></div>
