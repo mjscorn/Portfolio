@@ -334,9 +334,18 @@
     .qb-bullets li::before { content: '•'; position: absolute; left: 2px; color: var(--teal); }
     .qb-img { flex: 1 1 0; min-width: 0; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--stroke); border-radius: 12px; background: rgba(255,255,255,0.025); padding: 20px; min-height: 240px; }
     .qb-img img { width: 100%; height: auto; object-fit: contain; display: block; background: transparent; border-radius: 0; padding: 0; box-shadow: none; transition: opacity 0.25s; }
+    /* Tall single-phone hero default: constrain height and center (not full width) */
+    .qb-img .qb-hero-tap { width: auto; height: auto; max-height: 460px; max-width: 100%; margin: 0 auto; }
     .qb-img .qb-hover-img { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 80%; height: auto; max-height: none; padding: 0; background: transparent; box-shadow: none; border-radius: 10px; opacity: 0; }
     .qb-img.hover-active .qb-default-img { opacity: 0; }
     .qb-img.hover-active .qb-hover-img { opacity: 1; }
+    /* Full-frame hover swap (transparent-bg frame fills the image box) */
+    .qb-img .qb-hover-frame { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 405px; max-width: calc(100% - 40px); height: auto; opacity: 0; transition: opacity 0.3s; background: transparent; padding: 0; box-shadow: none; border-radius: 0; }
+    .qb-img.hover-active .qb-hover-frame { opacity: 1; }
+    /* Second hover frame: centered, scaled to 12px from top & bottom of the box */
+    .qb-img .qb-hover-frame2, .qb-img .qb-hover-frame3 { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); height: calc(100% - 24px); width: auto; max-width: calc(100% - 24px); object-fit: contain; opacity: 0; transition: opacity 0.3s; background: transparent; padding: 0; box-shadow: none; border-radius: 0; }
+    .qb-img.hover-active-2 .qb-hover-frame2 { opacity: 1; }
+    .qb-img.hover-active-3 .qb-hover-frame3 { opacity: 1; }
     .qb-apps-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
     .qb-img.hover-active-2 .qb-default-img { opacity: 0; transition: opacity 0.3s; }
     .qb-img.hover-active-2 .qb-apps-overlay { opacity: 1; }
@@ -383,9 +392,9 @@
          their phones), and bump the wrapped labels to a readable 10px. */
       .qb-c3-labels, .qb-c3-phones { gap: 4px; }
       .qb-c3-label { font-size: 10px; line-height: 1.25; }
-      /* Taller (wrapped) labels need a tighter gap/padding so the overlay
-         still fits the full-width image box without clipping. */
-      .qb-c3-overlay { gap: 8px; padding: 8px; }
+      /* Pin the question labels 12px from the top; the phones flow below and
+         clip at the bottom if the box is too short (the text never clips). */
+      .qb-c3-overlay { justify-content: flex-start; gap: 8px; padding: 8px; padding-top: 12px; }
     }
     .deck-nav { position: absolute; bottom: 18px; right: 18px; display: flex; align-items: center; gap: 8px; z-index: 6; padding: 5px 6px; background: rgba(13,21,25,0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.14); border-radius: 9999px; }
     .deck-count { font-size: 13px; color: #fff; opacity: 0.75; white-space: nowrap; padding: 0 6px; }
@@ -869,7 +878,7 @@ in the middle of a lake.</p>
               <div class="qb-card" data-hover-img3>When customers went to pay an open invoice, the workflow buried critical features and asked questions in an order counter to most payment mental-models</div>
             </div>
           </div>
-          <div class="qb-img"><img src="qbmobile/img2.png" alt="Invoice and payment screens" class="qb-default-img"><img src="qbmobile/img2-hover.png" alt="" class="qb-hover-img" aria-hidden="true"><div class="qb-apps-overlay" aria-hidden="true"><img src="qbmobile/img2-hover2-phone.png" class="qb-apps-phone"><div class="app-float app-float--cashapp"><svg width="60" height="60" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#00D632"/><text x="20" y="28" text-anchor="middle" font-family="monospace" font-size="20" font-weight="700" fill="white">$</text></svg></div><div class="app-float app-float--square"><svg width="60" height="60" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#121212"/><rect x="9" y="9" width="22" height="22" rx="2" fill="none" stroke="white" stroke-width="3"/></svg></div><div class="app-float app-float--paypal"><svg width="60" height="60" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#003087"/><text x="20" y="28" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="700" fill="white">P</text></svg></div><div class="app-float app-float--venmo"><svg width="60" height="60" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#3D95CE"/><text x="20" y="28" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="700" fill="white">V</text></svg></div></div><div class="qb-c3-overlay" aria-hidden="true"><div class="qb-c3-labels"><span class="qb-c3-label" style="--c3-delay:0">Charge or record?</span><span class="qb-c3-label" style="--c3-delay:1600">What customer?</span><span class="qb-c3-label" style="--c3-delay:3200">Which invoices?</span><span class="qb-c3-label" style="--c3-delay:4800">Method type?</span></div><div class="qb-c3-phones"><img src="qbmobile/card3-s1.png" class="qb-c3-phone" style="--c3-delay:0" alt=""><img src="qbmobile/card3-s2.png" class="qb-c3-phone" style="--c3-delay:1600" alt=""><img src="qbmobile/card3-s3.png" class="qb-c3-phone" style="--c3-delay:3200" alt=""><img src="qbmobile/card3-s4.png" class="qb-c3-phone" style="--c3-delay:4800" alt=""></div></div></div>
+          <div class="qb-img"><img src="qbmobile/img2.png" alt="Invoice and payment screens" class="qb-default-img"><img src="qbmobile/img2-hover.png" alt="" class="qb-hover-img" aria-hidden="true"><div class="qb-apps-overlay" aria-hidden="true"><img src="qbmobile/img2-hover2-phone.png" class="qb-apps-phone"><div class="app-float app-float--cashapp"><svg width="60" height="60" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#00D632"/><text x="20" y="28" text-anchor="middle" font-family="monospace" font-size="20" font-weight="700" fill="white">$</text></svg></div><div class="app-float app-float--square"><svg width="60" height="60" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#121212"/><rect x="9" y="9" width="22" height="22" rx="2" fill="none" stroke="white" stroke-width="3"/></svg></div><div class="app-float app-float--paypal"><svg width="60" height="60" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#003087"/><text x="20" y="28" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="700" fill="white">P</text></svg></div><div class="app-float app-float--venmo"><svg width="60" height="60" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#3D95CE"/><text x="20" y="28" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="700" fill="white">V</text></svg></div></div><div class="qb-c3-overlay" aria-hidden="true"><div class="qb-c3-labels"><span class="qb-c3-label" style="--c3-delay:0">How?</span><span class="qb-c3-label" style="--c3-delay:1600">Who?</span><span class="qb-c3-label" style="--c3-delay:3200">What?</span><span class="qb-c3-label" style="--c3-delay:4800">Method?</span></div><div class="qb-c3-phones"><img src="qbmobile/card3-s1.png" class="qb-c3-phone" style="--c3-delay:0" alt=""><img src="qbmobile/card3-s2.png" class="qb-c3-phone" style="--c3-delay:1600" alt=""><img src="qbmobile/card3-s3.png" class="qb-c3-phone" style="--c3-delay:3200" alt=""><img src="qbmobile/card3-s4.png" class="qb-c3-phone" style="--c3-delay:4800" alt=""></div></div></div>
         </div>
       </div>
       <div class="qb-section">
@@ -878,12 +887,12 @@ in the middle of a lake.</p>
           <div class="qb-text">
             <p class="qb-body">So the team restructured the QuickBooks Mobile app (which in a large company where you are one vertical team contributing to an ownership team with different incentives, isn't always easy). What we did was:</p>
             <div class="qb-cards">
-              <div class="qb-card">Made payments a primary navigation item to reflect customers' mental models</div>
-              <div class="qb-card">Created a new, simplified workflow to let customers take a quick payment without needing to create an invoice</div>
-              <div class="qb-card">When paying an invoice, customers' mental models were now reflected in the IA where all the once-buried payments features were now exposed in one consolidated, scalable screen</div>
+              <div class="qb-card" data-hover-img="qbmobile/img3-hover.png">Made payments a primary navigation item to reflect customers' mental models</div>
+              <div class="qb-card" data-hover-img2="qbmobile/img3-hover2.png">Created a new, simplified workflow to let customers take a quick payment without needing to create an invoice</div>
+              <div class="qb-card" data-hover-img3="qbmobile/img3-hover3.png">When paying an invoice, customers' mental models were now reflected in the IA where all the once-buried payments features were now exposed in one consolidated, scalable screen</div>
             </div>
           </div>
-          <div class="qb-img"><img src="qbmobile/img3.png" alt="Redesigned payment screens"></div>
+          <div class="qb-img"><img src="qbmobile/img3-default.png" alt="Tap to Pay on iPhone promo" class="qb-default-img qb-hero-tap"><img src="qbmobile/img3-hover.png" alt="" class="qb-hover-frame" aria-hidden="true"><img src="qbmobile/img3-hover2.png" alt="" class="qb-hover-frame2" aria-hidden="true"><img src="qbmobile/img3-hover3.png" alt="" class="qb-hover-frame3" aria-hidden="true"></div>
         </div>
       </div>
       <div class="qb-section">
