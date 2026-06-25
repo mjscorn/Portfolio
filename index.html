@@ -346,6 +346,65 @@
     .qb-img .qb-hover-frame2, .qb-img .qb-hover-frame3 { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); height: calc(100% - 24px); width: auto; max-width: calc(100% - 24px); object-fit: contain; opacity: 0; transition: opacity 0.3s; background: transparent; padding: 0; box-shadow: none; border-radius: 0; }
     .qb-img.hover-active-2 .qb-hover-frame2 { opacity: 1; }
     .qb-img.hover-active-3 .qb-hover-frame3 { opacity: 1; }
+    .qb-img.hover-active-4 .qb-default-img { opacity: 0; }
+
+    /* ── Impact metric visuals (one per card, animate in on hover/lock) ── */
+    .qb-metric { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 28px; text-align: center; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .qb-metrics-img.hover-active   .qb-metric-1,
+    .qb-metrics-img.hover-active-2 .qb-metric-2,
+    .qb-metrics-img.hover-active-3 .qb-metric-3,
+    .qb-metrics-img.hover-active-4 .qb-metric-4 { opacity: 1; }
+    .qb-metric-value { font-size: 38px; font-weight: 700; line-height: 1; color: var(--text-primary); letter-spacing: 0.01em; }
+    .qb-metric-label { font-size: 12px; line-height: 1.45; color: rgba(220,232,240,0.62); max-width: 240px; }
+    .qb-viz { width: min(80%, 300px); height: auto; }
+    .qb-viz--sq { width: min(42%, 150px); }
+    .m-axis { stroke: rgba(220,232,240,0.16); stroke-width: 2; }
+    /* value + label rise-in */
+    .qb-metric-value, .qb-metric-label { opacity: 0; transform: translateY(10px); }
+    .qb-metrics-img.hover-active   .qb-metric-1 .qb-metric-value,
+    .qb-metrics-img.hover-active-2 .qb-metric-2 .qb-metric-value,
+    .qb-metrics-img.hover-active-3 .qb-metric-3 .qb-metric-value,
+    .qb-metrics-img.hover-active-4 .qb-metric-4 .qb-metric-value { animation: qb-m-rise 0.5s cubic-bezier(0.2,0.7,0.2,1) 0.08s forwards; }
+    .qb-metrics-img.hover-active   .qb-metric-1 .qb-metric-label,
+    .qb-metrics-img.hover-active-2 .qb-metric-2 .qb-metric-label,
+    .qb-metrics-img.hover-active-3 .qb-metric-3 .qb-metric-label,
+    .qb-metrics-img.hover-active-4 .qb-metric-4 .qb-metric-label { animation: qb-m-rise 0.5s cubic-bezier(0.2,0.7,0.2,1) 0.28s forwards; }
+    @keyframes qb-m-rise { to { opacity: 1; transform: translateY(0); } }
+    /* 1 · line */
+    .m1-line { stroke: #3fb950; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 320; stroke-dashoffset: 320; }
+    .m1-dot { fill: #3fb950; opacity: 0; transform-box: fill-box; transform-origin: center; }
+    .qb-metrics-img.hover-active .qb-metric-1 .m1-line { animation: qb-m1-draw 1s ease-out 0.15s forwards; }
+    .qb-metrics-img.hover-active .qb-metric-1 .m1-dot  { animation: qb-m-pop 0.35s ease-out 1.0s forwards; }
+    @keyframes qb-m1-draw { to { stroke-dashoffset: 0; } }
+    /* 2 · bars */
+    .m2-bar { fill: rgba(33,150,200,0.4); transform: scaleY(0); transform-box: fill-box; transform-origin: center bottom; }
+    .m2-bar--hi { fill: var(--teal); }
+    .qb-metrics-img.hover-active-2 .qb-metric-2 .m2-bar { animation: qb-m2-grow 0.55s cubic-bezier(0.2,0.8,0.2,1) forwards; }
+    @keyframes qb-m2-grow { to { transform: scaleY(1); } }
+    /* 3 · ring + arrow */
+    .m3-track { stroke: rgba(220,232,240,0.12); stroke-width: 9; }
+    .m3-prog { stroke: var(--teal); stroke-width: 9; stroke-linecap: round; stroke-dasharray: 289; stroke-dashoffset: 289; }
+    .m3-arrow { stroke: #3fb950; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+    .qb-metrics-img.hover-active-3 .qb-metric-3 .m3-prog  { animation: qb-m3-fill 1s ease-out 0.15s forwards; }
+    .qb-metrics-img.hover-active-3 .qb-metric-3 .m3-arrow { animation: qb-m-fade 0.4s ease-out 0.75s forwards; }
+    @keyframes qb-m3-fill { to { stroke-dashoffset: 70; } }
+    /* 4 · tiles */
+    .m4-tile { fill: rgba(33,150,200,0.16); stroke: var(--teal); stroke-width: 2; opacity: 0; transform: scale(0); transform-box: fill-box; transform-origin: center; }
+    .qb-metrics-img.hover-active-4 .qb-metric-4 .m4-tile { animation: qb-m4-pop 0.45s cubic-bezier(0.2,0.9,0.3,1.25) forwards; }
+    @keyframes qb-m4-pop { 0% { opacity: 0; transform: scale(0); } 70% { opacity: 1; transform: scale(1.08); } 100% { opacity: 1; transform: scale(1); } }
+    /* shared */
+    @keyframes qb-m-pop  { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+    @keyframes qb-m-fade { to { opacity: 1; } }
+    /* Reduced motion: skip the entrance animation, show each visual's end state */
+    @media (prefers-reduced-motion: reduce) {
+      .qb-metric * { animation: none !important; }
+      .qb-metric-value, .qb-metric-label { opacity: 1; transform: none; }
+      .m1-line { stroke-dashoffset: 0; }
+      .m1-dot, .m3-arrow { opacity: 1; }
+      .m2-bar, .m4-tile { transform: none; opacity: 1; }
+      .m3-prog { stroke-dashoffset: 70; }
+    }
+
     .qb-apps-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
     .qb-img.hover-active-2 .qb-default-img { opacity: 0; transition: opacity 0.3s; }
     .qb-img.hover-active-2 .qb-apps-overlay { opacity: 1; }
@@ -899,15 +958,60 @@ in the middle of a lake.</p>
         <p class="qb-section-title">Impact</p>
         <div class="qb-row">
           <div class="qb-text">
-            <p class="qb-body">Shipped on iOS &amp; Android: receive payment on invoice, new sale + tap to pay, and a dedicated Sales tab.</p>
-            <ul class="qb-bullets">
-              <li>$3.7M in incremental annualized revenue</li>
-              <li>Sales tab most visited screen in QBM (still live with new nav)</li>
-              <li>Newer merchants have higher engagement (ITC as measured by TPV)</li>
-              <li>4 new components contributed to design systems</li>
-            </ul>
+            <p class="qb-body">We shipped these new experiences on iOS &amp; Android and overall saw:</p>
+            <div class="qb-cards">
+              <div class="qb-card" data-hover-img>$3.7M in incremental annualized revenue</div>
+              <div class="qb-card" data-hover-img2>The new Sales tab is the most visited screen in QuickBooks mobile app today</div>
+              <div class="qb-card" data-hover-img3>Our newer customers have higher engagement as measured by their increased payments charge volume</div>
+              <div class="qb-card" data-hover-img4>4 new components contributed to design systems</div>
+            </div>
           </div>
-          <div class="qb-img"><img src="qbmobile/img4.png" alt="Shipped dashboard and charge screens"></div>
+          <div class="qb-img qb-metrics-img">
+            <img src="qbmobile/img4.png" alt="Shipped dashboard and charge screens" class="qb-default-img">
+            <!-- 1 · revenue: line trending up -->
+            <div class="qb-metric qb-metric-1" aria-hidden="true">
+              <div class="qb-metric-value">$3.7M</div>
+              <svg class="qb-viz" viewBox="0 0 240 120" fill="none">
+                <line class="m-axis" x1="8" y1="108" x2="232" y2="108"/>
+                <polyline class="m1-line" points="14,100 70,82 126,58 182,38 226,14"/>
+                <circle class="m1-dot" cx="226" cy="14" r="5"/>
+              </svg>
+              <div class="qb-metric-label">incremental annualized revenue</div>
+            </div>
+            <!-- 2 · most-visited: bars, Sales tallest -->
+            <div class="qb-metric qb-metric-2" aria-hidden="true">
+              <div class="qb-metric-value">#1</div>
+              <svg class="qb-viz" viewBox="0 0 240 120" fill="none">
+                <line class="m-axis" x1="8" y1="108" x2="232" y2="108"/>
+                <rect class="m2-bar" x="28"  y="70" width="34" height="38" rx="3" style="animation-delay:.10s"/>
+                <rect class="m2-bar" x="78"  y="80" width="34" height="28" rx="3" style="animation-delay:.22s"/>
+                <rect class="m2-bar m2-bar--hi" x="128" y="26" width="34" height="82" rx="3" style="animation-delay:.34s"/>
+                <rect class="m2-bar" x="178" y="62" width="34" height="46" rx="3" style="animation-delay:.46s"/>
+              </svg>
+              <div class="qb-metric-label">Sales — most-visited screen in QBM</div>
+            </div>
+            <!-- 3 · engagement: ring fills, arrow up -->
+            <div class="qb-metric qb-metric-3" aria-hidden="true">
+              <div class="qb-metric-value">&uarr; TPV</div>
+              <svg class="qb-viz qb-viz--sq" viewBox="0 0 120 120" fill="none">
+                <circle class="m3-track" cx="60" cy="60" r="46"/>
+                <circle class="m3-prog" cx="60" cy="60" r="46" transform="rotate(-90 60 60)"/>
+                <path class="m3-arrow" d="M60 80 V42 M47 55 L60 42 L73 55"/>
+              </svg>
+              <div class="qb-metric-label">higher engagement from newer merchants</div>
+            </div>
+            <!-- 4 · components: 4 tiles assemble -->
+            <div class="qb-metric qb-metric-4" aria-hidden="true">
+              <div class="qb-metric-value">4</div>
+              <svg class="qb-viz qb-viz--sq" viewBox="0 0 120 120" fill="none">
+                <rect class="m4-tile" x="14" y="14" width="40" height="40" rx="9" style="animation-delay:.10s"/>
+                <rect class="m4-tile" x="66" y="14" width="40" height="40" rx="9" style="animation-delay:.22s"/>
+                <rect class="m4-tile" x="14" y="66" width="40" height="40" rx="9" style="animation-delay:.34s"/>
+                <rect class="m4-tile" x="66" y="66" width="40" height="40" rx="9" style="animation-delay:.46s"/>
+              </svg>
+              <div class="qb-metric-label">new components added to the design system</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1654,6 +1758,7 @@ in the middle of a lake.</p>
         ['data-hover-img',  'hover-active'],
         ['data-hover-img2', 'hover-active-2'],
         ['data-hover-img3', 'hover-active-3'],
+        ['data-hover-img4', 'hover-active-4'],
       ];
       const entries = [];
       ATTR_CLS.forEach(([attr, cls]) => {
