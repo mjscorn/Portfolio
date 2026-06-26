@@ -1,0 +1,7 @@
+# Large source media kept locally, not deployed
+music/*.wav
+music/cover.png
+
+# Working scratch
+qbmobile/card3-raw-*.png
+qbmobile/card3-frame.png

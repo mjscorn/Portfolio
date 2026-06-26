@@ -315,6 +315,29 @@
     .lightbox-close { position: fixed; top: 24px; right: 24px; z-index: 201; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius-full); color: #fff; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease; }
     .lightbox-close:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
 
+    /* ── Audio player (Analogue music) ── */
+    .audio-modal { position: fixed; inset: 0; z-index: 200; background: rgba(5,8,11,0.92); display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.22s ease; }
+    .audio-modal.open { opacity: 1; pointer-events: auto; }
+    .audio-card { width: min(92vw, 360px); background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 26px 26px 24px; box-shadow: 0 12px 60px rgba(0,0,0,0.6); transform: translateY(8px) scale(0.98); transition: transform 0.22s ease; display: flex; flex-direction: column; align-items: center; }
+    .audio-modal.open .audio-card { transform: none; }
+    .audio-title { font-size: 15px; font-weight: 600; letter-spacing: 0.04em; text-align: center; color: var(--text-primary); margin: 0 0 18px; }
+    .audio-cover { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 10px; display: block; box-shadow: 0 6px 24px rgba(0,0,0,0.45); }
+    .audio-trackname { font-size: 13px; color: rgba(220,232,240,0.7); text-align: center; margin: 16px 0 14px; min-height: 16px; }
+    .audio-progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; width: 100%; }
+    .audio-time { font-size: 11px; color: rgba(220,232,240,0.55); min-width: 32px; font-variant-numeric: tabular-nums; }
+    .audio-time:last-child { text-align: right; }
+    .audio-seek, .audio-volrange { -webkit-appearance: none; appearance: none; height: 4px; background: var(--stroke); border-radius: 999px; outline: none; accent-color: var(--teal); cursor: pointer; }
+    .audio-seek { flex: 1; }
+    .audio-seek::-webkit-slider-thumb, .audio-volrange::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--teal); cursor: pointer; }
+    .audio-seek::-moz-range-thumb, .audio-volrange::-moz-range-thumb { width: 13px; height: 13px; border: none; border-radius: 50%; background: var(--teal); cursor: pointer; }
+    .audio-controls { display: flex; align-items: center; justify-content: center; gap: 24px; }
+    .audio-btn { display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: var(--text-primary); cursor: pointer; padding: 0; opacity: 0.85; transition: opacity 0.15s ease, transform 0.15s ease; }
+    .audio-btn:hover { opacity: 1; }
+    .audio-btn--play { width: 52px; height: 52px; border-radius: 50%; background: var(--teal); color: #fff; opacity: 1; }
+    .audio-btn--play:hover { transform: scale(1.05); }
+    .audio-vol { display: flex; align-items: center; gap: 8px; color: rgba(220,232,240,0.7); margin-top: 20px; }
+    .audio-volrange { width: 120px; }
+
     /* ── QuickBooks Mobile case-study (scrolling page) ── */
     .subpage.deck { overflow: hidden; display: flex; flex-direction: column; }
     .qb-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-gutter: stable; padding: 0 24px; scrollbar-width: thin; scrollbar-color: var(--stroke) transparent; }
@@ -785,7 +808,7 @@
                 <p class="resume-section-label">interests</p>
                 <div class="resume-sidebar-item">
                   <p><a class="sublink photo-link" data-photo="images/stool.jpg" data-photo-alt="Woodworking — handmade stool">Woodworking<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
-                  <p>Analogue music</p>
+                  <p><a class="sublink" id="audio-link">Analogue music<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
                   <p><a class="sublink photo-link" data-photo="images/flyfishing.jpg" data-photo-alt="Fly fishing on the river">Fly fishing<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
                   <p><a class="poetry-link" id="poetry-link">Poetry<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
                 </div>
@@ -905,6 +928,39 @@ in the middle of a lake.</p>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
     </button>
     <img id="lightbox-img" src="" alt="">
+  </div>
+
+  <!-- Audio player: listen to a track over a full scrim -->
+  <div class="audio-modal" id="audio-modal" role="dialog" aria-modal="true" aria-label="Music player">
+    <button class="lightbox-close" id="audio-close" aria-label="Back">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </button>
+    <div class="audio-card">
+      <p class="audio-title">no fixed star</p>
+      <img class="audio-cover" src="music/cover.jpg" alt="no fixed star — a peaceful, dark place album cover">
+      <p class="audio-trackname" id="audio-trackname">compass</p>
+      <audio id="audio-el" preload="metadata"></audio>
+      <div class="audio-progress-row">
+        <span class="audio-time" id="audio-cur">0:00</span>
+        <input type="range" class="audio-seek" id="audio-seek" min="0" max="100" value="0" step="0.1" aria-label="Seek">
+        <span class="audio-time" id="audio-dur">0:00</span>
+      </div>
+      <div class="audio-controls">
+        <button class="audio-btn" id="audio-prev" aria-label="Previous track">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="2.5" height="14" rx="1"/><path d="M20 5.4v13.2a1 1 0 0 1-1.53.85l-9.5-6.6a1 1 0 0 1 0-1.7l9.5-6.6A1 1 0 0 1 20 5.4Z"/></svg>
+        </button>
+        <button class="audio-btn audio-btn--play" id="audio-playpause" aria-label="Play">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"/></svg>
+        </button>
+        <button class="audio-btn" id="audio-next" aria-label="Next track">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="16.5" y="5" width="2.5" height="14" rx="1"/><path d="M4 5.4v13.2a1 1 0 0 0 1.53.85l9.5-6.6a1 1 0 0 0 0-1.7l-9.5-6.6A1 1 0 0 0 4 5.4Z"/></svg>
+        </button>
+      </div>
+      <div class="audio-vol">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <input type="range" class="audio-volrange" id="audio-vol" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+      </div>
+    </div>
   </div>
 
   <!-- QuickBooks Mobile case-study slide deck -->
@@ -1507,10 +1563,68 @@ in the middle of a lake.</p>
       lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
     })();
 
+    /* ── Audio player (Analogue music) ── */
+    (function () {
+      const modal = document.getElementById('audio-modal');
+      const audio = document.getElementById('audio-el');
+      const link  = document.getElementById('audio-link');
+      if (!modal || !audio || !link) return;
+      const playBtn = document.getElementById('audio-playpause');
+      const prevBtn = document.getElementById('audio-prev');
+      const nextBtn = document.getElementById('audio-next');
+      const seek    = document.getElementById('audio-seek');
+      const volume  = document.getElementById('audio-vol');
+      const curEl   = document.getElementById('audio-cur');
+      const durEl   = document.getElementById('audio-dur');
+      const nameEl  = document.getElementById('audio-trackname');
+      const closeBtn = document.getElementById('audio-close');
+      const PLAY  = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"/></svg>';
+      const PAUSE = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+      const BASE = 'no fixed star - a peaceful, dark place (remix) - ';
+      const TRACKS = [
+        { name: 'compass',   file: BASE + '01 compass (remix).wav' },
+        { name: 'redwoods',  file: BASE + '02 redwoods (remix).wav' },
+        { name: 'malamute',  file: BASE + '03 malamute (remix).wav' },
+        { name: 'summerset', file: BASE + '04 summerset (remix).wav' },
+        { name: 'lorelai',   file: BASE + '05 lorelai (remix).wav' },
+      ];
+      let idx = 0, seeking = false;
+      const fmt = (t) => (!isFinite(t) ? '0:00' : Math.floor(t/60) + ':' + String(Math.floor(t%60)).padStart(2,'0'));
+      function syncBtn() { playBtn.innerHTML = audio.paused ? PLAY : PAUSE; playBtn.setAttribute('aria-label', audio.paused ? 'Play' : 'Pause'); }
+      function load(i, play) {
+        idx = (i + TRACKS.length) % TRACKS.length;
+        audio.src = 'music/' + TRACKS[idx].file;
+        nameEl.textContent = TRACKS[idx].name;
+        if (play) audio.play().catch(() => {});
+      }
+      function open()  { modal.classList.add('open'); }
+      function close() { modal.classList.remove('open'); audio.pause(); }
+      window._audioOpen = () => modal.classList.contains('open');
+      window._closeAudio = close;
+
+      link.addEventListener('click', open);
+      playBtn.addEventListener('click', () => { audio.paused ? audio.play() : audio.pause(); });
+      prevBtn.addEventListener('click', () => { (audio.currentTime > 3 ? load(idx, true) : load(idx - 1, true)); });
+      nextBtn.addEventListener('click', () => load(idx + 1, true));
+      audio.addEventListener('play', syncBtn);
+      audio.addEventListener('pause', syncBtn);
+      audio.addEventListener('ended', () => load(idx + 1, true));   /* auto-advance */
+      volume.addEventListener('input', () => { audio.volume = +volume.value; });
+      audio.addEventListener('loadedmetadata', () => { durEl.textContent = fmt(audio.duration); seek.max = audio.duration || 100; });
+      audio.addEventListener('timeupdate', () => { if (!seeking) seek.value = audio.currentTime; curEl.textContent = fmt(audio.currentTime); });
+      seek.addEventListener('input', () => { seeking = true; curEl.textContent = fmt(+seek.value); });
+      seek.addEventListener('change', () => { audio.currentTime = +seek.value; seeking = false; });
+      closeBtn.addEventListener('click', close);
+      modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+      load(0, false);
+      syncBtn();
+    })();
+
     /* Escape: close the lightbox first, otherwise step out of any open sub-page */
     document.addEventListener('keydown', (e) => {
       if (e.key !== 'Escape') return;
       if (window._lightboxOpen && window._lightboxOpen()) { window._closeLightbox(); return; }
+      if (window._audioOpen && window._audioOpen()) { window._closeAudio(); return; }
       /* A pinned QB card takes priority: unlock it without leaving the sub-page */
       if (window._qbCardIsLocked && window._qbCardIsLocked()) { window._unlockQbCard(); return; }
       if (subpageIsOpen()) {
