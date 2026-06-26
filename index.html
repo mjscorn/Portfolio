@@ -784,9 +784,9 @@
               <div class="resume-section">
                 <p class="resume-section-label">interests</p>
                 <div class="resume-sidebar-item">
-                  <p>Woodworking</p>
+                  <p><a class="sublink photo-link" data-photo="images/stool.jpg" data-photo-alt="Woodworking — handmade stool">Woodworking<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
                   <p>Analogue music</p>
-                  <p>Fly fishing</p>
+                  <p><a class="sublink photo-link" data-photo="images/flyfishing.jpg" data-photo-alt="Fly fishing on the river">Fly fishing<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
                   <p><a class="poetry-link" id="poetry-link">Poetry<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
                 </div>
               </div>
@@ -1490,12 +1490,17 @@ in the middle of a lake.</p>
       }
       window._lightboxOpen = () => lightbox.classList.contains('open');
       window._closeLightbox = closeLightbox;
+      window._openLightbox = openLightbox;
 
       grid.addEventListener('click', (e) => {
         const item = e.target.closest('.reachout-item');
         if (!item) return;
         const img = item.querySelector('img');
         openLightbox(img.src, img.alt);
+      });
+      /* Resume hobby chevrons that open a single photo in the same lightbox */
+      document.querySelectorAll('.photo-link').forEach((el) => {
+        el.addEventListener('click', () => openLightbox(el.dataset.photo, el.dataset.photoAlt || ''));
       });
       document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
       /* Click the backdrop (but not the image) to close */
