@@ -1113,33 +1113,36 @@ in the middle of a lake.</p>
       const ctx = canvas.getContext('2d');
       const R2 = Math.SQRT2;
       const ROT = -Math.PI / 4;
-      const COLORS = ['rgba(22, 62, 90, 0.011)', 'rgba(14, 40, 60, 0.017)', 'rgba(32, 84, 118, 0.018)'];
+      const COLORS = ['rgba(14, 40, 60, 0.017)', 'rgba(32, 84, 118, 0.018)'];
       const SHAPE_W = 60;
-      const N_LANES = 12;
-      const GAP = 4;
+      const LANE_PITCH = 140;   /* perpendicular spacing kept > SHAPE_W so lanes never overlap */
+      const GAP = 6;
       let shapes = [];
 
       function initShapes() {
         shapes = [];
         const W = canvas.width, H = canvas.height;
         const periodPx = (W + H) / R2;
-        for (let i = 0; i < N_LANES; i++) {
+        const N = Math.max(2, Math.round(periodPx / LANE_PITCH));
+        for (let i = 0; i < N; i++) {
           const speed = 0.024 + Math.random() * 0.006;
-          const uFrac = (i + 0.5) / N_LANES;
-          const chain = [];
-          let totalPx = 0;
-          while (totalPx < periodPx * 1.15) {
-            const height = 90 + Math.random() * 140;
-            const gap    = GAP + Math.random() * 160;
-            chain.push({ height, gap });
-            totalPx += height + gap;
-          }
-          const chainPer = totalPx / periodPx;
-          const phase    = Math.random() * chainPer;
-          let vOff = -phase;
-          for (const seg of chain) {
-            shapes.push({ uFrac, v: vOff, speed, height: seg.height, color: COLORS[Math.floor(Math.random() * 3)], chainPer });
-            vOff -= (seg.height + seg.gap) / periodPx;
+          const uFrac = (i + 0.5) / N;
+          /* Build a lane's repeating chain. gaps[k] is the EDGE gap to the next
+             shape (it accounts for both shapes' heights), so neighbours in a
+             lane never overlap no matter their relative sizes. */
+          const heights = [], gaps = [];
+          let spanPx = 0;
+          do {
+            heights.push(90 + Math.random() * 140);
+            gaps.push(GAP + Math.random() * 160);
+            spanPx += heights[heights.length - 1] + gaps[gaps.length - 1];
+          } while (spanPx < periodPx * 1.2);
+          const chainPer = spanPx / periodPx;
+          const n = heights.length;
+          let centerPx = -Math.random() * spanPx;
+          for (let k = 0; k < n; k++) {
+            shapes.push({ uFrac, v: centerPx / periodPx, speed, height: heights[k], color: COLORS[Math.floor(Math.random() * COLORS.length)], chainPer });
+            centerPx -= heights[k] / 2 + gaps[k] + heights[(k + 1) % n] / 2;
           }
         }
       }
