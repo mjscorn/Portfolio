@@ -322,7 +322,9 @@
     .audio-modal.open .audio-card { transform: none; }
     .audio-title { font-size: 15px; font-weight: 600; letter-spacing: 0.04em; text-align: center; color: var(--text-primary); margin: 0 0 18px; }
     .audio-cover { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 10px; display: block; box-shadow: 0 6px 24px rgba(0,0,0,0.45); }
-    .audio-trackname { font-size: 13px; color: rgba(220,232,240,0.7); text-align: center; margin: 16px 0 14px; min-height: 16px; }
+    .audio-trackrow { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; width: 100%; margin: 16px 0 14px; }
+    .audio-trackname { font-size: 13px; color: rgba(220,232,240,0.85); text-align: left; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .audio-trackcount { font-size: 12px; color: rgba(220,232,240,0.5); text-align: right; white-space: nowrap; flex-shrink: 0; font-variant-numeric: tabular-nums; }
     .audio-progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; width: 100%; }
     .audio-time { font-size: 11px; color: rgba(220,232,240,0.55); min-width: 32px; font-variant-numeric: tabular-nums; }
     .audio-time:last-child { text-align: right; }
@@ -938,7 +940,10 @@ in the middle of a lake.</p>
     <div class="audio-card">
       <p class="audio-title">no fixed star</p>
       <img class="audio-cover" src="music/cover.jpg" alt="no fixed star — a peaceful, dark place album cover">
-      <p class="audio-trackname" id="audio-trackname">compass</p>
+      <div class="audio-trackrow">
+        <span class="audio-trackname" id="audio-trackname">compass</span>
+        <span class="audio-trackcount" id="audio-trackcount">1 of 5</span>
+      </div>
       <audio id="audio-el" preload="metadata"></audio>
       <div class="audio-progress-row">
         <span class="audio-time" id="audio-cur">0:00</span>
@@ -1577,16 +1582,17 @@ in the middle of a lake.</p>
       const curEl   = document.getElementById('audio-cur');
       const durEl   = document.getElementById('audio-dur');
       const nameEl  = document.getElementById('audio-trackname');
+      const countEl = document.getElementById('audio-trackcount');
       const closeBtn = document.getElementById('audio-close');
       const PLAY  = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"/></svg>';
       const PAUSE = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
       const BASE = 'no fixed star - a peaceful, dark place (remix) - ';
       const TRACKS = [
-        { name: 'compass',   file: BASE + '01 compass (remix).wav' },
-        { name: 'redwoods',  file: BASE + '02 redwoods (remix).wav' },
-        { name: 'malamute',  file: BASE + '03 malamute (remix).wav' },
-        { name: 'summerset', file: BASE + '04 summerset (remix).wav' },
-        { name: 'lorelai',   file: BASE + '05 lorelai (remix).wav' },
+        { name: 'compass',   file: BASE + '01 compass (remix).mp3' },
+        { name: 'redwoods',  file: BASE + '02 redwoods (remix).mp3' },
+        { name: 'malamute',  file: BASE + '03 malamute (remix).mp3' },
+        { name: 'summerset', file: BASE + '04 summerset (remix).mp3' },
+        { name: 'lorelai',   file: BASE + '05 lorelai (remix).mp3' },
       ];
       let idx = 0, seeking = false;
       const fmt = (t) => (!isFinite(t) ? '0:00' : Math.floor(t/60) + ':' + String(Math.floor(t%60)).padStart(2,'0'));
@@ -1595,6 +1601,7 @@ in the middle of a lake.</p>
         idx = (i + TRACKS.length) % TRACKS.length;
         audio.src = 'music/' + TRACKS[idx].file;
         nameEl.textContent = TRACKS[idx].name;
+        countEl.textContent = (idx + 1) + ' of ' + TRACKS.length;
         if (play) audio.play().catch(() => {});
       }
       function open()  { modal.classList.add('open'); }
