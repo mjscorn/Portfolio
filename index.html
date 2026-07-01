@@ -1188,7 +1188,11 @@ in the middle of a lake.</p>
         const period = (W + H) / R2;
         const uMin = -H / R2, uRange = (W + H) / R2;
         bgSpeedNow += (bgSpeedTarget - bgSpeedNow) * 0.12;
-        ctx.fillStyle = 'rgba(13,21,25,0.14)';
+        /* Clear proportionally harder as the field speeds up, so a fast shape's
+           trail stays the same short length and never bridges the gap to the
+           next shape (which made them look like they touch during nav). */
+        const clearA = Math.min(0.85, 0.14 * bgSpeedNow);
+        ctx.fillStyle = 'rgba(13,21,25,' + clearA + ')';
         ctx.fillRect(0, 0, W, H);
         shapes.forEach(s => {
           s.v += s.speed * bgSpeedNow / period;
