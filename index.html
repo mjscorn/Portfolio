@@ -6,7 +6,7 @@
   <title>Michael Young — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wdth,wght@75..125,200..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --teal: #2196c8; --teal-light: rgba(33, 150, 200, 0.15); --text-primary: #dce8f0; --stroke: #1e2d3a; --bg: #141d26; --radius-md: 12px; --radius-full: 9999px; }
@@ -70,7 +70,7 @@
     body.light .cursor-all-scroll                             { cursor: url('cursors/light/sizeall.cur'), all-scroll; }
 
     /* ── Base ── */
-    html, body { height: 100%; font-family: 'Inconsolata', monospace; background: #0d1519; color: var(--text-primary); letter-spacing: 0.1em; }
+    html, body { height: 100%; font-family: 'IBM Plex Mono', monospace; background: #0d1519; color: var(--text-primary); letter-spacing: 0.1em; }
     button, .cta { letter-spacing: 0.25em; }
 
     /* ── Nav ── */
@@ -193,7 +193,7 @@
     .hero h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 700; color: var(--text-primary); line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.02em; }
     .hero .hero-quote { font-size: 16px; font-style: italic; color: var(--teal); margin-bottom: 20px; }
     .hero p { font-size: 15px; font-weight: 400; color: #6a8a9e; line-height: 1.7; margin-bottom: 24px; }
-    .cta { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #fff; font-family: 'Inconsolata', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; padding: 10px 24px; border-radius: var(--radius-md); text-decoration: none; border: none; transition: opacity 0.18s ease, transform 0.18s ease; }
+    .cta { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #fff; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; padding: 10px 24px; border-radius: var(--radius-md); text-decoration: none; border: none; transition: opacity 0.18s ease, transform 0.18s ease; }
     .cta:hover { opacity: 0.85; transform: translateY(-1px); }
     /* Home "View Portfolio": outline only; on hover a field of 2x2 pixels
        rolls across it in interfering wave motion (rendered on a canvas). */
@@ -227,7 +227,7 @@
     #contact .contact-box h2 { font-size: 22px; font-weight: 600; margin-bottom: 24px; text-align: center; }
     .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; position: relative; }
     .field label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); }
-    .field input, .field textarea { font-family: 'Inconsolata', monospace; font-size: 13px; color: var(--text-primary); background: rgba(0,0,0,0.25); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 10px 12px; outline: none; resize: none; transition: border-color 0.18s; }
+    .field input, .field textarea { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--text-primary); background: rgba(0,0,0,0.25); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 10px 12px; outline: none; resize: none; transition: border-color 0.18s; }
     .field input:focus, .field textarea:focus { border-color: var(--teal); background: rgba(0,0,0,0.35); }
     .field input::placeholder, .field textarea::placeholder { color: #3a5060; }
     #contact .page-body * { font-size: 16px; }
@@ -456,7 +456,7 @@
     /* Labels wrap (and break long words) instead of staying on one line, so a
        question can never overflow its narrow column and overlap the next — this
        applies at every width, including narrow two-column desktop sizes. */
-    .qb-c3-label { flex: 1 1 0; min-width: 0; font-size: 8px; font-family: -apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Helvetica Neue', sans-serif; font-weight: 400; color: rgba(220,232,240,0.9); text-align: left; white-space: normal; overflow-wrap: break-word; line-height: 1.2; opacity: 0; transform: translateY(-10px); }
+    .qb-c3-label { flex: 1 1 0; min-width: 0; font-size: 8px; font-family: 'IBM Plex Mono', monospace; font-weight: 400; color: rgba(220,232,240,0.9); text-align: left; white-space: normal; overflow-wrap: break-word; line-height: 1.2; opacity: 0; transform: translateY(-10px); }
     .qb-c3-phones { flex: 0 0 auto; display: flex; gap: 8px; align-items: flex-end; }
     .qb-img .qb-c3-phone { flex: 1 1 0; min-width: 0; width: 100%; height: auto; max-height: none; border-radius: 6px; object-fit: contain; object-position: left center; display: block; opacity: 0; transform: translateY(28px); box-shadow: none; padding: 0; background: transparent; }
     .qb-img.hover-active-3 .qb-c3-label { animation: qbc3-label-in 0.32s ease-out calc(var(--c3-delay) * 1ms) forwards; }
@@ -503,7 +503,7 @@
     .passkey-overlay.open .passkey-card { transform: none; }
     .passkey-card h3 { margin: 0 0 22px; font-size: 18px; font-weight: 600; color: var(--text-primary); }
     .pk-fields { display: flex; gap: 12px; justify-content: center; }
-    .pk-digit { width: 46px; height: 56px; text-align: center; font-family: 'Inconsolata', monospace; font-size: 24px; color: var(--text-primary); background: rgba(0,0,0,0.25); border: 1px solid var(--stroke); border-radius: var(--radius-md); outline: none; transition: border-color 0.18s, background 0.18s; }
+    .pk-digit { width: 46px; height: 56px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 24px; color: var(--text-primary); background: rgba(0,0,0,0.25); border: 1px solid var(--stroke); border-radius: var(--radius-md); outline: none; transition: border-color 0.18s, background 0.18s; }
     .pk-digit:focus { border-color: var(--teal); background: rgba(0,0,0,0.35); }
     .pk-digit.pk-bad { border-color: #e0915a; }
     .pk-error { margin: 16px 0 0; font-size: 12px; line-height: 1.4; color: #e0915a; min-height: 14px; opacity: 0; transition: opacity 0.18s; }
