@@ -70,11 +70,11 @@
     body.light .cursor-all-scroll                             { cursor: url('cursors/light/sizeall.cur'), all-scroll; }
 
     /* ── Base ── */
-    html, body { height: 100%; font-family: 'IBM Plex Mono', monospace; background: #0d1519; color: var(--text-primary); letter-spacing: 0.1em; }
+    html, body { height: 100%; font-family: 'IBM Plex Mono', monospace; background: linear-gradient(180deg, #141d26 0%, #141d26 16.67%, #1f2131 50%, #33343c 83.33%, #33343c 100%); color: var(--text-primary); letter-spacing: 0.1em; }
     button, .cta { letter-spacing: 0.25em; }
 
     /* ── Nav ── */
-    nav { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; align-items: center; gap: 20px; background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 8px 12px; white-space: nowrap; box-shadow: 0 2px 24px rgba(0,0,0,0.4); overflow: visible; }
+    nav { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; align-items: center; gap: 20px; background: var(--bg); border: 1px solid #33343c; border-radius: var(--radius-md); padding: 8px 12px; white-space: nowrap; overflow: visible; }
     .tab { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 4px 28px; border-radius: var(--radius-md); flex: 0 0 auto; transition: background 0.18s ease; text-decoration: none; color: var(--text-primary); font-size: 20px; font-weight: 300; }
     .tab-icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.8; transition: transform 0.18s ease; }
     .tab:hover { background: rgba(33, 150, 200, 0.12); }
@@ -104,7 +104,7 @@
     body.brand-minimal nav .brand { padding: 0; }
     .nav-flyout {
       position: fixed; left: 24px; top: 82px; z-index: 200;
-      min-width: 200px; display: flex; flex-direction: column; overflow: hidden;
+      min-width: 200px; display: flex; flex-direction: column; gap: 4px; padding: 4px; overflow: hidden;
       background: var(--bg); border: 1px solid var(--stroke);
       border-radius: var(--radius-md); box-shadow: 0 4px 32px rgba(0,0,0,0.5);
       opacity: 0; transform: translateY(-8px); pointer-events: none;
@@ -113,7 +113,7 @@
     .nav-flyout.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
     .flyout-item {
       display: flex; align-items: center; gap: 10px;
-      padding: 12px 16px; text-decoration: none;
+      padding: 12px 16px; text-decoration: none; border-radius: 6px;
       color: var(--text-primary); font-size: 14px; font-weight: 400;
       transition: background 0.15s ease;
     }
@@ -135,9 +135,8 @@
       margin-left: auto;
       margin-right: auto;
       background: var(--bg);
-      border: 1px solid var(--stroke);
+      border: 1px solid #33343c;
       border-radius: 12px;
-      box-shadow: 0 4px 40px rgba(0,0,0,0.35);
       z-index: 10;
       overflow-x: hidden;
       overflow-y: auto;
@@ -202,11 +201,15 @@
     .cta[data-section="portfolio"] .cta-px { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.25s ease; pointer-events: none; image-rendering: pixelated; }
     .cta[data-section="portfolio"]:hover .cta-px { opacity: 1; }
     .cta[data-section="portfolio"] .cta-label { position: relative; z-index: 1; }
+    .cta-arrow { width: 16px; height: 16px; vertical-align: middle; margin-left: 8px; }
+    .cta-arrow--filled { display: none; }
+    .cta[data-section="portfolio"]:hover .cta-arrow--outline { display: none; }
+    .cta[data-section="portfolio"]:hover .cta-arrow--filled { display: inline; }
 
     /* ── Portfolio ── */
     .portfolio-intro { width: 100%; max-width: 900px; margin: 0 auto 40px; }
     .portfolio-intro h2 { font-size: 22px; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; }
-    .portfolio-intro p { font-size: 15px; color: #6a8a9e; line-height: 1.7; max-width: 620px; }
+    .portfolio-intro p { font-size: 15px; color: #6a8a9e; line-height: 1.7; max-width: 900px; }
     .section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-bottom: 32px; width: 100%; max-width: 900px; margin-left: auto; margin-right: auto; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; width: 100%; max-width: 900px; margin: 0 auto; }
     .card { background: rgba(255,255,255,0.03); border: 1px solid var(--stroke); border-radius: var(--radius-md); overflow: hidden; transition: box-shadow 0.2s ease, transform 0.2s ease; }
@@ -261,14 +264,14 @@
     /* Experience: company → roles → bullets */
     .xp + .xp { margin-top: 22px; }
     .xp-company { font-size: var(--rfs); font-weight: 700; line-height: 1.5; }
-    .xp-role { margin-top: 16px; }
-    .xp-company + .xp-role { margin-top: 10px; }
+    .xp-role { margin-top: 20px; }
+    .xp-company + .xp-role { margin-top: 20px; }
     .xp-role-title { font-size: var(--rfs); font-weight: 600; line-height: 1.5; }
     .xp-bullets { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
     .xp-bullets li { position: relative; padding-left: 15px; font-size: var(--rfs); line-height: 1.5; color: rgba(220,232,240,0.6); }
     .xp-bullets li::before { content: '•'; position: absolute; left: 2px; top: 0; color: var(--teal); }
     /* Compact entries: secondary experience + education */
-    .r-entry + .r-entry { margin-top: 14px; }
+    .r-entry + .r-entry { margin-top: 20px; }
     .r-entry .r-name { font-size: var(--rfs); font-weight: 700; line-height: 1.5; color: var(--text-primary); }
     .r-entry .r-sub { font-size: var(--rfs); line-height: 1.5; margin-top: 2px; color: rgba(220,232,240,0.6); }
     .r-entry .r-sub .nm { color: rgba(220,232,240,0.75); }
@@ -293,8 +296,8 @@
     .subpage {
       position: fixed; top: 110px; left: 24px; right: 24px; bottom: 24px;
       max-width: 1440px; margin-left: auto; margin-right: auto;
-      background: var(--bg); border: 1px solid var(--stroke); border-radius: 12px;
-      box-shadow: 0 4px 40px rgba(0,0,0,0.35); z-index: 40;
+      background: var(--bg); border: 1px solid #33343c; border-radius: 12px;
+      z-index: 40;
       overflow-x: hidden; overflow-y: auto; padding: 24px;
       transform: translateX(110vw); pointer-events: none;
       /* Hidden when closed so it can never peek into view while the window is
@@ -667,7 +670,7 @@
         <p class="hero-eyebrow">UX/UI</p>
         <h1>Michael Young</h1>
         <p>I believe design is an empathetic process. <br class="hero-break">Based in Pacific Grove, CA.</p>
-        <a class="cta" data-section="portfolio"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">View Portfolio →</span></a>
+        <a class="cta" data-section="portfolio"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">View Portfolio<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></a>
       </div>
     </div>
   </section>
@@ -1035,7 +1038,7 @@ in the middle of a lake.</p>
             </div>
           </div>
           <div class="qb-img qb-metrics-img">
-            <img src="qbmobile/img4-final.png" alt="QuickBooks Mobile dashboard and charge screens" class="qb-default-img">
+            <img src="qbmobile/img4-final.png" alt="QuickBooks Mobile dashboard and charge screens" class="qb-default-img qb-hero-tap">
             <!-- 1 · revenue: line trending up -->
             <div class="qb-metric qb-metric-1" aria-hidden="true">
               <div class="qb-metric-value">$3.7M</div>
@@ -1120,11 +1123,25 @@ in the middle of a lake.</p>
       const ctx = canvas.getContext('2d');
       const R2 = Math.SQRT2;
       const ROT = -Math.PI / 4;
-      const COLORS = ['rgba(14, 40, 60, 0.0085)', 'rgba(32, 84, 118, 0.009)'];
+      const COLORS = ['rgba(58, 64, 102, 0.032)'];
       const SHAPE_W = 60;
-      const LANE_PITCH = 140;   /* perpendicular spacing kept > SHAPE_W so lanes never overlap */
+      const LANE_PITCH = 240;   /* wider lanes => fewer rectangles (also > SHAPE_W so no overlap) */
       const GAP = 6;
       let shapes = [];
+
+      /* Vertical "Japanese gradient" background: mouse-grey -> iron -> dove-feather.
+         Rebuilt on resize since it's tied to the canvas height. */
+      let bgGrad = null;
+      function buildGradient() {
+        const g = ctx.createLinearGradient(0, 0, 0, canvas.height || 1);
+        g.addColorStop(0.0000, '#141d26'); g.addColorStop(0.1667, '#141d26');  /* top = main card blue */
+        g.addColorStop(0.5000, '#1f2131'); g.addColorStop(0.5476, '#202232');
+        g.addColorStop(0.5952, '#222433'); g.addColorStop(0.6429, '#272835');
+        g.addColorStop(0.6905, '#2b2d38'); g.addColorStop(0.7381, '#30313a');
+        g.addColorStop(0.7857, '#32333b'); g.addColorStop(0.8333, '#33343c');
+        g.addColorStop(1.0000, '#33343c');
+        bgGrad = g;
+      }
 
       function initShapes() {
         shapes = [];
@@ -1141,7 +1158,7 @@ in the middle of a lake.</p>
           let spanPx = 0;
           do {
             heights.push(90 + Math.random() * 140);
-            gaps.push(GAP + Math.random() * 160);
+            gaps.push(GAP + Math.random() * 360);
             spanPx += heights[heights.length - 1] + gaps[gaps.length - 1];
           } while (spanPx < periodPx * 1.2);
           const chainPer = spanPx / periodPx;
@@ -1158,7 +1175,8 @@ in the middle of a lake.</p>
       function resize() {
         canvas.width  = window.innerWidth;
         canvas.height = window.innerHeight;
-        ctx.fillStyle = '#0d1519';
+        buildGradient();
+        ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         /* Build shapes only on the first valid size. Rebuilding on every
            resize tick reseeds random positions each frame, which makes the
@@ -1192,8 +1210,10 @@ in the middle of a lake.</p>
            trail stays the same short length and never bridges the gap to the
            next shape (which made them look like they touch during nav). */
         const clearA = Math.min(0.85, 0.14 * bgSpeedNow);
-        ctx.fillStyle = 'rgba(13,21,25,' + clearA + ')';
+        ctx.globalAlpha = clearA;
+        ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, W, H);
+        ctx.globalAlpha = 1;
         shapes.forEach(s => {
           s.v += s.speed * bgSpeedNow / period;
           if (s.v > 0.1) s.v -= s.chainPer;
