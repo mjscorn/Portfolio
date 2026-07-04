@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --teal: #2196c8; --teal-light: rgba(33, 150, 200, 0.15); --text-primary: #dce8f0; --stroke: #1e2d3a; --bg: #141d26; --radius-md: 12px; --radius-full: 9999px; }
+    :root { --teal: #6e7bcf; --teal-light: rgba(110, 123, 207, 0.15); --text-primary: #dce8f0; --stroke: #1e2d3a; --bg: #141d26; --radius-md: 12px; --radius-full: 9999px; }
 
     /* ── Cursor mapping ── dark (default) ───────────────────────── */
     *                                              { cursor: url('cursors/dark/arrow.cur'), auto; }
@@ -77,15 +77,20 @@
     nav { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; align-items: center; gap: 20px; background: var(--bg); border: 1px solid #33343c; border-radius: var(--radius-md); padding: 8px 12px; white-space: nowrap; overflow: visible; }
     .tab { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 4px 28px; border-radius: var(--radius-md); flex: 0 0 auto; transition: background 0.18s ease; text-decoration: none; color: var(--text-primary); font-size: 20px; font-weight: 300; }
     .tab-icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.8; transition: transform 0.18s ease; }
-    .tab:hover { background: rgba(33, 150, 200, 0.12); }
+    .tab:hover { background: rgba(110, 123, 207, 0.12); }
     .tab:hover .tab-icon { transform: scale(1.2); }
-    .tab.active { background: rgba(33, 150, 200, 0.12); font-weight: 500; }
+    .tab.active { background: rgba(110, 123, 207, 0.12); font-weight: 500; }
     .tab.active .tab-icon { opacity: 1; }
     .tab-icon--filled { display: none; }
     .tab.active .tab-icon--outline { display: none; }
     .tab.active .tab-icon--filled { display: inline-block; }
-    .brand { display: flex; align-items: center; gap: 8px; padding: 0 40px; border-radius: var(--radius-md); height: 0; overflow: visible; }
-    .brand-icon { width: 52px; height: 52px; flex-shrink: 0; }
+    .brand { display: flex; align-items: center; gap: 8px; padding: 0 40px; border-radius: var(--radius-md); height: 0; overflow: visible; cursor: pointer; }
+    .brand-icon { width: 52px; height: 52px; flex-shrink: 0; border-radius: 50%; cursor: pointer; transition: transform 0.18s ease; }
+    .brand-name { cursor: pointer; }
+    .brand-circle { fill: var(--teal); transition: fill 0.18s ease; }
+    .brand:hover .brand-icon { transform: scale(1.08); }
+    .brand:hover .brand-circle { fill: #5a66b8; }
+    .brand.active .brand-icon { outline: 1px solid #fff; outline-offset: 3px; }
     .brand-name { font-size: 20px; font-weight: 500; letter-spacing: 0.04em; color: var(--text-primary); }
 
     /* ── Collapsed nav / hamburger menu ── */
@@ -117,10 +122,14 @@
       color: var(--text-primary); font-size: 14px; font-weight: 400;
       transition: background 0.15s ease;
     }
-    .flyout-item:hover, .flyout-item.active { background: rgba(33, 150, 200, 0.12); }
+    .flyout-item:hover, .flyout-item.active { background: rgba(110, 123, 207, 0.12); }
     .flyout-item.active { font-weight: 500; }
-    .flyout-icon { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.8; }
+    .flyout-icon { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.8; transition: transform 0.18s ease; }
+    .flyout-icon--filled { display: none; }
+    .flyout-item:hover .flyout-icon { transform: scale(1.2); }
     .flyout-item.active .flyout-icon { opacity: 1; }
+    .flyout-item.active .flyout-icon--outline { display: none; }
+    .flyout-item.active .flyout-icon--filled { display: inline-block; }
 
     /* ── Cards — each section is its own full card ── */
     section {
@@ -161,7 +170,7 @@
     /* ── Page title + body layout ── */
     .page-title { font-size: 32px; font-weight: 400; flex-shrink: 0; position: sticky; top: -24px; z-index: 5; background: var(--bg); margin: -24px -24px 12px; padding: 24px 24px 12px; }
     .page-body { flex: 1; display: flex; flex-direction: column; align-items: center; width: 100%; }
-    #home .page-body, #contact .page-body { justify-content: center; }
+    #home .page-body, #contact .page-body, #about .page-body { justify-content: center; }
     /* Push main content 80px below the title bar (12px title margin + 68px) */
     #portfolio .page-body, #resume .page-body { margin-top: 68px; }
 
@@ -188,6 +197,10 @@
 
     /* ── Hero (Home) ── */
     .hero { text-align: center; max-width: 600px; padding: 0 24px; }
+    /* ── About me ── */
+    .about-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; padding: 0 24px; }
+    .about-pixel { width: min(46vh, 440px); max-width: 84vw; height: auto; aspect-ratio: 1 / 1; image-rendering: pixelated; border-radius: 10px; box-shadow: 0 8px 40px rgba(0,0,0,0.35); }
+    .about-wip { color: var(--teal); text-transform: lowercase; letter-spacing: 0.5em; padding-left: 0.5em; font-size: 13px; font-weight: 300; }
     .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 24px; }
     .hero h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 700; color: var(--text-primary); line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.02em; }
     .hero .hero-quote { font-size: 16px; font-style: italic; color: var(--teal); margin-bottom: 20px; }
@@ -222,7 +235,7 @@
     #qbmobile-link .card-thumb img { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 45%; height: auto; display: block; border-radius: 12px 12px 0 0; box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 8px 24px rgba(0,0,0,0.4); }
     .card-link { cursor: pointer; }
     .card-body { padding: 16px; }
-    .card-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .card-title { font-size: 13px; font-weight: 400; margin-bottom: 6px; }
     .card-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); background: var(--teal-light); display: inline-block; padding: 2px 8px; border-radius: 4px; }
 
     /* ── Contact ── */
@@ -246,7 +259,7 @@
     #contact .cta[disabled] { opacity: 0.45; pointer-events: none; }
     #contact .cta.sending { opacity: 0.7; pointer-events: none; }
     #contact .cta { background: transparent; border: 1px solid #fff; border-radius: 4px; transition: background 0.18s ease, border-color 0.18s ease; }
-    #contact .cta:hover { opacity: 1; transform: none; background: rgba(33, 150, 200, 0.12); border-color: var(--teal); }
+    #contact .cta:hover { opacity: 1; transform: none; background: rgba(110, 123, 207, 0.12); border-color: var(--teal); }
 
     /* ── Resume ── */
     .resume-summary { width: 100%; max-width: 720px; margin: 0 auto 36px; }
@@ -412,7 +425,7 @@
     .qb-metrics-img.hover-active .qb-metric-1 .m1-dot  { animation: qb-m-pop 0.35s ease-out 1.0s forwards; }
     @keyframes qb-m1-draw { to { stroke-dashoffset: 0; } }
     /* 2 · bars */
-    .m2-bar { fill: rgba(33,150,200,0.4); transform: scaleY(0); transform-box: fill-box; transform-origin: center bottom; }
+    .m2-bar { fill: rgba(110,123,207,0.4); transform: scaleY(0); transform-box: fill-box; transform-origin: center bottom; }
     .m2-bar--hi { fill: var(--teal); }
     .qb-metrics-img.hover-active-2 .qb-metric-2 .m2-bar { animation: qb-m2-grow 0.55s cubic-bezier(0.2,0.8,0.2,1) forwards; }
     @keyframes qb-m2-grow { to { transform: scaleY(1); } }
@@ -424,7 +437,7 @@
     .qb-metrics-img.hover-active-3 .qb-metric-3 .m3-arrow { animation: qb-m-fade 0.4s ease-out 0.75s forwards; }
     @keyframes qb-m3-fill { to { stroke-dashoffset: 70; } }
     /* 4 · tiles */
-    .m4-tile { fill: rgba(33,150,200,0.16); stroke: var(--teal); stroke-width: 2; opacity: 0; transform: scale(0); transform-box: fill-box; transform-origin: center; }
+    .m4-tile { fill: rgba(110,123,207,0.16); stroke: var(--teal); stroke-width: 2; opacity: 0; transform: scale(0); transform-box: fill-box; transform-origin: center; }
     .qb-metrics-img.hover-active-4 .qb-metric-4 .m4-tile { animation: qb-m4-pop 0.45s cubic-bezier(0.2,0.9,0.3,1.25) forwards; }
     @keyframes qb-m4-pop { 0% { opacity: 0; transform: scale(0); } 70% { opacity: 1; transform: scale(1.08); } 100% { opacity: 1; transform: scale(1); } }
     /* shared */
@@ -469,10 +482,10 @@
     .qb-body:has(+ .qb-cards) { font-size: 18px; }
     .qb-cards { display: flex; flex-direction: column; gap: 20px; }
     .qb-card { background: rgba(255,255,255,0.04); border: 1px solid var(--stroke); border-radius: 12px; padding: 14px 16px; font-size: 14px; line-height: 1.6; color: rgba(220,232,240,0.72); transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.2s ease; cursor: default; }
-    .qb-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(33,150,200,0.45); color: var(--text-primary); transform: scale(1.03); }
+    .qb-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(110,123,207,0.45); color: var(--text-primary); transform: scale(1.03); }
     .qb-card-interactive { cursor: pointer; }
     /* Clicked-locked card: hold the scale, lighten the border, pin the image */
-    .qb-card.qb-card-locked { background: rgba(255,255,255,0.08); border-color: var(--teal); color: var(--text-primary); transform: scale(1.03); box-shadow: 0 0 0 1px rgba(33,150,200,0.55), 0 6px 20px rgba(0,0,0,0.35); }
+    .qb-card.qb-card-locked { background: rgba(255,255,255,0.08); border-color: var(--teal); color: var(--text-primary); transform: scale(1.03); box-shadow: 0 0 0 1px rgba(110,123,207,0.55), 0 6px 20px rgba(0,0,0,0.35); }
     @media (max-width: 640px) {
       .qb-row, .qb-section:nth-child(even) .qb-row { flex-direction: column; gap: 28px; }
       /* One column: drop the alternating half-width indent so section titles
@@ -535,11 +548,11 @@
     .poetry-header { display: flex; align-items: center; gap: 16px; flex-shrink: 0; position: sticky; top: -24px; z-index: 5; background: var(--bg); margin: -24px -24px 12px; padding: 24px 24px 12px; }
     .poetry-header .page-title { position: static; margin: 0; padding: 0; background: transparent; }
     .poetry-back { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: transparent; border: 1px solid var(--stroke); border-radius: var(--radius-md); color: var(--text-primary); transition: background 0.18s ease, border-color 0.18s ease; }
-    .poetry-back:hover { background: rgba(33, 150, 200, 0.12); border-color: var(--teal); }
+    .poetry-back:hover { background: rgba(110, 123, 207, 0.12); border-color: var(--teal); }
     .poem-pager { margin-left: auto; display: flex; align-items: center; gap: 12px; }
     .poem-count { font-size: 14px; color: var(--text-primary); opacity: 0.6; white-space: nowrap; }
     .poem-nav { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: transparent; border: 1px solid var(--stroke); border-radius: var(--radius-md); color: var(--text-primary); transition: background 0.18s ease, border-color 0.18s ease, opacity 0.18s ease; }
-    .poem-nav:hover:not(:disabled) { background: rgba(33, 150, 200, 0.12); border-color: var(--teal); }
+    .poem-nav:hover:not(:disabled) { background: rgba(110, 123, 207, 0.12); border-color: var(--teal); }
     .poem-nav:disabled { opacity: 0.25; pointer-events: none; }
     .poetry-body { width: 100%; }
     .poem-slider { display: flex; gap: 48px; width: 100%; align-items: flex-start; transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1); }
@@ -610,38 +623,38 @@
 
   <!-- Fly-out nav menu -->
   <div class="nav-flyout" id="nav-flyout">
-    <a class="flyout-item active" data-section="home">
-      <svg class="flyout-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.1125 38.6602C10.9276 37.0318 4 29.744 4 21C4 11.0589 12.9543 3 24 3C34.6729 3 43.3931 10.524 43.9697 20H44V32.5C44 36.6499 43.8793 39.3618 43.7488 41.0807C43.6191 42.7888 42.5179 44.1347 40.8289 44.4205C39.0758 44.7171 36.2815 45 32 45C27.7185 45 24.9242 44.7171 23.1711 44.4205C21.4821 44.1347 20.3809 42.7888 20.2512 41.0807C20.2015 40.4261 20.1533 39.6274 20.1125 38.6602Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 23C36 25.7614 37.7909 28 40 28C42.2091 28 44 25.7614 44 23C44 20.2386 42.2091 18 40 18C37.7909 18 36 20.2386 36 23Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 28C28.2091 28 30 25.7614 30 23C30 20.2386 28.2091 18 26 18C23.7909 18 22 20.2386 22 23C22 25.7614 23.7909 28 26 28Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M29 39V44.75" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 39V44.75" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Home
+    <a class="flyout-item" data-section="about">
+      <svg class="flyout-icon flyout-icon--outline" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.1125 38.6602C10.9276 37.0318 4 29.744 4 21C4 11.0589 12.9543 3 24 3C34.6729 3 43.3931 10.524 43.9697 20H44V32.5C44 36.6499 43.8793 39.3618 43.7488 41.0807C43.6191 42.7888 42.5179 44.1347 40.8289 44.4205C39.0758 44.7171 36.2815 45 32 45C27.7185 45 24.9242 44.7171 23.1711 44.4205C21.4821 44.1347 20.3809 42.7888 20.2512 41.0807C20.2015 40.4261 20.1533 39.6274 20.1125 38.6602Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 23C36 25.7614 37.7909 28 40 28C42.2091 28 44 25.7614 44 23C44 20.2386 42.2091 18 40 18C37.7909 18 36 20.2386 36 23Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 28C28.2091 28 30 25.7614 30 23C30 20.2386 28.2091 18 26 18C23.7909 18 22 20.2386 22 23C22 25.7614 23.7909 28 26 28Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M29 39V44.75" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 39V44.75" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="flyout-icon flyout-icon--filled" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 3C34.6729 3 43.3931 10.524 43.9697 20H44V32.5C44 36.6499 43.8795 39.3622 43.749 41.0811C43.6192 42.789 42.5179 44.1351 40.8291 44.4209C39.9796 44.5646 38.8853 44.7029 37.4961 44.8096C37.4969 44.7898 37.5 44.77 37.5 44.75V39C37.5 38.1716 36.8284 37.5 36 37.5C35.1716 37.5 34.5 38.1716 34.5 39V44.75C34.5 44.822 34.5068 44.8926 34.5166 44.9619C33.7412 44.9846 32.9038 45 32 45C31.4707 45 30.9642 44.9954 30.4795 44.9873C30.4918 44.9099 30.5 44.8309 30.5 44.75V39C30.5 38.1716 29.8284 37.5 29 37.5C28.1716 37.5 27.5 38.1716 27.5 39V44.75C27.5 44.7924 27.5024 44.8344 27.5059 44.876C25.6288 44.7659 24.215 44.5975 23.1709 44.4209C21.4821 44.1351 20.3808 42.789 20.251 41.0811C20.2013 40.4265 20.1531 39.6274 20.1123 38.6602C10.9275 37.0317 4 29.7439 4 21C4 11.0589 12.9543 3 24 3ZM26 18C23.7909 18 22 20.2386 22 23C22 25.7614 23.7909 28 26 28C28.2091 28 30 25.7614 30 23C30 20.2386 28.2091 18 26 18ZM39 18C36.7909 18 35 20.2386 35 23C35 25.7614 36.7909 28 39 28C41.2091 28 43 25.7614 43 23C43 20.2386 41.2091 18 39 18Z" fill="currentColor"/></svg>
+      About me
     </a>
     <a class="flyout-item" data-section="contact">
-      <svg class="flyout-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 11.002C15.1207 11.0232 10.3785 11.2614 7.48765 11.4737C5.36438 11.6296 3.70643 13.2138 3.50597 15.3333C3.25837 17.9513 3 22.0974 3 28.0004C3 33.9035 3.25837 38.0496 3.50597 40.6675C3.70642 42.787 5.36591 44.3714 7.48918 44.5273C10.5182 44.7496 15.579 45.0004 23 45.0004C30.421 45.0004 35.4818 44.7497 38.5108 44.5273C40.6341 44.3714 42.2936 42.787 42.494 40.6675C42.7416 38.0496 43 33.9035 43 28.0004C43 26.5642 42.9847 25.2319 42.958 24.0004" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 27.0001C4.25013 27.7082 17.2636 35 22.9999 35C28.7365 35 41.7509 27.7075 43 27" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 3C40.9706 3 45 7.02944 45 12C45 16.9706 40.9706 21 36 21C31.0294 21 27 16.9706 27 12C27 7.02944 31.0294 3 36 3Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+      <svg class="flyout-icon flyout-icon--outline" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 11.002C15.1207 11.0232 10.3785 11.2614 7.48765 11.4737C5.36438 11.6296 3.70643 13.2138 3.50597 15.3333C3.25837 17.9513 3 22.0974 3 28.0004C3 33.9035 3.25837 38.0496 3.50597 40.6675C3.70642 42.787 5.36591 44.3714 7.48918 44.5273C10.5182 44.7496 15.579 45.0004 23 45.0004C30.421 45.0004 35.4818 44.7497 38.5108 44.5273C40.6341 44.3714 42.2936 42.787 42.494 40.6675C42.7416 38.0496 43 33.9035 43 28.0004C43 26.5642 42.9847 25.2319 42.958 24.0004" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 27.0001C4.25013 27.7082 17.2636 35 22.9999 35C28.7365 35 41.7509 27.7075 43 27" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 3C40.9706 3 45 7.02944 45 12C45 16.9706 40.9706 21 36 21C31.0294 21 27 16.9706 27 12C27 7.02944 31.0294 3 36 3Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><svg class="flyout-icon flyout-icon--filled" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.50488 26.9844C3.30299 27.9674 6.23589 29.5296 9.4209 31.0527C11.8182 32.1991 14.3832 33.3353 16.7275 34.1885C19.0206 35.023 21.281 35.6553 23 35.6553C24.7137 35.6553 26.9387 35.0444 29.1895 34.2354C31.4881 33.4091 33.9915 32.3089 36.3271 31.1982C39.7059 29.5915 42.7849 27.9382 44.4727 27.0098C44.4022 32.4234 44.1949 38.6133 43.9873 40.8086C43.7162 43.6758 41.4547 45.8152 38.6211 46.0234C35.5527 46.2487 30.4546 46.5 23 46.5C15.5453 46.5 10.4473 46.2486 7.37891 46.0234C4.54533 45.8152 2.28386 43.6758 2.0127 40.8086C1.76034 38.1404 1.5 33.9467 1.5 28C1.5 27.6556 1.50319 27.3171 1.50488 26.9844ZM22.1357 9.50781C22.8279 9.57014 23.395 10.1054 23.4873 10.8066C24.0858 15.354 25.4413 18.3065 27.0576 20.209C28.662 22.0975 30.6124 23.0575 32.6143 23.4688C36.7222 24.3126 40.9911 22.8272 42.3291 22.1582C42.7941 21.9257 43.3468 21.9503 43.7891 22.2236C44.2312 22.497 44.5 22.9802 44.5 23.5C44.5 23.5289 44.499 23.5579 44.499 23.5869C44.418 23.6157 44.3381 23.6515 44.2607 23.6953C43.6467 24.0431 39.6173 26.3111 35.0391 28.4883C32.7482 29.5777 30.3436 30.6335 28.1748 31.4131C25.958 32.2099 24.1546 32.6553 23 32.6553C21.8509 32.6553 20.0209 32.1955 17.7529 31.3701C15.5363 30.5634 13.069 29.4715 10.7148 28.3457C6.51037 26.3351 2.74507 24.2501 1.55273 23.5811C1.6409 19.91 1.82817 17.1435 2.0127 15.1924C2.28383 12.3257 4.54354 10.1857 7.37793 9.97754C10.3064 9.76248 15.0837 9.52326 21.9951 9.50195L22.1357 9.50781Z" fill="currentColor"/><path d="M36 3C40.9706 3 45 7.02944 45 12C45 16.9706 40.9706 21 36 21C31.0294 21 27 16.9706 27 12C27 7.02944 31.0294 3 36 3Z" fill="currentColor" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
       Contact
     </a>
     <a class="flyout-item" data-section="portfolio">
-      <svg class="flyout-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M35.5999 39.731C35.4347 41.4658 34.2788 42.8128 32.5642 43.1242C30.2584 43.543 26.2058 44.0001 19.5 44.0001C12.7942 44.0001 8.74157 43.543 6.43582 43.1242C4.72117 42.8128 3.56525 41.4658 3.40008 39.731C3.20127 37.6429 3 34.1239 3 28.434C3 22.744 3.20127 19.225 3.40008 17.1369C3.56525 15.4021 4.72365 14.0545 6.43832 13.7432C6.61515 13.7111 6.80224 13.6788 7 13.6465" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.7738 4.19291C21.6044 4.03607 23.3846 4.80794 24.5919 6.19283L25.6544 7.41163C26.414 8.28303 27.5135 8.78318 28.6695 8.78318H39.1361C42.2569 8.78318 44.8533 11.1764 44.9367 14.2961C44.9761 15.7712 45 17.4736 45 19.4337C45 25.1237 44.7987 28.6427 44.5999 30.7307C44.4347 32.4656 43.2788 33.8125 41.5642 34.124C39.2584 34.5427 35.2058 34.9998 28.5 34.9998C21.7942 34.9998 17.7416 34.5427 15.4358 34.124C13.7212 33.8125 12.5653 32.4656 12.4001 30.7307C12.2013 28.6427 12 25.1237 12 19.4337C12 13.7437 12.2013 10.2247 12.4001 8.13666C12.5653 6.40181 13.7237 5.05426 15.4383 4.74298C16.491 4.55187 17.9075 4.35283 19.7738 4.19291Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg class="flyout-icon flyout-icon--outline" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M35.5999 39.731C35.4347 41.4658 34.2788 42.8128 32.5642 43.1242C30.2584 43.543 26.2058 44.0001 19.5 44.0001C12.7942 44.0001 8.74157 43.543 6.43582 43.1242C4.72117 42.8128 3.56525 41.4658 3.40008 39.731C3.20127 37.6429 3 34.1239 3 28.434C3 22.744 3.20127 19.225 3.40008 17.1369C3.56525 15.4021 4.72365 14.0545 6.43832 13.7432C6.61515 13.7111 6.80224 13.6788 7 13.6465" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.7738 4.19291C21.6044 4.03607 23.3846 4.80794 24.5919 6.19283L25.6544 7.41163C26.414 8.28303 27.5135 8.78318 28.6695 8.78318H39.1361C42.2569 8.78318 44.8533 11.1764 44.9367 14.2961C44.9761 15.7712 45 17.4736 45 19.4337C45 25.1237 44.7987 28.6427 44.5999 30.7307C44.4347 32.4656 43.2788 33.8125 41.5642 34.124C39.2584 34.5427 35.2058 34.9998 28.5 34.9998C21.7942 34.9998 17.7416 34.5427 15.4358 34.124C13.7212 33.8125 12.5653 32.4656 12.4001 30.7307C12.2013 28.6427 12 25.1237 12 19.4337C12 13.7437 12.2013 10.2247 12.4001 8.13666C12.5653 6.40181 13.7237 5.05426 15.4383 4.74298C16.491 4.55187 17.9075 4.35283 19.7738 4.19291Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="flyout-icon flyout-icon--filled" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.7738 4.19291C21.6044 4.03607 23.3846 4.80794 24.5919 6.19283L25.6544 7.41163C26.414 8.28303 27.5135 8.78318 28.6695 8.78318H39.1361C42.2569 8.78318 44.8533 11.1764 44.9367 14.2961C44.9761 15.7712 45 17.4736 45 19.4337C45 25.1237 44.7987 28.6427 44.5999 30.7307C44.4347 32.4656 43.2788 33.8125 41.5642 34.124C39.2584 34.5427 35.2058 34.9998 28.5 34.9998C21.7942 34.9998 17.7416 34.5427 15.4358 34.124C13.7212 33.8125 12.5653 32.4656 12.4001 30.7307C12.2013 28.6427 12 25.1237 12 19.4337C12 13.7437 12.2013 10.2247 12.4001 8.13666C12.5653 6.40181 13.7237 5.05426 15.4383 4.74298C16.491 4.55187 17.9075 4.35283 19.7738 4.19291Z" fill="currentColor"/><path d="M35.0572 38.0367C34.892 39.7715 34.2788 42.8127 32.5642 43.1241C30.2584 43.5429 26.2058 44 19.5 44C12.7942 44 8.74157 43.5429 6.43582 43.1241C4.72117 42.8127 3.56525 41.4657 3.40008 39.7309C3.20127 37.6428 3 34.1238 3 28.4339C3 22.7439 3.20127 19.2249 3.40008 17.1368C3.56525 15.402 5.52426 14 8.5625 14C8.79104 39.079 5.38617 38.4537 35.0572 38.0367Z" fill="currentColor"/></svg>
       Portfolio
     </a>
     <a class="flyout-item" data-section="resume">
-      <svg class="flyout-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 35H33" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 26H29" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 35H15" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 26H15" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M29.368 3.08035C30.2652 3.35935 33.145 4.50204 37.3046 8.55862C41.2253 12.3823 42.4915 15.0971 42.8635 16.129C42.9472 18.3704 42.9998 20.9801 42.9998 24.0001C42.9998 32.0645 42.6249 37.2041 42.283 40.2144C42.033 42.4159 40.3803 44.0624 38.1796 44.3191C35.3646 44.6476 30.7668 45.0001 23.9999 45.0001C17.233 45.0001 12.6352 44.6476 9.82016 44.3191C7.61949 44.0624 5.96679 42.4159 5.71677 40.2144C5.37489 37.2041 5 32.0645 5 24.0001C5 15.9356 5.37489 10.796 5.71677 7.78567C5.96679 5.58423 7.6195 3.93771 9.82016 3.68097C12.6352 3.35255 17.233 3 23.9999 3C25.9699 3 27.7562 3.02988 29.368 3.08035Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M42.8758 16.6068C40.6208 16.9412 36.5237 16.6707 33.494 16.3863C31.2476 16.1754 29.4808 14.4215 29.2607 12.1759C28.9701 9.21081 28.7 5.24074 29.0511 3.07227" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg class="flyout-icon flyout-icon--outline" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 35H33" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 26H29" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 35H15" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 26H15" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M29.368 3.08035C30.2652 3.35935 33.145 4.50204 37.3046 8.55862C41.2253 12.3823 42.4915 15.0971 42.8635 16.129C42.9472 18.3704 42.9998 20.9801 42.9998 24.0001C42.9998 32.0645 42.6249 37.2041 42.283 40.2144C42.033 42.4159 40.3803 44.0624 38.1796 44.3191C35.3646 44.6476 30.7668 45.0001 23.9999 45.0001C17.233 45.0001 12.6352 44.6476 9.82016 44.3191C7.61949 44.0624 5.96679 42.4159 5.71677 40.2144C5.37489 37.2041 5 32.0645 5 24.0001C5 15.9356 5.37489 10.796 5.71677 7.78567C5.96679 5.58423 7.6195 3.93771 9.82016 3.68097C12.6352 3.35255 17.233 3 23.9999 3C25.9699 3 27.7562 3.02988 29.368 3.08035Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M42.8758 16.6068C40.6208 16.9412 36.5237 16.6707 33.494 16.3863C31.2476 16.1754 29.4808 14.4215 29.2607 12.1759C28.9701 9.21081 28.7 5.24074 29.0511 3.07227" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="flyout-icon flyout-icon--filled" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 1.5C25.4347 1.5 26.7737 1.51598 28.0205 1.54395C27.7053 4.2343 27.4934 9.52456 27.7676 12.3223C28.058 15.2853 30.3943 17.602 33.3535 17.8799C34.9028 18.0253 37.1228 18.1653 39.2432 18.2275C41.172 18.2842 43.133 18.2774 44.4258 18.126C44.4717 19.8873 44.5 21.8402 44.5 24C44.5 32.1095 44.1229 37.3069 43.7734 40.3838C43.4442 43.2828 41.2416 45.4716 38.3535 45.8086C35.4748 46.1445 30.8186 46.5 24 46.5C17.1815 46.5 12.5253 46.1445 9.64648 45.8086C6.75836 45.4717 4.55587 43.2828 4.22656 40.3838C3.87712 37.3069 3.5 32.1095 3.5 24C3.5 15.8905 3.87713 10.6931 4.22656 7.61621C4.55589 4.71726 6.75842 2.52834 9.64648 2.19141C12.5252 1.85556 17.1814 1.5 24 1.5ZM15 33.5C14.1716 33.5 13.5 34.1716 13.5 35C13.5 35.8284 14.1716 36.5 15 36.5H16C16.8284 36.5 17.5 35.8284 17.5 35C17.5 34.1716 16.8284 33.5 16 33.5H15ZM22 33.5C21.1716 33.5 20.5 34.1716 20.5 35C20.5 35.8284 21.1716 36.5 22 36.5H33C33.8284 36.5 34.5 35.8284 34.5 35C34.5 34.1716 33.8284 33.5 33 33.5H22ZM15 24.5C14.1716 24.5 13.5 25.1716 13.5 26C13.5 26.8284 14.1716 27.5 15 27.5H16C16.8284 27.5 17.5 26.8284 17.5 26C17.5 25.1716 16.8284 24.5 16 24.5H15ZM22 24.5C21.1716 24.5 20.5 25.1716 20.5 26C20.5 26.8284 21.1716 27.5 22 27.5H29C29.8284 27.5 30.5 26.8284 30.5 26C30.5 25.1716 29.8284 24.5 29 24.5H22ZM30.9746 2.09668C32.522 2.79312 35.0834 4.29724 38.3516 7.48438C41.9692 11.0125 43.4764 13.7013 44.0869 15.1455C43.0674 15.2675 41.3008 15.2873 39.3311 15.2295C37.2698 15.169 35.1141 15.0315 33.6338 14.8926C32.1004 14.7485 30.9037 13.5573 30.7539 12.0293C30.509 9.53038 30.698 4.61886 30.9746 2.09668Z" fill="currentColor"/></svg>
       Resume
     </a>
   </div>
 
   <nav>
-    <a class="tab active" data-section="home">
+    <a class="tab" data-section="about">
       <svg class="tab-icon tab-icon--outline" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.1125 38.6602C10.9276 37.0318 4 29.744 4 21C4 11.0589 12.9543 3 24 3C34.6729 3 43.3931 10.524 43.9697 20H44V32.5C44 36.6499 43.8793 39.3618 43.7488 41.0807C43.6191 42.7888 42.5179 44.1347 40.8289 44.4205C39.0758 44.7171 36.2815 45 32 45C27.7185 45 24.9242 44.7171 23.1711 44.4205C21.4821 44.1347 20.3809 42.7888 20.2512 41.0807C20.2015 40.4261 20.1533 39.6274 20.1125 38.6602Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 23C36 25.7614 37.7909 28 40 28C42.2091 28 44 25.7614 44 23C44 20.2386 42.2091 18 40 18C37.7909 18 36 20.2386 36 23Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 28C28.2091 28 30 25.7614 30 23C30 20.2386 28.2091 18 26 18C23.7909 18 22 20.2386 22 23C22 25.7614 23.7909 28 26 28Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M29 39V44.75" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 39V44.75" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <svg class="tab-icon tab-icon--filled" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 3C34.6729 3 43.3931 10.524 43.9697 20H44V32.5C44 36.6499 43.8795 39.3622 43.749 41.0811C43.6192 42.789 42.5179 44.1351 40.8291 44.4209C39.9796 44.5646 38.8853 44.7029 37.4961 44.8096C37.4969 44.7898 37.5 44.77 37.5 44.75V39C37.5 38.1716 36.8284 37.5 36 37.5C35.1716 37.5 34.5 38.1716 34.5 39V44.75C34.5 44.822 34.5068 44.8926 34.5166 44.9619C33.7412 44.9846 32.9038 45 32 45C31.4707 45 30.9642 44.9954 30.4795 44.9873C30.4918 44.9099 30.5 44.8309 30.5 44.75V39C30.5 38.1716 29.8284 37.5 29 37.5C28.1716 37.5 27.5 38.1716 27.5 39V44.75C27.5 44.7924 27.5024 44.8344 27.5059 44.876C25.6288 44.7659 24.215 44.5975 23.1709 44.4209C21.4821 44.1351 20.3808 42.789 20.251 41.0811C20.2013 40.4265 20.1531 39.6274 20.1123 38.6602C10.9275 37.0317 4 29.7439 4 21C4 11.0589 12.9543 3 24 3ZM26 18C23.7909 18 22 20.2386 22 23C22 25.7614 23.7909 28 26 28C28.2091 28 30 25.7614 30 23C30 20.2386 28.2091 18 26 18ZM39 18C36.7909 18 35 20.2386 35 23C35 25.7614 36.7909 28 39 28C41.2091 28 43 25.7614 43 23C43 20.2386 41.2091 18 39 18Z" fill="currentColor"/></svg>
-      Home
+      About me
     </a>
     <a class="tab" data-section="contact">
       <svg class="tab-icon tab-icon--outline" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 11.002C15.1207 11.0232 10.3785 11.2614 7.48765 11.4737C5.36438 11.6296 3.70643 13.2138 3.50597 15.3333C3.25837 17.9513 3 22.0974 3 28.0004C3 33.9035 3.25837 38.0496 3.50597 40.6675C3.70642 42.787 5.36591 44.3714 7.48918 44.5273C10.5182 44.7496 15.579 45.0004 23 45.0004C30.421 45.0004 35.4818 44.7497 38.5108 44.5273C40.6341 44.3714 42.2936 42.787 42.494 40.6675C42.7416 38.0496 43 33.9035 43 28.0004C43 26.5642 42.9847 25.2319 42.958 24.0004" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 27.0001C4.25013 27.7082 17.2636 35 22.9999 35C28.7365 35 41.7509 27.7075 43 27" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 3C40.9706 3 45 7.02944 45 12C45 16.9706 40.9706 21 36 21C31.0294 21 27 16.9706 27 12C27 7.02944 31.0294 3 36 3Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
       <svg class="tab-icon tab-icon--filled" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.50488 26.9844C3.30299 27.9674 6.23589 29.5296 9.4209 31.0527C11.8182 32.1991 14.3832 33.3353 16.7275 34.1885C19.0206 35.023 21.281 35.6553 23 35.6553C24.7137 35.6553 26.9387 35.0444 29.1895 34.2354C31.4881 33.4091 33.9915 32.3089 36.3271 31.1982C39.7059 29.5915 42.7849 27.9382 44.4727 27.0098C44.4022 32.4234 44.1949 38.6133 43.9873 40.8086C43.7162 43.6758 41.4547 45.8152 38.6211 46.0234C35.5527 46.2487 30.4546 46.5 23 46.5C15.5453 46.5 10.4473 46.2486 7.37891 46.0234C4.54533 45.8152 2.28386 43.6758 2.0127 40.8086C1.76034 38.1404 1.5 33.9467 1.5 28C1.5 27.6556 1.50319 27.3171 1.50488 26.9844ZM22.1357 9.50781C22.8279 9.57014 23.395 10.1054 23.4873 10.8066C24.0858 15.354 25.4413 18.3065 27.0576 20.209C28.662 22.0975 30.6124 23.0575 32.6143 23.4688C36.7222 24.3126 40.9911 22.8272 42.3291 22.1582C42.7941 21.9257 43.3468 21.9503 43.7891 22.2236C44.2312 22.497 44.5 22.9802 44.5 23.5C44.5 23.5289 44.499 23.5579 44.499 23.5869C44.418 23.6157 44.3381 23.6515 44.2607 23.6953C43.6467 24.0431 39.6173 26.3111 35.0391 28.4883C32.7482 29.5777 30.3436 30.6335 28.1748 31.4131C25.958 32.2099 24.1546 32.6553 23 32.6553C21.8509 32.6553 20.0209 32.1955 17.7529 31.3701C15.5363 30.5634 13.069 29.4715 10.7148 28.3457C6.51037 26.3351 2.74507 24.2501 1.55273 23.5811C1.6409 19.91 1.82817 17.1435 2.0127 15.1924C2.28383 12.3257 4.54354 10.1857 7.37793 9.97754C10.3064 9.76248 15.0837 9.52326 21.9951 9.50195L22.1357 9.50781Z" fill="#FFFFFF"/><path d="M36 3C40.9706 3 45 7.02944 45 12C45 16.9706 40.9706 21 36 21C31.0294 21 27 16.9706 27 12C27 7.02944 31.0294 3 36 3Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/></svg>
       Contact
     </a>
-    <div class="brand">
+    <div class="brand active" data-section="home">
       <svg class="brand-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16C32 24.8366 24.8366 32 16 32C7.16344 32 0 24.8366 0 16Z" fill="#16587A"/>
+        <path class="brand-circle" d="M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16C32 24.8366 24.8366 32 16 32C7.16344 32 0 24.8366 0 16Z" fill="#6e7bcf"/>
         <path d="M17.9324 9.02118L16.153 9.02119L17.9748 12.7918L20.1778 17.7699H21.1523L25.3254 9H23.5672L20.7286 15.2067L17.9324 9.02118Z" fill="white"/>
         <path d="M22.1078 15.8807L23.3008 13.2549L21.6737 13.2549L17.3986 22.2391L19.1998 22.2391L22.1078 15.8807Z" fill="white"/>
         <path d="M7.82178 22.2391V9.04187H9.60118L12.3974 15.2274L15.236 9.02069H16.9942V18.8565H15.1512V12.7702L12.8211 17.7906H11.8466L9.64355 12.8125V22.2391H7.82178Z" fill="white"/>
@@ -674,6 +687,16 @@
       </div>
     </div>
   </section>
+
+    <section id="about">
+      <p class="page-title">About me</p>
+      <div class="page-body">
+        <div class="about-hero">
+          <canvas class="about-pixel" id="about-pixel" width="84" height="84" role="img" aria-label="Pixel illustration of a person at a desk facing a monitor, with bookshelves above and an open window overlooking the ocean"></canvas>
+          <p class="about-wip">work in progress</p>
+        </div>
+      </div>
+    </section>
 
     <section id="portfolio">
       <p class="page-title">Portfolio</p>
@@ -1239,7 +1262,7 @@ in the middle of a lake.</p>
   <script>
     /* ── Navigation with directional slide ── */
     (function () {
-      const NAV_ORDER = ['home', 'contact', 'portfolio', 'resume'];
+      const NAV_ORDER = ['about', 'contact', 'home', 'portfolio', 'resume'];
       let currentId = 'home';
       let animating = false;
       const DUR = 440;
@@ -1298,8 +1321,9 @@ in the middle of a lake.</p>
         });
 
         /* Update nav + flyout highlights immediately */
-        document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-        document.querySelector(`.tab[data-section="${id}"]`).classList.add('active');
+        document.querySelectorAll('nav [data-section]').forEach(el => el.classList.remove('active'));
+        const navActive = document.querySelector(`nav [data-section="${id}"]`);
+        if (navActive) navActive.classList.add('active');
         document.querySelectorAll('.flyout-item').forEach(el => el.classList.remove('active'));
         const fi = document.querySelector(`.flyout-item[data-section="${id}"]`);
         if (fi) fi.classList.add('active');
@@ -1689,7 +1713,7 @@ in the middle of a lake.</p>
         const t = (ts - start) / 1000;
         const W = canvas.width, H = canvas.height;
         ctx.clearRect(0, 0, W, H);
-        ctx.fillStyle = 'rgba(33,150,200,0.6)';    /* solid, crisp — no blur, no falloff */
+        ctx.fillStyle = 'rgba(110,123,207,0.6)';    /* solid, crisp — no blur, no falloff */
         const cols = Math.ceil(W / CELL), rows = Math.ceil(H / CELL);
         for (let gx = 0; gx < cols; gx++) {
           /* irregular travelling surface (0..1): random per-column offset + mixed sines */
@@ -2027,6 +2051,31 @@ in the middle of a lake.</p>
       /* Clear any pin when the QB sub-page is reset/closed */
       const prevReset = window._resetDeck;
       window._resetDeck = function () { unlock(); if (prevReset) prevReset(); };
+    })();
+  </script>
+
+  <script>
+    /* ── About-me pixel scene ── luminance-mapped to the site's cool palette ── */
+    (function () {
+      const canvas = document.getElementById('about-pixel');
+      if (!canvas) return;
+      const W = 84, H = 84;
+      /* 12-step ramp: deep navy → periwinkle → ice (dark → light) */
+      const RAMP = ['#0d141c','#121a24','#172033','#1e2740','#28304f','#333e6b',
+                    '#414d8a','#5560ab','#6e7bcf','#8f9ada','#b4bce8','#e2ebf3'];
+      const DATA =
+        '555555555555555555555555555555555555555555555555555555555555555555555555555554444555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555554444555555555555555555555555555555555555555555555555555555555555555555555555555555555444444555555555555555555555555555555555555555555555555555555455555555555555555555554444344555555555555555555555555555555557874455555555565555555345555555554444444444444333333555555555555555555555555555445657974444455555455555544434455555554443333333343333333555555555555555555555555555323548a97852355555435455543433455555554433333333334333333555555555555555555555555555324999997752355544434355434334435555554433333333334333333555555555555555555555555555324778874443355564442355433334245555554433333333334333333555555555555555555555555555323547974443355554443455553333455555554433333333334333333555555555555555555555555555323657974443355554333455555434455555554433333333334333333555555555555555555555555555323657974443355553332255554443245555554433333333334333333555555555555555555555555555323657974443355553332255554443245555554433333333334333333555555555555555555555555555323647874443355554222455555332355555554433333333334333333555555555555555555544444444444445544444444444444444444444444444554433333333334333333555555555555555555543333333333333333333333333444333333334333333454433333333334333333555555555555555555543332223333333333333333333333333333333322232454443333333344333333555555555555555555554432234343433334444444444444444444444422343454443333333344333333555555555555555555555433234434433333333333333333333344433423333344444444444344444444555555555555555555555433233334355433333333333333333344333423333344444444444444444444555555555555555555555433235535456533333333333333333333333323333333444444444444444444555555555555555555555544447749546644444444544555544444444444444444444444444443444444555555555555555555555555554334335665555555586555567555555555555554444444444443444444555555555555555555555555554334335655555554495444469455555555555554445555555543455555555555555555555555555555554334334665555555343333334334555555555554445555555543455555555555555555555555555555554334334566555555475733333334555555555554445555555553555555555555555555555555555555554334333466555555464633333334555555555554346565555653555565555555555555555555554444444434444454444445333333333334555444444554346666666653566666555555555555555555554444444444444444444444444444444444444444444554356666666653566656555555555555555555543333333333333333333333333333333333333333333454357666666653446434555555555555555555554332233333333333333333333333333333333322233454356666666443444333555555555555555555554433234333343333333333333333333334444423344344444444444563677655555555555555555555555433234333336766666666666666666743444422334444444444444444444577555555555555555555555433333333359aaaaaaaaaaaaaaaaaaa743444333344444333333444443444335555555555555555555555433333333787666666666666666678853444444344444444444433443333345555555555555555555555444444443786777777766667777767854444444444444333333433444333335555555555555555555555555555555786899aa8533334788a668555555555555543333333334433333355555555555555555555555555555557868abb953332334787668655555555555543333333334433333355555555555555555555555555555557868899533322232478668655555555555543233333333433333355555555555555555555555555555557868aa9322222222268668655555555555443233333333433333355555555555555555555555555555557868888322222222268668655555555555443222233223433222255555555555555555555555555555557867887222222222268668655555555555543332233333432333255555555555555555555555555555557868aa83222222222786686555555555555432222222234322222555555555555555555555556655555578677772222222222786685555555555554432222222234322222555555555555555555555547845555578677775222222224786685555555555554432222222234322222555555555555555555555557774555578677777222222226776785555555555554432222222234322222555555555555555555555555874555578766666433333346666786555555555554443333344343332222555555555555555555555545445555568888888877777788888765555555555555444444444444333332555555555555555555555544333455556777767678888867676755555555555555555555555554444343555555555555555555555544333355555555566667777666655555555555555555555555555554444444555555555555555555555544333355555556666665555666666555555555555555555555555554444454555555555555555555556643324566798986665565555555566898975666666665555555555555444454555555555555555555566663345566788776533333333333356678876666666666555555555555454454555555555555555555555555555555555565322222222222225655555555555555555555555555455554555555555555555554444444444444444564122222222222213654444444444444445555555555455555555555555555555555433333333333333564122222222222213663333333333333445555555555455555555555555555555555422222222222222564122222222222213663222222222223445555555555455555555555555555555555422222222222223774122222222222214784222222222223445555555555445555555555555555555555433321243333334884122222332222213895344443223333435555555555455555555555555555555555544322343333334784122211111122213784333343223444334555555555454555555555555555555555544322243333333574122221111222214754333343223444334555555555444455555555555555555555544322243333333343222221111222223443333343223444334555555555444555555555555555555555544322243333333332222221111222222333333343223444344455555555444555555555555555555555544322243333333333211111111111123333333343223444344455555555444555555555555555555555544322343333333334234443222444423333333343223444344445555555445555555555555555555555544322343333333334233332222333323333433343223444344445555555444555555555555555555555544322243333333333311111222111133333333343223444344444555555444555555555555555555555544322243333333343333332222333332433333343223444344434555555444555555555555555555555444322243333333342122222222111112433333343223444333434555555444455555555555555555555444322243333333333101001221100013433333343223444333443455555444455555555555555555555544422343333333334344431111344434333333343223444333444455555445555333333222333222222344322222222222222267751111476622222222222222443222222223332222232111111111111111111244222211111111111156641111366621111111112221343122222111111111121333333333233222232344322222222222222267742111476622222222222222443222223333332232332555555555555555555544432344444444444444442112444444344444443333444444445455555555555555555665555665556544544444444444444410023112200144434434444444444454554444555555555555566666655555555544444444444444443211122112211123444444444444444444444444455555566566666665665555555444444434444444442122222222222212443445434444444444555455555555666566666666666666665555444444444444431134444113334311244444444544455556666666666656666666666666666666666666666555555554430034452001444410355555555666666666666666666666676666666666666666666666666666666666632334443222443323566666666666666666666666666666666666666666666766666666666666666666665655555666555566666666666666676666666766766666666766666666666666667666566666666666666666666666666766666666666676666766666666666666666';
+      const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(W, H);
+      for (let i = 0; i < W * H; i++) {
+        const hex = RAMP[parseInt(DATA[i], 12)] || RAMP[0];
+        const r = parseInt(hex.slice(1, 3), 16),
+              g = parseInt(hex.slice(3, 5), 16),
+              b = parseInt(hex.slice(5, 7), 16);
+        const o = i * 4;
+        img.data[o] = r; img.data[o + 1] = g; img.data[o + 2] = b; img.data[o + 3] = 255;
+      }
+      ctx.putImageData(img, 0, 0);
     })();
   </script>
 </body>
