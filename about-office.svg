@@ -6,8 +6,8 @@
 <g id="window">
 <g id="fog" clip-path="url(#fogClip)">
 <g id="fog-shapes" fill="#6f80b0" fill-opacity="0.55" filter="url(#fogMorph)">
-<animateTransform attributeName="transform" type="translate" values="0 0;900 0" dur="26s" repeatCount="indefinite" calcMode="linear"/>
-<animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="26s" repeatCount="indefinite"/>
+<animateTransform attributeName="transform" type="translate" values="0 -115;900 -115" dur="78s" repeatCount="indefinite" calcMode="linear"/>
+<animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="78s" repeatCount="indefinite"/>
 <path d="M547 313.5C547 244 614.5 260 661.8 268C695.5 260 756.2 246.6 783.2 276C810.2 292.1 817 302.8 817 313.5C817 377.7 736 367 695.5 361.6C641.5 375 587.5 367 547 313.5Z"/>
 <path d="M891 310.5C891 244.8 920.2 260 940.7 267.6C955.4 260 981.7 247.4 993.4 275.2C1005.1 290.3 1008 300.4 1008 310.5C1008 371.1 972.9 361 955.4 356C932 368.6 908.6 361 891 310.5Z"/>
 <path d="M971 397C971 315.1 1003.5 334 1026.2 343.4C1042.5 334 1071.8 318.2 1084.8 352.9C1097.8 371.8 1101 384.4 1101 397C1101 472.6 1062 460 1042.5 453.7C1016.5 469.4 990.5 460 971 397Z"/>
@@ -840,13 +840,13 @@
 <animate attributeName="scale" dur="8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3;0.55;0.8;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1" values="11;21;13;19;11"/>
 </feDisplacementMap>
 </filter>
-<clipPath id="fogClip"><rect x="1192" y="190" width="210" height="286"/></clipPath>
+<clipPath id="fogClip"><rect x="1192" y="92" width="210" height="280"/></clipPath>
 <filter id="fogMorph" x="-30%" y="-60%" width="160%" height="220%" color-interpolation-filters="sRGB">
 <feTurbulence type="fractalNoise" baseFrequency="0.01 0.014" numOctaves="2" seed="9" result="fn">
-<animate attributeName="baseFrequency" dur="24s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0.01 0.014;0.013 0.018;0.01 0.014"/>
+<animate attributeName="baseFrequency" dur="72s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0.01 0.014;0.013 0.018;0.01 0.014"/>
 </feTurbulence>
 <feDisplacementMap in="SourceGraphic" in2="fn" scale="10">
-<animate attributeName="scale" dur="19s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="6;12;6"/>
+<animate attributeName="scale" dur="57s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="6;12;6"/>
 </feDisplacementMap>
 </filter>
 <clipPath id="clip0_115987_8630">
