@@ -227,7 +227,16 @@
       50%  { transform: skewX(-0.9deg) translateX(-2.5px); }
       100% { transform: skewX(0.3deg)  translateX(0); }
     }
-    @media (prefers-reduced-motion: reduce) { .office-scene #curtain-sway, .office-scene #curtain { animation: none; } }
+    /* Tucked-in flap: swings from its top attachment on its own faster rhythm
+       (on top of the whole-curtain sway it inherits) + a stronger displacement
+       filter, so its free edge unfurls and flaps with independent shape movement. */
+    .office-scene #flap { transform-box: fill-box; transform-origin: 47% 4%; animation: flap-swing 6.5s ease-in-out infinite; will-change: transform; }
+    @keyframes flap-swing {
+      0%   { transform: rotate(-0.6deg) skewX(0.5deg); }
+      50%  { transform: rotate(2.6deg)  skewX(-2.4deg); }
+      100% { transform: rotate(-0.6deg) skewX(0.5deg); }
+    }
+    @media (prefers-reduced-motion: reduce) { .office-scene #curtain-sway, .office-scene #curtain, .office-scene #flap { animation: none; } }
     /* Hover affordance groundwork — individual elements light up (wired up next). */
     .office-scene [data-hot] { cursor: url('cursors/dark/hand.cur'), pointer; }
     .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 24px; }
