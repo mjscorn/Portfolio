@@ -210,6 +210,17 @@
        full-bleed line art (desk, window, guitar reach the edges). */
     .office-scene { width: min(94%, 1060px, calc(76vh * 1.478)); margin: 0 auto; background: var(--bg); border: 1px solid #33343c; border-radius: var(--radius-md); overflow: hidden; padding: 14px; }
     .office-scene svg { display: block; width: 100%; height: auto; border-radius: 4px; }
+    /* Curtain gently blows in from the window: swing pivots at the rod (top),
+       so the hem billows most; the SVG turbulence filter adds the cloth ripple. */
+    .office-scene #curtain-sway { transform-box: fill-box; transform-origin: 50% 1%; animation: curtain-sway 8.5s ease-in-out infinite; will-change: transform; }
+    @keyframes curtain-sway {
+      0%   { transform: skewX(-0.3deg) translateX(0); }
+      22%  { transform: skewX(-1.7deg) translateX(-3px); }
+      45%  { transform: skewX(-0.5deg) translateX(-0.5px); }
+      68%  { transform: skewX(-2.3deg) translateX(-4px); }
+      100% { transform: skewX(-0.3deg) translateX(0); }
+    }
+    @media (prefers-reduced-motion: reduce) { .office-scene #curtain-sway { animation: none; } }
     /* Hover affordance groundwork — individual elements light up (wired up next). */
     .office-scene [data-hot] { cursor: url('cursors/dark/hand.cur'), pointer; }
     .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 24px; }
