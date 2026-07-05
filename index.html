@@ -239,6 +239,8 @@
     @media (prefers-reduced-motion: reduce) { .office-scene #curtain-sway, .office-scene #curtain, .office-scene #flap { animation: none; } }
     /* Hover affordance groundwork — individual elements light up (wired up next). */
     .office-scene [data-hot] { cursor: url('cursors/dark/hand.cur'), pointer; }
+    .office-scene .px-hit, .office-scene .px-hit * { cursor: url('cursors/dark/hand.cur'), pointer !important; }
+    body.light .office-scene .px-hit, body.light .office-scene .px-hit * { cursor: url('cursors/light/hand.cur'), pointer !important; }
     .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 24px; }
     .hero h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 700; color: var(--text-primary); line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.02em; }
     .hero .hero-quote { font-size: 16px; font-style: italic; color: var(--teal); margin-bottom: 20px; }
@@ -2108,9 +2110,64 @@ in the middle of a lake.</p>
           host.innerHTML = svg;
           const el = host.querySelector('svg');
           if (el) { el.removeAttribute('width'); el.removeAttribute('height'); }
+          setupOfficePx(host);
         })
         .catch(() => {}); /* image is decorative; fail silently if missing */
     })();
+
+    /* ── Office-scene pixel-fill hover ──
+       On hover of the guitar or record, fill their shapes with the same
+       field-of-2x2-pixels wave used on the "View Portfolio" button. Each
+       shape has its own <foreignObject> canvas clipped to its silhouette. */
+    function setupOfficePx(root) {
+      function makeField(canvas) {
+        const ctx = canvas.getContext('2d');
+        const CELL = 3, PXSIZE = 2, BASE = 0.62;
+        const WAVES = [
+          { amp: 0.20, freq: 0.42, speed: 2.4, ph: Math.random() * 6.283 },
+          { amp: 0.14, freq: 0.83, speed: 3.1, ph: Math.random() * 6.283 },
+          { amp: 0.09, freq: 1.60, speed: 1.5, ph: Math.random() * 6.283 },
+        ];
+        let jitter = [], raf = null, start = 0;
+        function fit() {
+          const r = canvas.getBoundingClientRect();
+          canvas.width  = Math.max(1, Math.round(r.width));
+          canvas.height = Math.max(1, Math.round(r.height));
+          const cols = Math.ceil(canvas.width / CELL);
+          jitter = [];
+          for (let i = 0; i < cols; i++) jitter.push((Math.random() - 0.5) * 0.3);
+        }
+        function frame(ts) {
+          if (!start) start = ts;
+          const t = (ts - start) / 1000;
+          const W = canvas.width, H = canvas.height;
+          ctx.clearRect(0, 0, W, H);
+          ctx.fillStyle = 'rgba(110,123,207,0.6)';
+          const cols = Math.ceil(W / CELL), rows = Math.ceil(H / CELL);
+          for (let gx = 0; gx < cols; gx++) {
+            let s = BASE + (jitter[gx] || 0);
+            for (const w of WAVES) s += w.amp * Math.sin(gx * w.freq - t * w.speed + w.ph);
+            s = s < 0 ? 0 : s > 1 ? 1 : s;
+            const fillRows = Math.round(s * rows);
+            for (let k = 0; k < fillRows; k++) ctx.fillRect(gx * CELL, (rows - 1 - k) * CELL, PXSIZE, PXSIZE);
+          }
+          raf = requestAnimationFrame(frame);
+        }
+        return {
+          go()   { fit(); start = 0; if (!raf) raf = requestAnimationFrame(frame); },
+          stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } ctx.clearRect(0, 0, canvas.width, canvas.height); }
+        };
+      }
+      root.querySelectorAll('.px-hit').forEach(hit => {
+        const key = hit.getAttribute('data-hit');
+        const layers = [...root.querySelectorAll('.office-px[data-hit="' + key + '"]')];
+        const fields = layers.map(l => makeField(l.querySelector('canvas')));
+        const on  = () => { layers.forEach(l => l.setAttribute('opacity', '1')); fields.forEach(f => f.go()); };
+        const off = () => { layers.forEach(l => l.setAttribute('opacity', '0')); fields.forEach(f => f.stop()); };
+        hit.addEventListener('mouseenter', on);
+        hit.addEventListener('mouseleave', off);
+      });
+    }
   </script>
 </body>
 </html>
