@@ -104,9 +104,10 @@
     }
     body.nav-collapsed .nav-menu-btn { display: flex; }
     body.nav-collapsed nav .tab { display: none; }
-    /* Collapsed/responsive: the hamburger + flyout handle nav, so drop the
-       centered MY (home) brand pill entirely. */
-    body.nav-collapsed nav { display: none; }
+    /* Collapsed/responsive: hide the tabs but keep the MY (home) brand pill —
+       it's the clickable shortcut back to Home. Home is intentionally NOT in
+       the hamburger flyout, only here. */
+    body.nav-collapsed nav { height: var(--nav-h, 47px); }
     body.brand-minimal .brand-name { display: none; }
     body.brand-minimal nav .brand { padding: 0; }
     .nav-flyout {
