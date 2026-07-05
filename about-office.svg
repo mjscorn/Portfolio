@@ -805,20 +805,21 @@
 <rect x="0.5" y="0.5" width="1380" height="933" rx="11.5" stroke="white"/>
 </g>
 <defs>
-<filter id="curtainWind" x="-20%" y="-8%" width="140%" height="124%" color-interpolation-filters="sRGB">
-<feTurbulence type="fractalNoise" baseFrequency="0.006 0.012" numOctaves="2" seed="7" stitchTiles="stitch" result="noise">
-<animate attributeName="baseFrequency" dur="13s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0.006 0.012;0.0085 0.016;0.006 0.012"/>
+<filter id="curtainWind" x="-22%" y="-10%" width="146%" height="130%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.006 0.011" numOctaves="2" seed="7" stitchTiles="stitch" result="noise">
+<animate attributeName="baseFrequency" dur="19s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.22;0.45;0.7;1" keySplines="0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" values="0.006 0.011;0.009 0.017;0.0065 0.013;0.0085 0.015;0.006 0.011"/>
 </feTurbulence>
-<feDisplacementMap in="SourceGraphic" in2="noise" xChannelSelector="R" yChannelSelector="G" scale="14">
-<animate attributeName="scale" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1" values="9;19;9"/>
+<feDisplacementMap in="SourceGraphic" in2="noise" xChannelSelector="R" yChannelSelector="G" scale="12">
+<animate attributeName="scale" dur="15s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.16;0.34;0.5;0.66;0.84;1" keySplines="0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" values="9;19;12;22;11;17;9"/>
 </feDisplacementMap>
 </filter>
-<filter id="oceanWaves" x="-6%" y="-45%" width="112%" height="190%" color-interpolation-filters="sRGB">
-<feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="1" seed="3" result="n">
-<animate attributeName="baseFrequency" dur="17s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0.012 0.02;0.016 0.026;0.012 0.02"/>
-</feTurbulence>
-<feDisplacementMap in="SourceGraphic" in2="n" xChannelSelector="R" yChannelSelector="G" scale="4">
-<animate attributeName="scale" dur="11s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1" values="2.5;5.5;2.5"/>
+<filter id="oceanWaves" x="-16%" y="-70%" width="132%" height="240%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.02 0.006" numOctaves="2" seed="6" result="n"/>
+<feOffset in="n" dx="0" dy="0" result="n2">
+<animate attributeName="dx" dur="8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;26;0"/>
+</feOffset>
+<feDisplacementMap in="SourceGraphic" in2="n2" xChannelSelector="R" yChannelSelector="G" scale="7">
+<animate attributeName="scale" dur="12s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1" values="5;9;5"/>
 </feDisplacementMap>
 </filter>
 <clipPath id="clip0_115987_8630">
