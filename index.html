@@ -202,7 +202,13 @@
     .hero { text-align: center; max-width: 600px; padding: 0 24px; }
     /* ── About me ── */
     .about-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; padding: 0 24px; }
-    .about-wip { font-size: clamp(1.1rem, 3.4vw, 1.9rem); font-weight: 300; letter-spacing: 0.55em; text-transform: lowercase; color: var(--teal); text-align: center; text-indent: 0.55em; }
+    /* Interactive office scene (line-art SVG injected from about-office.svg).
+       Sized to fit within the About card by width, height, and viewport. */
+    .about-hero { width: 100%; }
+    .office-scene { width: min(94%, 1060px, calc(76vh * 1.478)); margin: 0 auto; }
+    .office-scene svg { display: block; width: 100%; height: auto; }
+    /* Hover affordance groundwork — individual elements light up (wired up next). */
+    .office-scene [data-hot] { cursor: url('cursors/dark/hand.cur'), pointer; }
     .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 24px; }
     .hero h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 700; color: var(--text-primary); line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.02em; }
     .hero .hero-quote { font-size: 16px; font-style: italic; color: var(--teal); margin-bottom: 20px; }
@@ -694,7 +700,7 @@
       <p class="page-title">About me</p>
       <div class="page-body">
         <div class="about-hero">
-          <p class="about-wip">work in progress</p>
+          <div class="office-scene" id="office-scene" role="img" aria-label="Line illustration of my office desk: an acoustic guitar, widescreen monitor and keyboard, a framed fly-fishing trout print, a record player, a teapot and mug, a model sailboat, potted plants, a fly rod, and a window looking out over the ocean."></div>
         </div>
       </div>
     </section>
@@ -2054,6 +2060,26 @@ in the middle of a lake.</p>
       /* Clear any pin when the QB sub-page is reset/closed */
       const prevReset = window._resetDeck;
       window._resetDeck = function () { unlock(); if (prevReset) prevReset(); };
+    })();
+  </script>
+
+  <script>
+    /* ── About-me interactive office scene ──
+       Inject the line-art SVG inline so its named groups (guitar, trout
+       picture, computer monitor, record frame, boat, bamboo, plant, flyrod,
+       mug, stomper/PC, window …) are real DOM nodes we can wire hover/click
+       tooltips onto later. For now this just places the image. */
+    (function () {
+      const host = document.getElementById('office-scene');
+      if (!host) return;
+      fetch('about-office.svg')
+        .then(r => r.ok ? r.text() : Promise.reject(r.status))
+        .then(svg => {
+          host.innerHTML = svg;
+          const el = host.querySelector('svg');
+          if (el) { el.removeAttribute('width'); el.removeAttribute('height'); }
+        })
+        .catch(() => {}); /* image is decorative; fail silently if missing */
     })();
   </script>
 </body>
