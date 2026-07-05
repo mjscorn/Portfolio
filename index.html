@@ -205,7 +205,8 @@
     /* Interactive office scene (line-art SVG injected from about-office.svg).
        Sized to fit within the About card by width, height, and viewport. */
     .about-hero { width: 100%; }
-    .office-scene { width: min(94%, 1060px, calc(76vh * 1.478)); margin: 0 auto; }
+    /* Framed like the portfolio cards: same border, radius, and faint fill. */
+    .office-scene { width: min(94%, 1060px, calc(76vh * 1.478)); margin: 0 auto; background: rgba(255,255,255,0.03); border: 1px solid var(--stroke); border-radius: var(--radius-md); overflow: hidden; }
     .office-scene svg { display: block; width: 100%; height: auto; }
     /* Hover affordance groundwork — individual elements light up (wired up next). */
     .office-scene [data-hot] { cursor: url('cursors/dark/hand.cur'), pointer; }
