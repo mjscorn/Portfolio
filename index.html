@@ -212,18 +212,22 @@
     .office-scene svg { display: block; width: 100%; height: auto; border-radius: 4px; }
     /* Curtain gently blows in from the window: swing pivots at the rod (top),
        so the hem billows most; the SVG turbulence filter adds the cloth ripple. */
-    .office-scene #curtain-sway { transform-box: fill-box; transform-origin: 50% 1%; animation: curtain-sway 13s cubic-bezier(0.37,0,0.63,1) infinite; will-change: transform; }
-    @keyframes curtain-sway {
-      0%   { transform: skewX(-0.4deg) translateX(0)    scaleX(1);     }
-      13%  { transform: skewX(-1.6deg) translateX(-3px) scaleX(0.996); }
-      27%  { transform: skewX(-0.6deg) translateX(-1px) scaleX(1.002); }
-      40%  { transform: skewX(-2.5deg) translateX(-5px) scaleX(0.99);  }
-      53%  { transform: skewX(-1deg)   translateX(-2px) scaleX(1.001); }
-      67%  { transform: skewX(-2deg)   translateX(-4px) scaleX(0.993); }
-      82%  { transform: skewX(-0.7deg) translateX(-1px) scaleX(1.002); }
-      100% { transform: skewX(-0.4deg) translateX(0)    scaleX(1);     }
+    /* Two superimposed sine sways (non-harmonic periods) sum to a smooth,
+       organic billow with no synchronized keyframe stops — outer is the slow
+       big swing from the rod, inner adds a faster, smaller flutter. */
+    .office-scene #curtain-sway { transform-box: fill-box; transform-origin: 50% 1%; animation: curtain-swayA 9s ease-in-out infinite; will-change: transform; }
+    .office-scene #curtain      { transform-box: fill-box; transform-origin: 50% 0%; animation: curtain-swayB 5.9s ease-in-out infinite; will-change: transform; }
+    @keyframes curtain-swayA {
+      0%   { transform: skewX(-0.5deg); }
+      50%  { transform: skewX(-2.3deg); }
+      100% { transform: skewX(-0.5deg); }
     }
-    @media (prefers-reduced-motion: reduce) { .office-scene #curtain-sway { animation: none; } }
+    @keyframes curtain-swayB {
+      0%   { transform: skewX(0.3deg)  translateX(0); }
+      50%  { transform: skewX(-0.9deg) translateX(-2.5px); }
+      100% { transform: skewX(0.3deg)  translateX(0); }
+    }
+    @media (prefers-reduced-motion: reduce) { .office-scene #curtain-sway, .office-scene #curtain { animation: none; } }
     /* Hover affordance groundwork — individual elements light up (wired up next). */
     .office-scene [data-hot] { cursor: url('cursors/dark/hand.cur'), pointer; }
     .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 24px; }
