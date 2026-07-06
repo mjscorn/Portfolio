@@ -2121,9 +2121,10 @@ in the middle of a lake.</p>
        field-of-2x2-pixels wave used on the "View Portfolio" button. Each
        shape has its own <foreignObject> canvas clipped to its silhouette. */
     function setupOfficePx(root) {
-      function makeField(canvas) {
+      function makeField(canvas, color) {
         const ctx = canvas.getContext('2d');
         const CELL = 3, PXSIZE = 2, BASE = 0.62;
+        const FILL = color || 'rgba(110,123,207,0.6)';
         const WAVES = [
           { amp: 0.20, freq: 0.42, speed: 2.4, ph: Math.random() * 6.283 },
           { amp: 0.14, freq: 0.83, speed: 3.1, ph: Math.random() * 6.283 },
@@ -2143,7 +2144,7 @@ in the middle of a lake.</p>
           const t = (ts - start) / 1000;
           const W = canvas.width, H = canvas.height;
           ctx.clearRect(0, 0, W, H);
-          ctx.fillStyle = 'rgba(110,123,207,0.6)';
+          ctx.fillStyle = FILL;
           const cols = Math.ceil(W / CELL), rows = Math.ceil(H / CELL);
           for (let gx = 0; gx < cols; gx++) {
             let s = BASE + (jitter[gx] || 0);
@@ -2159,18 +2160,39 @@ in the middle of a lake.</p>
           stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } ctx.clearRect(0, 0, canvas.width, canvas.height); }
         };
       }
-      /* Guitar + record are connected: hovering either fills both and shows
-         the record tooltip; clicking either opens the Analogue-music player. */
-      const allLayers = [...root.querySelectorAll('.office-px')];
+      /* Objects are wired into connected groups (data-group). Hovering any hit
+         in a group fills every layer in that group and shows the group tooltip;
+         clicking runs the group action. Legacy layers with no data-group fall
+         into "music" (guitar + record → Analogue-music player). */
+      const groupOf = el => el.getAttribute('data-group') || 'music';
+      /* Desk uses the darker card-bg blue for its pixels so it reads
+         distinctly against the accent-blue fills used elsewhere. */
+      const FILL  = { desk: '#141d26' };
+      const TIP   = { music: '#record-tooltip', fishing: '#trout-tooltip', desk: '#desk-tooltip' };
+      const CLICK = {
+        music:   () => { if (window._openAudio)    window._openAudio(); },
+        fishing: () => { if (window._openLightbox) window._openLightbox('images/flyfishing.jpg', 'Fly fishing on the river'); },
+        desk:    () => { if (window._openLightbox) window._openLightbox('images/stool.jpg', 'Woodworking — handmade stool'); },
+      };
+
       const fieldOf = new Map();
-      allLayers.forEach(l => fieldOf.set(l, makeField(l.querySelector('canvas'))));
-      const tooltip = root.querySelector('#record-tooltip');
-      const on  = () => { allLayers.forEach(l => { l.setAttribute('opacity', '1'); fieldOf.get(l).go(); }); if (tooltip) tooltip.setAttribute('opacity', '1'); };
-      const off = () => { allLayers.forEach(l => { l.setAttribute('opacity', '0'); fieldOf.get(l).stop(); }); if (tooltip) tooltip.setAttribute('opacity', '0'); };
+      root.querySelectorAll('.office-px').forEach(l => fieldOf.set(l, makeField(l.querySelector('canvas'), FILL[groupOf(l)])));
+
+      const layersByGroup = {};
+      root.querySelectorAll('.office-px').forEach(l => {
+        const g = groupOf(l);
+        (layersByGroup[g] || (layersByGroup[g] = [])).push(l);
+      });
+
       root.querySelectorAll('.px-hit').forEach(hit => {
+        const g = groupOf(hit);
+        const layers = layersByGroup[g] || [];
+        const tip = TIP[g] ? root.querySelector(TIP[g]) : null;
+        const on  = () => { layers.forEach(l => { l.setAttribute('opacity', '1'); fieldOf.get(l).go(); }); if (tip) tip.setAttribute('opacity', '1'); };
+        const off = () => { layers.forEach(l => { l.setAttribute('opacity', '0'); fieldOf.get(l).stop(); }); if (tip) tip.setAttribute('opacity', '0'); };
         hit.addEventListener('mouseenter', on);
         hit.addEventListener('mouseleave', off);
-        hit.addEventListener('click', () => { if (window._openAudio) window._openAudio(); });
+        hit.addEventListener('click', CLICK[g] || (() => {}));
       });
     }
   </script>
