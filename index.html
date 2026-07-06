@@ -1707,6 +1707,7 @@ in the middle of a lake.</p>
       function close() { modal.classList.remove('open'); audio.pause(); }
       window._audioOpen = () => modal.classList.contains('open');
       window._closeAudio = close;
+      window._openAudio = open;
 
       link.addEventListener('click', open);
       playBtn.addEventListener('click', () => { audio.paused ? audio.play() : audio.pause(); });
@@ -2158,14 +2159,18 @@ in the middle of a lake.</p>
           stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } ctx.clearRect(0, 0, canvas.width, canvas.height); }
         };
       }
+      /* Guitar + record are connected: hovering either fills both and shows
+         the record tooltip; clicking either opens the Analogue-music player. */
+      const allLayers = [...root.querySelectorAll('.office-px')];
+      const fieldOf = new Map();
+      allLayers.forEach(l => fieldOf.set(l, makeField(l.querySelector('canvas'))));
+      const tooltip = root.querySelector('#record-tooltip');
+      const on  = () => { allLayers.forEach(l => { l.setAttribute('opacity', '1'); fieldOf.get(l).go(); }); if (tooltip) tooltip.setAttribute('opacity', '1'); };
+      const off = () => { allLayers.forEach(l => { l.setAttribute('opacity', '0'); fieldOf.get(l).stop(); }); if (tooltip) tooltip.setAttribute('opacity', '0'); };
       root.querySelectorAll('.px-hit').forEach(hit => {
-        const key = hit.getAttribute('data-hit');
-        const layers = [...root.querySelectorAll('.office-px[data-hit="' + key + '"]')];
-        const fields = layers.map(l => makeField(l.querySelector('canvas')));
-        const on  = () => { layers.forEach(l => l.setAttribute('opacity', '1')); fields.forEach(f => f.go()); };
-        const off = () => { layers.forEach(l => l.setAttribute('opacity', '0')); fields.forEach(f => f.stop()); };
         hit.addEventListener('mouseenter', on);
         hit.addEventListener('mouseleave', off);
+        hit.addEventListener('click', () => { if (window._openAudio) window._openAudio(); });
       });
     }
   </script>

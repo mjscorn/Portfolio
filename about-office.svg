@@ -806,6 +806,7 @@
 </g>
 </g>
 </g>
+<g id="record-tooltip" opacity="0" pointer-events="none" style="transition:opacity .2s ease"><rect x="2" y="94" width="292" height="32" rx="8" fill="#141d26" stroke="#33343c" stroke-width="1.5"/><path d="M89 124L98 134L107 124Z" fill="#141d26"/><path d="M89 125L98 135L107 125" fill="none" stroke="#33343c" stroke-width="1.5"/><text x="148" y="115" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="14" fill="#dce8f0" letter-spacing="0.3">Analogue music. Click to listen.</text></g>
 <defs>
 <filter id="curtainWind" x="-25%" y="-12%" width="150%" height="134%" color-interpolation-filters="sRGB">
 <feTurbulence type="fractalNoise" baseFrequency="0.0065 0.012" numOctaves="2" seed="7" result="noise"/>
