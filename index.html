@@ -585,7 +585,6 @@
     .resume-pane, .poetry-pane { width: 100%; flex-shrink: 0; min-height: 0; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable; padding: 24px 24px 0; scrollbar-width: thin; scrollbar-color: var(--stroke) transparent; }
     .resume-pane::-webkit-scrollbar, .poetry-pane::-webkit-scrollbar { width: 4px; }
     .resume-pane::-webkit-scrollbar-thumb, .poetry-pane::-webkit-scrollbar-thumb { background: var(--stroke); border-radius: 2px; }
-    #resume.show-poetry .resume-slider { transform: translateX(calc(-100% - 48px)); }
     .poetry-header { display: flex; align-items: center; gap: 16px; flex-shrink: 0; position: sticky; top: -24px; z-index: 5; background: var(--bg); margin: -24px -24px 12px; padding: 24px 24px 12px; }
     .poetry-header .page-title { position: static; margin: 0; padding: 0; background: transparent; }
     .poetry-back { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: transparent; border: 1px solid var(--stroke); border-radius: var(--radius-md); color: var(--text-primary); transition: background 0.18s ease, border-color 0.18s ease; }
@@ -861,43 +860,36 @@
               </div>
             </div>
 
-            <div class="resume-bottom">
-
-              <div class="resume-section">
-                <p class="resume-section-label">education</p>
-                <div class="r-entry">
-                  <p class="r-name">Teaching Credential</p>
-                  <p class="r-sub r-line"><span class="nm">SFSU</span><span class="sep">|</span><span class="dt">Dec '16–Jun '18</span></p>
-                </div>
-                <div class="r-entry">
-                  <p class="r-name">M.A. in English Literature</p>
-                  <p class="r-sub r-line"><span class="nm">CSU East Bay</span><span class="sep">|</span><span class="dt">Sep '11–'13</span></p>
-                </div>
-                <div class="r-entry">
-                  <p class="r-name">B.A. in English Literature</p>
-                  <p class="r-sub r-line"><span class="nm">CSU East Bay</span><span class="sep">|</span><span class="dt">Sep '06–'09</span></p>
-                </div>
+            <div class="resume-section collapsible">
+              <button class="resume-section-label collapse-toggle" type="button" aria-expanded="true">Education<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <div class="collapse-body">
+              <div class="collapse-inner">
+              <div class="r-entry">
+                <p class="r-name">Teaching Credential</p>
+                <p class="r-sub r-line"><span class="nm">SFSU</span><span class="sep">|</span><span class="dt">Dec '16–Jun '18</span></p>
               </div>
-
-              <div class="resume-section">
-                <p class="resume-section-label">interests</p>
-                <div class="resume-sidebar-item">
-                  <p><a class="sublink photo-link" data-photo="images/stool.jpg" data-photo-alt="Woodworking — handmade stool">Woodworking<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
-                  <p><a class="sublink" id="audio-link">Analogue music<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
-                  <p><a class="sublink photo-link" data-photo="images/flyfishing.jpg" data-photo-alt="Fly fishing on the river">Fly fishing<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
-                  <p><a class="poetry-link" id="poetry-link">Poetry<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
-                </div>
+              <div class="r-entry">
+                <p class="r-name">M.A. in English Literature</p>
+                <p class="r-sub r-line"><span class="nm">CSU East Bay</span><span class="sep">|</span><span class="dt">Sep '11–'13</span></p>
               </div>
-
+              <div class="r-entry">
+                <p class="r-name">B.A. in English Literature</p>
+                <p class="r-sub r-line"><span class="nm">CSU East Bay</span><span class="sep">|</span><span class="dt">Sep '06–'09</span></p>
+              </div>
+              </div>
+              </div>
             </div>
 
         </div>
       </div>
         </div>
+      </div>
+    </section>
 
-        <div class="poetry-pane">
+  <!-- Poetry sub-page: standalone overlay opened from the About-scene books; not tied to the resume -->
+  <div class="subpage" id="poetry-view">
           <div class="poetry-header">
-            <button class="poetry-back" id="poetry-back" aria-label="Back to resume">
+            <button class="poetry-back" id="poetry-back" aria-label="Back">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <p class="page-title">Poetry</p>
@@ -968,9 +960,7 @@ in the middle of a lake.</p>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
+  </div>
 
   <!-- ReachOut USA sub-page (slides in like the poetry view) -->
   <div class="subpage" id="reachout-view">
@@ -1497,7 +1487,7 @@ in the middle of a lake.</p>
        Escape, the back chevron, and the browser back button all step
        backwards out of an open sub-page. */
     const SUBPAGES = [
-      { sectionId: 'resume', cls: 'show-poetry', openId: 'poetry-link', backId: 'poetry-back' },
+      { sectionId: 'poetry-view', cls: 'open', backId: 'poetry-back' }, /* opened via the About-scene books (_openPoetry) */
       { sectionId: 'reachout-view', cls: 'open', openId: 'reachout-link', backId: 'reachout-back' },
       { sectionId: 'qbmobile-view', cls: 'open', openId: 'qbmobile-link', backId: 'qbmobile-back' },
     ];
@@ -1541,10 +1531,10 @@ in the middle of a lake.</p>
     }
 
     SUBPAGES.forEach(s => {
-      document.getElementById(s.openId).addEventListener('click', () => {
-        openSubpage(s);
-      });
-      document.getElementById(s.backId).addEventListener('click', () => {
+      const openEl = s.openId && document.getElementById(s.openId);
+      if (openEl) openEl.addEventListener('click', () => openSubpage(s));
+      const backEl = document.getElementById(s.backId);
+      if (backEl) backEl.addEventListener('click', () => {
         if (history.state && history.state.subpage) history.back();
         else closeOpenSubpage();
       });
@@ -1560,6 +1550,12 @@ in the middle of a lake.</p>
         if (history.state && history.state.subpage) history.replaceState(null, '');
       }
     };
+
+    /* Poetry is a standalone sub-page overlay (like ReachOut / QB Mobile),
+       opened from the About-scene books. It slides in over whatever section is
+       showing and closing it returns there — it is no longer tied to the resume. */
+    const POETRY_SUBPAGE = SUBPAGES.find(s => s.sectionId === 'poetry-view');
+    window._openPoetry = function () { openSubpage(POETRY_SUBPAGE); };
 
     /* ── Site passcode gate ──
        The whole site is locked behind the passcode on arrival. The overlay
@@ -1616,12 +1612,20 @@ in the middle of a lake.</p>
       });
 
       window._openPasscode = openGate;      /* exposed for testing / re-locking */
-      /* Re-gate on every page display, not just first load. On a reload or a
-         bfcache restore the browser can repopulate the previously-typed digits
-         (which would otherwise auto-satisfy the check); pageshow fires after
-         that restoration, so re-gating here clears them and re-presents the
-         gate. Fires on the initial load too. */
-      window.addEventListener('pageshow', openGate);
+
+      /* In the local Claude preview (localhost) skip the gate so the site is
+         immediately usable; the deployed site stays gated. */
+      const isPreview = ['localhost', '127.0.0.1', '[::1]', '::1', ''].includes(location.hostname);
+
+      /* Present the gate (or bypass it in preview) on every page display, not
+         just first load. On a reload or bfcache restore the browser can
+         repopulate the previously-typed digits (which would otherwise
+         auto-satisfy the check); pageshow fires after that restoration, so
+         re-running here clears them and re-presents the gate. The immediate
+         call runs during parse (before first paint) so nothing flashes. */
+      const gateOrBypass = () => { if (isPreview) unlock(); else openGate(); };
+      window.addEventListener('pageshow', gateOrBypass);
+      gateOrBypass();
     })();
 
     /* ── Poem pager ── */
@@ -1679,8 +1683,8 @@ in the middle of a lake.</p>
     (function () {
       const modal = document.getElementById('audio-modal');
       const audio = document.getElementById('audio-el');
-      const link  = document.getElementById('audio-link');
-      if (!modal || !audio || !link) return;
+      const link  = document.getElementById('audio-link');   /* may be absent — the record hover uses window._openAudio */
+      if (!modal || !audio) return;
       const playBtn = document.getElementById('audio-playpause');
       const prevBtn = document.getElementById('audio-prev');
       const nextBtn = document.getElementById('audio-next');
@@ -1717,7 +1721,7 @@ in the middle of a lake.</p>
       window._closeAudio = close;
       window._openAudio = open;
 
-      link.addEventListener('click', open);
+      if (link) link.addEventListener('click', open);
       playBtn.addEventListener('click', () => { audio.paused ? audio.play() : audio.pause(); });
       prevBtn.addEventListener('click', () => { (audio.currentTime > 3 ? load(idx, true) : load(idx - 1, true)); });
       nextBtn.addEventListener('click', () => load(idx + 1, true));
@@ -1817,7 +1821,7 @@ in the middle of a lake.</p>
         if (sub) return sub;
         const resume = document.getElementById('resume');
         if (resume && resume.classList.contains('active')) {
-          return resume.querySelector(resume.classList.contains('show-poetry') ? '.poetry-pane' : '.resume-pane');
+          return resume.querySelector('.resume-pane');
         }
         return document.querySelector('section.active');
       }
@@ -2173,14 +2177,13 @@ in the middle of a lake.</p>
          clicking runs the group action. Legacy layers with no data-group fall
          into "music" (guitar + record → Analogue-music player). */
       const groupOf = el => el.getAttribute('data-group') || 'music';
-      /* Desk uses the darker card-bg blue for its pixels so it reads
-         distinctly against the accent-blue fills used elsewhere. */
-      const FILL  = { desk: '#141d26' };
-      const TIP   = { music: '#record-tooltip', fishing: '#trout-tooltip', desk: '#desk-tooltip' };
+      const FILL  = {};   /* every group uses the default accent-blue pixels */
+      const TIP   = { music: '#record-tooltip', fishing: '#trout-tooltip', desk: '#desk-tooltip', poetry: '#books-tooltip' };
       const CLICK = {
         music:   () => { if (window._openAudio)    window._openAudio(); },
         fishing: () => { if (window._openLightbox) window._openLightbox('images/flyfishing.jpg', 'Fly fishing on the river'); },
         desk:    () => { if (window._openLightbox) window._openLightbox('images/stool.jpg', 'Woodworking — handmade stool'); },
+        poetry:  () => { if (window._openPoetry)   window._openPoetry(); },
       };
 
       const fieldOf = new Map();
