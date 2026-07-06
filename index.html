@@ -549,11 +549,12 @@
     .deck-btn:hover:not(:disabled) { background: rgba(255,255,255,0.14); }
     .deck-btn:disabled { opacity: 0.28; pointer-events: none; }
 
-    /* ── Passkey modal (locks the QuickBooks portfolio sections) ── */
+    /* ── Passcode gate (locks the whole site until the passcode is entered) ── */
     /* visibility flips to visible immediately on open (0s) so the first field
        is focusable inside the triggering tap and mobile raises the keyboard;
        on close it stays visible through the 0.22s fade-out then hides. */
-    .passkey-overlay { position: fixed; inset: 0; z-index: 250; display: flex; align-items: center; justify-content: center; background: rgba(10,16,22,0.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); opacity: 0; visibility: hidden; transition: opacity 0.22s ease, visibility 0s linear 0.22s; }
+    .passkey-overlay { position: fixed; inset: 0; z-index: 250; display: flex; align-items: center; justify-content: center; background: rgba(10,16,22,0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); opacity: 0; visibility: hidden; transition: opacity 0.22s ease, visibility 0s linear 0.22s; }
+    body.gated { overflow: hidden; }
     .passkey-overlay.open { opacity: 1; visibility: visible; transition: opacity 0.22s ease, visibility 0s; }
     .passkey-card { width: min(92vw, 340px); background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 32px 28px 28px; text-align: center; transform: translateY(8px) scale(0.98); transition: transform 0.22s ease; }
     .passkey-overlay.open .passkey-card { transform: none; }
@@ -653,7 +654,7 @@
     }
   </style>
 </head>
-<body>
+<body class="gated">
   <canvas id="bg-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
 
   <!-- Hamburger button (collapsed nav only) -->
@@ -1164,17 +1165,17 @@ in the middle of a lake.</p>
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
 
-  <!-- Passkey modal: gates the locked QuickBooks portfolio sections -->
-  <div class="passkey-overlay" id="passkey-modal" role="dialog" aria-modal="true" aria-labelledby="pk-title">
+  <!-- Passcode gate: locks the whole site until the passcode is entered; open by default so no content flashes before the JS runs -->
+  <div class="passkey-overlay open" id="passkey-modal" role="dialog" aria-modal="true" aria-labelledby="pk-title">
     <div class="passkey-card">
-      <h3 id="pk-title">Enter passkey</h3>
+      <h3 id="pk-title">Enter passcode</h3>
       <div class="pk-fields">
         <input class="pk-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Passkey digit 1">
         <input class="pk-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Passkey digit 2">
         <input class="pk-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Passkey digit 3">
         <input class="pk-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Passkey digit 4">
       </div>
-      <p class="pk-error" id="pk-error">Wrong passkey</p>
+      <p class="pk-error" id="pk-error">Wrong passcode</p>
     </div>
   </div>
 
@@ -1498,7 +1499,7 @@ in the middle of a lake.</p>
     const SUBPAGES = [
       { sectionId: 'resume', cls: 'show-poetry', openId: 'poetry-link', backId: 'poetry-back' },
       { sectionId: 'reachout-view', cls: 'open', openId: 'reachout-link', backId: 'reachout-back' },
-      { sectionId: 'qbmobile-view', cls: 'open', openId: 'qbmobile-link', backId: 'qbmobile-back', locked: true },
+      { sectionId: 'qbmobile-view', cls: 'open', openId: 'qbmobile-link', backId: 'qbmobile-back' },
     ];
     const SUBPAGE_DUR = 440; /* matches the .resume-slider transition */
 
@@ -1541,7 +1542,6 @@ in the middle of a lake.</p>
 
     SUBPAGES.forEach(s => {
       document.getElementById(s.openId).addEventListener('click', () => {
-        if (s.locked && !window._qbUnlocked) { window._openPasskey(s); return; }
         openSubpage(s);
       });
       document.getElementById(s.backId).addEventListener('click', () => {
@@ -1561,38 +1561,41 @@ in the middle of a lake.</p>
       }
     };
 
-    /* ── Passkey gate for locked portfolio sections ── */
+    /* ── Site passcode gate ──
+       The whole site is locked behind the passcode on arrival. The overlay
+       ships open (in markup) so nothing flashes before this runs; entering the
+       correct code reveals everything, including the QB Mobile piece. There is
+       deliberately no outside-click / Escape dismissal — the gate must be met. */
     (function () {
-      const PASSKEY = '8000';
+      const PASSCODE = '8000';
       const overlay = document.getElementById('passkey-modal');
       const digits  = [...overlay.querySelectorAll('.pk-digit')];
       const errEl   = document.getElementById('pk-error');
-      let pending = null;
 
       function clearError() { errEl.classList.remove('show'); digits.forEach(d => d.classList.remove('pk-bad')); }
-      function reset() { digits.forEach(d => d.value = ''); clearError(); }
 
-      window._openPasskey = function (s) {
-        pending = s;
-        reset();
+      function openGate() {
+        window._qbUnlocked = false;
+        digits.forEach(d => d.value = '');
+        clearError();
+        document.body.classList.add('gated');
         overlay.classList.add('open');
-        /* Focus the first field synchronously, still inside the triggering tap,
-           so mobile browsers raise the on-screen keyboard. A focus() in a
-           setTimeout is detached from the user gesture and iOS Safari then
-           refuses to show the keyboard. offsetWidth forces the visibility
-           change to commit first so the field is focusable. */
+        /* Focus the first field synchronously so mobile raises the keyboard;
+           offsetWidth forces the visibility change to commit first. */
         void overlay.offsetWidth;
         digits[0].focus({ preventScroll: true });
-      };
-      function close() { overlay.classList.remove('open'); pending = null; }
+      }
+
+      function unlock() {
+        window._qbUnlocked = true;          /* also clears the QB Mobile gate */
+        overlay.classList.remove('open');
+        document.body.classList.remove('gated');
+      }
 
       function check() {
         if (digits.some(d => !d.value)) return;
-        if (digits.map(d => d.value).join('') === PASSKEY) {
-          const s = pending;
-          close();
-          window._qbUnlocked = true;
-          if (s) openSubpage(s);
+        if (digits.map(d => d.value).join('') === PASSCODE) {
+          unlock();
         } else {
           errEl.classList.add('show');
           digits.forEach(d => d.classList.add('pk-bad'));
@@ -1612,8 +1615,13 @@ in the middle of a lake.</p>
         });
       });
 
-      overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('open')) close(); });
+      window._openPasscode = openGate;      /* exposed for testing / re-locking */
+      /* Re-gate on every page display, not just first load. On a reload or a
+         bfcache restore the browser can repopulate the previously-typed digits
+         (which would otherwise auto-satisfy the check); pageshow fires after
+         that restoration, so re-gating here clears them and re-presents the
+         gate. Fires on the initial load too. */
+      window.addEventListener('pageshow', openGate);
     })();
 
     /* ── Poem pager ── */
