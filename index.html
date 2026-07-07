@@ -1654,8 +1654,15 @@ in the middle of a lake.</p>
       if (!lightbox || !grid) return;
 
       function openLightbox(src, alt) {
-        lbImg.src = src; lbImg.alt = alt || '';
-        lightbox.classList.add('open');
+        lbImg.alt = alt || '';
+        /* Reveal only once the NEW image has decoded, otherwise the previously
+           viewed image flashes during the fade-in before the new one paints. */
+        const reveal = () => lightbox.classList.add('open');
+        if (lbImg.getAttribute('src') === src && lbImg.complete) { reveal(); return; }
+        lbImg.src = src;
+        if (lbImg.decode) lbImg.decode().then(reveal).catch(reveal);
+        else if (lbImg.complete) reveal();
+        else lbImg.onload = reveal;
       }
       function closeLightbox() {
         lightbox.classList.remove('open');
