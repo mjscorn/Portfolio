@@ -239,6 +239,8 @@
     @media (prefers-reduced-motion: reduce) { .office-scene #curtain-sway, .office-scene #curtain, .office-scene #flap { animation: none; } }
     /* Hover affordance groundwork — individual elements light up (wired up next). */
     .office-scene [data-hot] { cursor: url('cursors/dark/hand.cur'), pointer; }
+    .office-scene #mouse { cursor: grab; }
+    .office-scene #mouse.dragging { cursor: grabbing; }
     .office-scene .px-hit, .office-scene .px-hit * { cursor: url('cursors/dark/hand.cur'), pointer !important; }
     body.light .office-scene .px-hit, body.light .office-scene .px-hit * { cursor: url('cursors/light/hand.cur'), pointer !important; }
     .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 24px; }
@@ -273,6 +275,11 @@
     #reachout-link .card-thumb img { object-fit: contain; }
     #qbmobile-link .card-thumb { position: relative; }
     #qbmobile-link .card-thumb img { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 45%; height: auto; display: block; border-radius: 12px 12px 0 0; box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 8px 24px rgba(0,0,0,0.4); }
+    /* Pixel-wave hover behind the thumbnail image (same effect as the View Portfolio button) */
+    .card-link .card-thumb { position: relative; }
+    .card-link .card-thumb .card-px { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.25s ease; pointer-events: none; image-rendering: pixelated; }
+    .card-link:hover .card-thumb .card-px { opacity: 1; }
+    .card-link .card-thumb img { position: relative; z-index: 1; }
     .card-link { cursor: pointer; }
     .card-body { padding: 16px; }
     .card-title { font-size: 13px; font-weight: 300; margin-bottom: 6px; }
@@ -402,6 +409,14 @@
     .audio-btn--play:hover { transform: scale(1.05); }
     .audio-vol { display: flex; align-items: center; gap: 8px; color: rgba(220,232,240,0.7); margin-top: 20px; }
     .audio-volrange { width: 120px; }
+    .audio-mute-btn { display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: inherit; cursor: pointer; padding: 0; opacity: 0.85; transition: opacity 0.15s ease; }
+    .audio-mute-btn:hover { opacity: 1; }
+    /* About-scene mini audio controls (share the media player's audio element) */
+    .scene-audio { display: flex; align-items: center; justify-content: flex-end; gap: 12px; width: min(94%, 1060px, calc(76vh * 1.478)); margin: 0 auto; color: rgba(220,232,240,0.7); }
+    .scene-audio-btn { display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: var(--text-primary); cursor: pointer; padding: 0; opacity: 0.85; transition: opacity 0.15s ease; }
+    .scene-audio-btn:hover { opacity: 1; }
+    .scene-audio-btn svg { width: 20px; height: 20px; }
+    .scene-audio .audio-volrange { width: 90px; }
 
     /* ── QuickBooks Mobile case-study (scrolling page) ── */
     .subpage.deck { overflow: hidden; display: flex; flex-direction: column; }
@@ -594,6 +609,12 @@
     .poem-nav { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: transparent; border: 1px solid var(--stroke); border-radius: var(--radius-md); color: var(--text-primary); transition: background 0.18s ease, border-color 0.18s ease, opacity 0.18s ease; }
     .poem-nav:hover:not(:disabled) { background: rgba(110, 123, 207, 0.12); border-color: var(--teal); }
     .poem-nav:disabled { opacity: 0.25; pointer-events: none; }
+    /* Poetry sub-page: fixed header, scrolling body, pager pinned to the bottom-right */
+    #poetry-view { display: flex; flex-direction: column; overflow: hidden; }
+    #poetry-view .poetry-header { position: static; }
+    #poetry-view .poetry-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+    #poetry-view .poem-page { padding-top: 16px; }
+    #poetry-view .poem-pager { flex-shrink: 0; align-self: stretch; justify-content: flex-end; margin: 8px -24px -24px; padding: 14px 24px; background: var(--bg); border-top: 1px solid var(--stroke); }
     .poetry-body { width: 100%; }
     .poem-slider { display: flex; gap: 48px; width: 100%; align-items: flex-start; transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1); }
     /* Poems start at the same offset below the header as the resume content (12px header margin + 68px) */
@@ -733,6 +754,11 @@
       <div class="page-body">
         <div class="about-hero">
           <div class="office-scene" id="office-scene" role="img" aria-label="Line illustration of my office desk: an acoustic guitar, widescreen monitor and keyboard, a framed fly-fishing trout print, a record player, a teapot and mug, a model sailboat, potted plants, a fly rod, and a window looking out over the ocean."></div>
+          <div class="scene-audio" id="scene-audio">
+            <button class="scene-audio-btn" id="scene-playpause" aria-label="Play"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"/></svg></button>
+            <button class="scene-audio-btn" id="scene-mute" aria-label="Mute"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <input type="range" class="audio-volrange" id="scene-vol" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+          </div>
         </div>
       </div>
     </section>
@@ -745,8 +771,8 @@
           <p>Using this portfolio as an example of how I think about UI/UX, things like responsive behavior, navigation, and interaction.</p>
         </div>
         <div class="grid">
-          <div class="card card-link" id="reachout-link"><div class="card-thumb"><img src="reachout/12.jpg" alt="ReachOut USA"></div><div class="card-body"><p class="card-title">ReachOut USA</p><span class="card-tag">Branding</span></div></div>
-          <div class="card card-link" id="qbmobile-link"><div class="card-thumb"><img src="qbmobile/thumb.png" alt="QuickBooks Mobile"></div><div class="card-body"><p class="card-title">QuickBooks Mobile</p><span class="card-tag">UX/UI</span></div></div>
+          <div class="card card-link" id="reachout-link"><div class="card-thumb"><canvas class="card-px" aria-hidden="true"></canvas><img src="reachout/12.jpg" alt="ReachOut USA"></div><div class="card-body"><p class="card-title">ReachOut USA</p><span class="card-tag">Branding</span></div></div>
+          <div class="card card-link" id="qbmobile-link"><div class="card-thumb"><canvas class="card-px" aria-hidden="true"></canvas><img src="qbmobile/thumb.png" alt="QuickBooks Mobile"></div><div class="card-body"><p class="card-title">QuickBooks Mobile</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">QuickBooks Payments</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">QuickBooks Navigation</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">Project 5</p><span class="card-tag">UX/UI</span></div></div>
@@ -893,15 +919,6 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <p class="page-title">Poetry</p>
-            <div class="poem-pager">
-              <button class="poem-nav" id="poem-prev" aria-label="Previous poem">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <span class="poem-count" id="poem-count">1 / 2</span>
-              <button class="poem-nav" id="poem-next" aria-label="Next poem">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-            </div>
           </div>
           <div class="poetry-body">
             <div class="poem-slider" id="poem-slider">
@@ -959,6 +976,15 @@ in the middle of a lake.</p>
                 </div>
               </div>
             </div>
+          </div>
+          <div class="poem-pager">
+            <button class="poem-nav" id="poem-prev" aria-label="Previous poem">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <span class="poem-count" id="poem-count">1 / 2</span>
+            <button class="poem-nav" id="poem-next" aria-label="Next poem">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
           </div>
   </div>
 
@@ -1025,7 +1051,7 @@ in the middle of a lake.</p>
         </button>
       </div>
       <div class="audio-vol">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button class="audio-mute-btn" id="audio-mute" aria-label="Mute"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <input type="range" class="audio-volrange" id="audio-vol" min="0" max="1" step="0.01" value="1" aria-label="Volume">
       </div>
     </div>
@@ -1704,6 +1730,8 @@ in the middle of a lake.</p>
       const closeBtn = document.getElementById('audio-close');
       const PLAY  = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"/></svg>';
       const PAUSE = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+      const VOL_ON  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      const VOL_OFF = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 9.5l5 5M22 9.5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
       const BASE = 'no fixed star - a peaceful, dark place (remix) - ';
       const TRACKS = [
         { name: 'compass',   file: BASE + '01 compass (remix).mp3' },
@@ -1714,7 +1742,19 @@ in the middle of a lake.</p>
       ];
       let idx = 0, seeking = false;
       const fmt = (t) => (!isFinite(t) ? '0:00' : Math.floor(t/60) + ':' + String(Math.floor(t%60)).padStart(2,'0'));
-      function syncBtn() { playBtn.innerHTML = audio.paused ? PLAY : PAUSE; playBtn.setAttribute('aria-label', audio.paused ? 'Play' : 'Pause'); }
+      /* Both the record-player modal and the About-scene bar drive the same audio */
+      const playBtns   = [playBtn, document.getElementById('scene-playpause')].filter(Boolean);
+      const muteBtns   = [document.getElementById('audio-mute'), document.getElementById('scene-mute')].filter(Boolean);
+      const volSliders = [volume, document.getElementById('scene-vol')].filter(Boolean);
+      function syncBtn() {
+        const ic = audio.paused ? PLAY : PAUSE, lbl = audio.paused ? 'Play' : 'Pause';
+        playBtns.forEach(b => { b.innerHTML = ic; b.setAttribute('aria-label', lbl); });
+      }
+      function syncVol() {
+        const muted = audio.muted || audio.volume === 0;
+        muteBtns.forEach(b => { b.innerHTML = muted ? VOL_OFF : VOL_ON; b.setAttribute('aria-label', muted ? 'Unmute' : 'Mute'); });
+        volSliders.forEach(s => { if (document.activeElement !== s) s.value = audio.muted ? 0 : audio.volume; });
+      }
       function load(i, play) {
         idx = (i + TRACKS.length) % TRACKS.length;
         audio.src = 'music/' + TRACKS[idx].file;
@@ -1729,13 +1769,15 @@ in the middle of a lake.</p>
       window._openAudio = open;
 
       if (link) link.addEventListener('click', open);
-      playBtn.addEventListener('click', () => { audio.paused ? audio.play() : audio.pause(); });
+      playBtns.forEach(b => b.addEventListener('click', () => { audio.paused ? audio.play().catch(() => {}) : audio.pause(); }));
+      muteBtns.forEach(b => b.addEventListener('click', () => { audio.muted = !audio.muted; syncVol(); }));
+      volSliders.forEach(s => s.addEventListener('input', () => { audio.volume = +s.value; audio.muted = (+s.value === 0); syncVol(); }));
       prevBtn.addEventListener('click', () => { (audio.currentTime > 3 ? load(idx, true) : load(idx - 1, true)); });
       nextBtn.addEventListener('click', () => load(idx + 1, true));
       audio.addEventListener('play', syncBtn);
       audio.addEventListener('pause', syncBtn);
+      audio.addEventListener('volumechange', syncVol);
       audio.addEventListener('ended', () => load(idx + 1, true));   /* auto-advance */
-      volume.addEventListener('input', () => { audio.volume = +volume.value; });
       audio.addEventListener('loadedmetadata', () => { durEl.textContent = fmt(audio.duration); seek.max = audio.duration || 100; });
       audio.addEventListener('timeupdate', () => { if (!seeking) seek.value = audio.currentTime; curEl.textContent = fmt(audio.currentTime); });
       seek.addEventListener('input', () => { seeking = true; curEl.textContent = fmt(+seek.value); });
@@ -1744,6 +1786,7 @@ in the middle of a lake.</p>
       modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
       load(0, false);
       syncBtn();
+      syncVol();
     })();
 
     /* ── "View Portfolio" hover: field of 2x2 pixels rolling in a wave ── */
@@ -1794,6 +1837,52 @@ in the middle of a lake.</p>
       btn.addEventListener('mouseleave', stop);
       btn.addEventListener('focus', go);
       btn.addEventListener('blur', stop);
+    })();
+
+    /* ── Portfolio link cards (ReachOut, QB Mobile): same pixel wave behind the thumbnail ── */
+    (function () {
+      function attach(card) {
+        const canvas = card.querySelector('.card-px');
+        if (!canvas) return;
+        const thumb = canvas.parentElement;              /* size to the thumbnail */
+        const ctx = canvas.getContext('2d');
+        const PXSIZE = 2, GUTTER = 1, CELL = PXSIZE + GUTTER;
+        const WAVES = [
+          { amp: 0.20, freq: 0.42, speed: 2.4, ph: Math.random() * 6.283 },
+          { amp: 0.14, freq: 0.83, speed: 3.1, ph: Math.random() * 6.283 },
+          { amp: 0.09, freq: 1.60, speed: 1.5, ph: Math.random() * 6.283 },
+        ];
+        let jitter = [], raf = null, start = 0;
+        function fit() {
+          const r = thumb.getBoundingClientRect();
+          canvas.width  = Math.max(1, Math.round(r.width));
+          canvas.height = Math.max(1, Math.round(r.height));
+          const cols = Math.ceil(canvas.width / CELL);
+          jitter = [];
+          for (let i = 0; i < cols; i++) jitter.push((Math.random() - 0.5) * 0.3);
+        }
+        function frame(ts) {
+          if (!start) start = ts;
+          const t = (ts - start) / 1000;
+          const W = canvas.width, H = canvas.height;
+          ctx.clearRect(0, 0, W, H);
+          ctx.fillStyle = 'rgba(110,123,207,0.6)';
+          const cols = Math.ceil(W / CELL), rows = Math.ceil(H / CELL);
+          for (let gx = 0; gx < cols; gx++) {
+            let s = 0.5 + (jitter[gx] || 0);
+            for (const w of WAVES) s += w.amp * Math.sin(gx * w.freq - t * w.speed + w.ph);
+            s = s < 0 ? 0 : s > 1 ? 1 : s;
+            const fillRows = Math.round(s * rows);
+            for (let k = 0; k < fillRows; k++) ctx.fillRect(gx * CELL, (rows - 1 - k) * CELL, PXSIZE, PXSIZE);
+          }
+          raf = requestAnimationFrame(frame);
+        }
+        function go()   { fit(); start = 0; if (!raf) raf = requestAnimationFrame(frame); }
+        function stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } ctx.clearRect(0, 0, canvas.width, canvas.height); }
+        card.addEventListener('mouseenter', go);
+        card.addEventListener('mouseleave', stop);
+      }
+      document.querySelectorAll('.card-link .card-px').forEach(c => attach(c.closest('.card-link')));
     })();
 
     /* Escape: close the lightbox first, otherwise step out of any open sub-page */
@@ -2131,6 +2220,7 @@ in the middle of a lake.</p>
           const el = host.querySelector('svg');
           if (el) { el.removeAttribute('width'); el.removeAttribute('height'); }
           setupOfficePx(host);
+          setupMouseDrag(host);
         })
         .catch(() => {}); /* image is decorative; fail silently if missing */
     })();
@@ -2212,6 +2302,38 @@ in the middle of a lake.</p>
         hit.addEventListener('mouseleave', off);
         hit.addEventListener('click', CLICK[g] || (() => {}));
       });
+    }
+
+    /* Grab-and-drop the desk mouse. It stays on the desk between the keyboard
+       (left limit) and reaches to the right of the bamboo, without overlapping
+       the keyboard. Pointer deltas are converted from screen px to viewBox
+       units via the SVG's on-screen scale. */
+    function setupMouseDrag(root) {
+      const svg = root.querySelector('svg');
+      const mouse = svg && svg.querySelector('#mouse');
+      if (!mouse) return;
+      const VBW = 1381, MW = 65, MH = 56, BASE_X = 825, BASE_Y = 652;
+      const B = { minX: 680, maxX: 1120, minY: 648, maxY: 712 };
+      const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
+      let offX = 0, offY = 0, drag = false, sCX = 0, sCY = 0, sOX = 0, sOY = 0, scale = 1;
+      const apply = () => mouse.setAttribute('transform', `translate(${offX.toFixed(1)} ${offY.toFixed(1)})`);
+      mouse.style.touchAction = 'none';
+      mouse.addEventListener('pointerdown', (e) => {
+        drag = true; mouse.classList.add('dragging');
+        scale = svg.getBoundingClientRect().width / VBW || 1;
+        sCX = e.clientX; sCY = e.clientY; sOX = offX; sOY = offY;
+        try { mouse.setPointerCapture(e.pointerId); } catch (_) {}
+        e.preventDefault(); e.stopPropagation();
+      });
+      mouse.addEventListener('pointermove', (e) => {
+        if (!drag) return;
+        const nx = clamp(BASE_X + sOX + (e.clientX - sCX) / scale, B.minX, B.maxX);
+        const ny = clamp(BASE_Y + sOY + (e.clientY - sCY) / scale, B.minY, B.maxY);
+        offX = nx - BASE_X; offY = ny - BASE_Y; apply();
+      });
+      const end = (e) => { if (!drag) return; drag = false; mouse.classList.remove('dragging'); try { mouse.releasePointerCapture(e.pointerId); } catch (_) {} };
+      mouse.addEventListener('pointerup', end);
+      mouse.addEventListener('pointercancel', end);
     }
   </script>
 </body>
