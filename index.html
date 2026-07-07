@@ -239,8 +239,10 @@
     @media (prefers-reduced-motion: reduce) { .office-scene #curtain-sway, .office-scene #curtain, .office-scene #flap { animation: none; } }
     /* Hover affordance groundwork — individual elements light up (wired up next). */
     .office-scene [data-hot] { cursor: url('cursors/dark/hand.cur'), pointer; }
-    .office-scene #mouse { cursor: grab; }
-    .office-scene #mouse.dragging { cursor: grabbing; }
+    .office-scene #mouse, .office-scene #mouse * { cursor: url('cursors/dark/grab.cur'), grab; }
+    .office-scene #mouse.dragging, .office-scene #mouse.dragging * { cursor: url('cursors/dark/grabbing.cur'), grabbing; }
+    body.light .office-scene #mouse, body.light .office-scene #mouse * { cursor: url('cursors/light/grab.cur'), grab; }
+    body.light .office-scene #mouse.dragging, body.light .office-scene #mouse.dragging * { cursor: url('cursors/light/grabbing.cur'), grabbing; }
     .office-scene .px-hit, .office-scene .px-hit * { cursor: url('cursors/dark/hand.cur'), pointer !important; }
     body.light .office-scene .px-hit, body.light .office-scene .px-hit * { cursor: url('cursors/light/hand.cur'), pointer !important; }
     .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 24px; }
@@ -381,6 +383,7 @@
     .lightbox { position: fixed; inset: 0; z-index: 200; background: rgba(5,8,11,0.92); display: flex; align-items: center; justify-content: center; padding: 48px; opacity: 0; pointer-events: none; transition: opacity 0.22s ease; }
     .lightbox.open { opacity: 1; pointer-events: auto; }
     .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 8px; box-shadow: 0 12px 60px rgba(0,0,0,0.6); transform: scale(0.96); transition: transform 0.22s ease; }
+    .lightbox.noir img { filter: grayscale(1) contrast(1.12) brightness(0.96); }
     .lightbox.open img { transform: scale(1); }
     .lightbox-close { position: fixed; top: 24px; right: 24px; z-index: 201; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius-full); color: #fff; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease; }
     .lightbox-close:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
@@ -399,6 +402,8 @@
     .audio-time { font-size: 11px; color: rgba(220,232,240,0.55); min-width: 32px; font-variant-numeric: tabular-nums; }
     .audio-time:last-child { text-align: right; }
     .audio-seek, .audio-volrange { -webkit-appearance: none; appearance: none; height: 4px; background: var(--stroke); border-radius: 999px; outline: none; accent-color: var(--teal); cursor: pointer; }
+    /* Volume track fills up to the thumb: teal below --fill, stroke above (--fill set by JS, follows the dot) */
+    .audio-volrange { background: linear-gradient(to right, var(--teal) var(--fill, 100%), var(--stroke) var(--fill, 100%)); }
     .audio-seek { flex: 1; }
     .audio-seek::-webkit-slider-thumb, .audio-volrange::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--teal); cursor: pointer; }
     .audio-seek::-moz-range-thumb, .audio-volrange::-moz-range-thumb { width: 13px; height: 13px; border: none; border-radius: 50%; background: var(--teal); cursor: pointer; }
@@ -412,11 +417,19 @@
     .audio-mute-btn { display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: inherit; cursor: pointer; padding: 0; opacity: 0.85; transition: opacity 0.15s ease; }
     .audio-mute-btn:hover { opacity: 1; }
     /* About-scene mini audio controls (share the media player's audio element) */
-    .scene-audio { display: flex; align-items: center; justify-content: flex-end; gap: 12px; width: min(94%, 1060px, calc(76vh * 1.478)); margin: 0 auto; color: rgba(220,232,240,0.7); }
-    .scene-audio-btn { display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: var(--text-primary); cursor: pointer; padding: 0; opacity: 0.85; transition: opacity 0.15s ease; }
-    .scene-audio-btn:hover { opacity: 1; }
-    .scene-audio-btn svg { width: 20px; height: 20px; }
-    .scene-audio .audio-volrange { width: 90px; }
+    /* About-scene audio UI inside the monitor screen (sizes are SVG user units) */
+    .mon-audio { position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 14px 20px; box-sizing: border-box; }
+    .mon-wave { width: 100%; height: 104px; pointer-events: none; opacity: 0.9; }
+    /* Controls sit in a row under the wave lines: play/pause, then volume icon + bar */
+    .mon-ui { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 16px; }
+    .mon-play { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--teal); color: #fff; border: none; cursor: pointer; padding: 0; transition: transform 0.15s ease; }
+    .mon-play:hover { transform: scale(1.08); }
+    .mon-play svg { width: 20px; height: 20px; }
+    .mon-vol { display: flex; align-items: center; gap: 10px; color: rgba(220,232,240,0.85); }
+    .mon-mute { display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: inherit; cursor: pointer; padding: 0; opacity: 0.85; transition: opacity 0.15s ease; }
+    .mon-mute:hover { opacity: 1; }
+    .mon-mute svg { width: 22px; height: 22px; }
+    .mon-volrange { width: 130px; }
 
     /* ── QuickBooks Mobile case-study (scrolling page) ── */
     .subpage.deck { overflow: hidden; display: flex; flex-direction: column; }
@@ -754,11 +767,7 @@
       <div class="page-body">
         <div class="about-hero">
           <div class="office-scene" id="office-scene" role="img" aria-label="Line illustration of my office desk: an acoustic guitar, widescreen monitor and keyboard, a framed fly-fishing trout print, a record player, a teapot and mug, a model sailboat, potted plants, a fly rod, and a window looking out over the ocean."></div>
-          <div class="scene-audio" id="scene-audio">
-            <button class="scene-audio-btn" id="scene-playpause" aria-label="Play"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"/></svg></button>
-            <button class="scene-audio-btn" id="scene-mute" aria-label="Mute"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            <input type="range" class="audio-volrange" id="scene-vol" min="0" max="1" step="0.01" value="1" aria-label="Volume">
-          </div>
+          <audio id="scene-audio-el" src="music/reflections.m4a" preload="auto" loop></audio>
         </div>
       </div>
     </section>
@@ -1328,6 +1337,7 @@ in the middle of a lake.</p>
         /* Leaving via the nav closes any open sub-page overlay first */
         if (window._exitSubpages) window._exitSubpages();
         if (id === currentId || animating) return;
+        if (window._sceneSongOnSection) window._sceneSongOnSection(id);  /* start/stop the About song */
 
         const fromIndex = NAV_ORDER.indexOf(currentId);
         const toIndex   = NAV_ORDER.indexOf(id);
@@ -1342,7 +1352,6 @@ in the middle of a lake.</p>
         }
 
         animating = true;
-        window._bgSpeedTarget(64); /* ramp bg up to 64× while cards move */
 
         /* Snap all cards into their starting train positions (no transition) */
         cards.forEach((card, i) => {
@@ -1402,7 +1411,6 @@ in the middle of a lake.</p>
           toEl.style.transform  = '';
           toEl.style.visibility = '';
           toEl.style.opacity    = '';
-          window._bgSpeedTarget(1); /* lerp bg back to normal speed */
           window._refreshScrollFab && window._refreshScrollFab();
           animating = false;
         }, DUR + 20);
@@ -1681,6 +1689,8 @@ in the middle of a lake.</p>
 
       function openLightbox(src, alt) {
         lbImg.alt = alt || '';
+        /* The About-scene hobby photos (fly fishing, woodworking) get a B&W noir treatment */
+        lightbox.classList.toggle('noir', /flyfishing|stool/.test(src));
         /* Reveal only once the NEW image has decoded, otherwise the previously
            viewed image flashes during the fade-in before the new one paints. */
         const reveal = () => lightbox.classList.add('open');
@@ -1743,17 +1753,18 @@ in the middle of a lake.</p>
       let idx = 0, seeking = false;
       const fmt = (t) => (!isFinite(t) ? '0:00' : Math.floor(t/60) + ':' + String(Math.floor(t%60)).padStart(2,'0'));
       /* Both the record-player modal and the About-scene bar drive the same audio */
-      const playBtns   = [playBtn, document.getElementById('scene-playpause')].filter(Boolean);
-      const muteBtns   = [document.getElementById('audio-mute'), document.getElementById('scene-mute')].filter(Boolean);
-      const volSliders = [volume, document.getElementById('scene-vol')].filter(Boolean);
+      const playBtns   = [playBtn];
+      const muteBtns   = [document.getElementById('audio-mute')].filter(Boolean);
+      const volSliders = [volume];
       function syncBtn() {
         const ic = audio.paused ? PLAY : PAUSE, lbl = audio.paused ? 'Play' : 'Pause';
         playBtns.forEach(b => { b.innerHTML = ic; b.setAttribute('aria-label', lbl); });
       }
+      const paintVol = s => s.style.setProperty('--fill', Math.round(+s.value * 100) + '%');
       function syncVol() {
         const muted = audio.muted || audio.volume === 0;
         muteBtns.forEach(b => { b.innerHTML = muted ? VOL_OFF : VOL_ON; b.setAttribute('aria-label', muted ? 'Unmute' : 'Mute'); });
-        volSliders.forEach(s => { if (document.activeElement !== s) s.value = audio.muted ? 0 : audio.volume; });
+        volSliders.forEach(s => { if (document.activeElement !== s) s.value = audio.muted ? 0 : audio.volume; paintVol(s); });
       }
       function load(i, play) {
         idx = (i + TRACKS.length) % TRACKS.length;
@@ -1762,14 +1773,16 @@ in the middle of a lake.</p>
         countEl.textContent = (idx + 1) + ' of ' + TRACKS.length;
         if (play) audio.play().catch(() => {});
       }
-      function open()  { modal.classList.add('open'); }
-      function close() { modal.classList.remove('open'); audio.pause(); }
+      function open()  { modal.classList.add('open'); if (window._sceneSongRecordOpen) window._sceneSongRecordOpen(true); }
+      function close() { modal.classList.remove('open'); audio.pause(); if (window._sceneSongRecordOpen) window._sceneSongRecordOpen(false); }
       window._audioOpen = () => modal.classList.contains('open');
       window._closeAudio = close;
       window._openAudio = open;
+      const audioToggle = () => { audio.paused ? audio.play().catch(() => {}) : audio.pause(); };
+      window._audioToggle = audioToggle;
 
       if (link) link.addEventListener('click', open);
-      playBtns.forEach(b => b.addEventListener('click', () => { audio.paused ? audio.play().catch(() => {}) : audio.pause(); }));
+      playBtns.forEach(b => b.addEventListener('click', audioToggle));
       muteBtns.forEach(b => b.addEventListener('click', () => { audio.muted = !audio.muted; syncVol(); }));
       volSliders.forEach(s => s.addEventListener('input', () => { audio.volume = +s.value; audio.muted = (+s.value === 0); syncVol(); }));
       prevBtn.addEventListener('click', () => { (audio.currentTime > 3 ? load(idx, true) : load(idx - 1, true)); });
@@ -1788,6 +1801,118 @@ in the middle of a lake.</p>
       syncBtn();
       syncVol();
     })();
+
+    /* ── About-scene ambient song (UI lives inside the monitor screen) ──
+       Plays reflections.m4a while the About section is showing: starts on
+       entering About, stops on leaving. Play/pause + mute + volume sit in the
+       monitor over a waveform — a Web Audio analyser draws the song's real
+       signal while playing and a flatline when paused. Separate from the record
+       player, which pauses this so two tracks never overlap. Default vol 20%. */
+    function setupSceneAudio(root) {
+      const el      = document.getElementById('scene-audio-el');
+      const playBtn = root.querySelector('#scene-playpause');
+      const muteBtn = root.querySelector('#scene-mute');
+      const vol     = root.querySelector('#scene-vol');
+      const wave    = root.querySelector('.mon-wave');
+      if (!el || !playBtn) return;
+      const PLAY  = '<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"/></svg>';
+      const PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+      const VOL_ON  = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      const VOL_OFF = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 9.5l5 5M22 9.5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
+      el.volume = 0.1;
+      if (vol) vol.value = 0.1;
+      let userPaused = false, recordOpen = false;
+      const isAbout = () => { const a = document.getElementById('about'); return a && a.classList.contains('active'); };
+      const paintVol = () => vol && vol.style.setProperty('--fill', Math.round(+vol.value * 100) + '%');
+      const syncBtn = () => { playBtn.innerHTML = el.paused ? PLAY : PAUSE; playBtn.setAttribute('aria-label', el.paused ? 'Play' : 'Pause'); };
+      function syncVol() {
+        const muted = el.muted || el.volume === 0;
+        if (muteBtn) { muteBtn.innerHTML = muted ? VOL_OFF : VOL_ON; muteBtn.setAttribute('aria-label', muted ? 'Unmute' : 'Mute'); }
+        if (vol && document.activeElement !== vol) vol.value = el.muted ? 0 : el.volume;
+        paintVol();
+      }
+
+      /* Web Audio analyser → real waveform. Built lazily on the first play so
+         the AudioContext starts inside a user gesture; the media element is
+         then routed through the graph (so resume() must run when playing). */
+      let actx, analyser, freq;
+      function initGraph() {
+        if (actx || !(window.AudioContext || window.webkitAudioContext)) return;
+        try {
+          actx = new (window.AudioContext || window.webkitAudioContext)();
+          const srcNode = actx.createMediaElementSource(el);
+          analyser = actx.createAnalyser();
+          analyser.fftSize = 256; analyser.smoothingTimeConstant = 0.88;   /* heavy smoothing = calm */
+          srcNode.connect(analyser); analyser.connect(actx.destination);
+          freq = new Uint8Array(analyser.frequencyBinCount);
+        } catch (e) { actx = null; analyser = null; }
+      }
+      const play = () => { initGraph(); if (actx && actx.state === 'suspended') actx.resume().catch(() => {}); el.play().catch(() => {}); };
+
+      /* Relaxed vertical-bar visualiser: thin lines that ease toward the song's
+         spectrum while playing and settle into a flat row of short ticks when
+         idle. Per-bar easing + the analyser's smoothing keep motion gentle. */
+      if (wave) {
+        const wctx = wave.getContext('2d');
+        const BARS = 26;
+        const bars = new Array(BARS).fill(0);   /* eased 0..1 heights */
+        (function drawWave() {
+          requestAnimationFrame(drawWave);
+          const r = wave.getBoundingClientRect();
+          const W = Math.max(1, Math.round(r.width)), H = Math.max(1, Math.round(r.height));
+          if (wave.width !== W)  wave.width = W;
+          if (wave.height !== H) wave.height = H;
+          const playing = !el.paused && !el.muted && el.volume > 0;
+          if (playing && analyser) analyser.getByteFrequencyData(freq);
+          wctx.clearRect(0, 0, W, H);
+          wctx.fillStyle = 'rgba(110,123,207,0.5)';
+          const mid = H / 2, minH = Math.max(1.2, H * 0.028), maxH = H * 0.4;
+          const gap = W / BARS, bw = Math.min(gap * 0.34, 4);
+          for (let i = 0; i < BARS; i++) {
+            let target = 0;
+            if (playing && analyser) {
+              /* Mirror the spectrum around the center so the loud low-mids sit
+                 in the middle (apex) and taper to the edges. */
+              const d = Math.abs(i - (BARS - 1) / 2) / ((BARS - 1) / 2);   /* 0 center .. 1 edges */
+              const bin = 2 + Math.floor(d * (analyser.frequencyBinCount * 0.55));
+              target = Math.pow(freq[bin] / 255, 1.6);   /* gentle curve tames peaks */
+            }
+            bars[i] += (target - bars[i]) * 0.09;   /* slow easing = smooth/relaxing */
+            const half = minH + bars[i] * (maxH - minH);
+            const x = gap * (i + 0.5) - bw / 2;
+            wctx.beginPath();
+            wctx.roundRect(x, mid - half, bw, half * 2, bw / 2);
+            wctx.fill();
+          }
+        })();
+      }
+
+      const toggle = () => { if (el.paused) { userPaused = false; play(); } else { userPaused = true; el.pause(); } };
+      window._sceneToggle = toggle;
+      playBtn.addEventListener('click', toggle);
+      if (muteBtn) muteBtn.addEventListener('click', () => { el.muted = !el.muted; syncVol(); });
+      if (vol) vol.addEventListener('input', () => { el.volume = +vol.value; el.muted = (+vol.value === 0); syncVol(); });
+      el.addEventListener('play', syncBtn);
+      el.addEventListener('pause', syncBtn);
+      el.addEventListener('volumechange', syncVol);
+
+      /* Nav hook: start on entering About, stop (and rewind) on leaving. */
+      window._sceneSongOnSection = (id) => {
+        if (id === 'about') { if (!userPaused && !recordOpen) play(); }
+        else { el.pause(); try { el.currentTime = 0; } catch (_) {} userPaused = false; }
+      };
+      /* Record player overlap: pause while its modal is open, resume after if still on About. */
+      window._sceneSongRecordOpen = (isOpen) => {
+        recordOpen = isOpen;
+        if (isOpen) el.pause();
+        else if (isAbout() && !userPaused) play();
+      };
+
+      syncBtn();
+      syncVol();
+      if (isAbout() && !recordOpen) play();   /* already on About when the SVG finished injecting */
+    }
 
     /* ── "View Portfolio" hover: field of 2x2 pixels rolling in a wave ── */
     (function () {
@@ -1896,6 +2021,17 @@ in the middle of a lake.</p>
         if (history.state && history.state.subpage) history.back();
         else closeOpenSubpage();
       }
+    });
+
+    /* Space bar toggles play/pause: the record player when it's open, otherwise
+       the About-scene song while the About section is showing. */
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== ' ' && e.code !== 'Space') return;
+      const t = e.target;
+      if (t && (/^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(t.tagName) || t.isContentEditable)) return;
+      if (window._audioOpen && window._audioOpen()) { e.preventDefault(); window._audioToggle && window._audioToggle(); return; }
+      const about = document.getElementById('about');
+      if (about && about.classList.contains('active')) { e.preventDefault(); window._sceneToggle && window._sceneToggle(); }
     });
 
     /* Resume date stacking is handled purely in CSS now (see the ≤640px
@@ -2221,6 +2357,7 @@ in the middle of a lake.</p>
           if (el) { el.removeAttribute('width'); el.removeAttribute('height'); }
           setupOfficePx(host);
           setupMouseDrag(host);
+          setupSceneAudio(host);
         })
         .catch(() => {}); /* image is decorative; fail silently if missing */
     })();
@@ -2275,7 +2412,7 @@ in the middle of a lake.</p>
          into "music" (guitar + record → Analogue-music player). */
       const groupOf = el => el.getAttribute('data-group') || 'music';
       const FILL  = {};   /* every group uses the default accent-blue pixels */
-      const TIP   = { music: '#record-tooltip', fishing: '#trout-tooltip', desk: '#desk-tooltip', poetry: '#books-tooltip' };
+      const TIP   = { music: '#record-tooltip', fishing: '#trout-tooltip', desk: '#desk-tooltip', poetry: '#books-tooltip', tea: '#tea-tooltip' };
       const CLICK = {
         music:   () => { if (window._openAudio)    window._openAudio(); },
         fishing: () => { if (window._openLightbox) window._openLightbox('images/flyfishing.jpg', 'Fly fishing on the river'); },
