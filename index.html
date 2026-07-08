@@ -1050,11 +1050,11 @@ in the middle of a lake.</p>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
     </button>
     <div class="audio-card">
-      <p class="audio-title">no fixed star</p>
+      <p class="audio-title" id="audio-artist">no fixed star</p>
       <img class="audio-cover" src="music/cover.jpg" alt="no fixed star — a peaceful, dark place album cover">
       <div class="audio-trackrow">
-        <span class="audio-trackname" id="audio-trackname">compass</span>
-        <span class="audio-trackcount" id="audio-trackcount">1 of 5</span>
+        <span class="audio-trackname" id="audio-trackname">redwoods</span>
+        <span class="audio-trackcount" id="audio-trackcount">1 of 4</span>
       </div>
       <audio id="audio-el" preload="metadata"></audio>
       <div class="audio-progress-row">
@@ -1751,18 +1751,18 @@ in the middle of a lake.</p>
       const durEl   = document.getElementById('audio-dur');
       const nameEl  = document.getElementById('audio-trackname');
       const countEl = document.getElementById('audio-trackcount');
+      const artistEl = document.getElementById('audio-artist');
       const closeBtn = document.getElementById('audio-close');
       const PLAY  = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"/></svg>';
       const PAUSE = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
       const VOL_ON  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       const VOL_OFF = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 9.5l5 5M22 9.5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
-      const BASE = 'no fixed star - a peaceful, dark place (remix) - ';
+      const NFS = 'no fixed star - a peaceful, dark place (remix) - ';
       const TRACKS = [
-        { name: 'compass',   file: BASE + '01 compass (remix).mp3' },
-        { name: 'redwoods',  file: BASE + '02 redwoods (remix).mp3' },
-        { name: 'malamute',  file: BASE + '03 malamute (remix).mp3' },
-        { name: 'summerset', file: BASE + '04 summerset (remix).mp3' },
-        { name: 'lorelai',   file: BASE + '05 lorelai (remix).mp3' },
+        { artist: 'no fixed star',  name: 'redwoods',                   file: NFS + '02 redwoods (remix).mp3' },
+        { artist: 'troubled coast', name: "I'm Still A Loner, Dottie",  file: "I'm Still A Loner, Dottie.mp3" },
+        { artist: 'troubled coast', name: 'Breathing',                  file: '03 Breathing.mp3' },
+        { artist: 'troubled coast', name: 'Brother',                    file: '01 Brother.mp3' },
       ];
       let idx = 0, seeking = false;
       const fmt = (t) => (!isFinite(t) ? '0:00' : Math.floor(t/60) + ':' + String(Math.floor(t%60)).padStart(2,'0'));
@@ -1783,7 +1783,8 @@ in the middle of a lake.</p>
       function load(i, play) {
         idx = (i + TRACKS.length) % TRACKS.length;
         audio.src = 'music/' + TRACKS[idx].file;
-        nameEl.textContent = TRACKS[idx].name;
+        if (artistEl) artistEl.textContent = TRACKS[idx].artist;
+        nameEl.textContent = TRACKS[idx].name.toLowerCase();
         countEl.textContent = (idx + 1) + ' of ' + TRACKS.length;
         if (play) audio.play().catch(() => {});
       }
