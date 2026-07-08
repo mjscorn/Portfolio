@@ -394,10 +394,23 @@
     /* ── Audio player (Analogue music) ── */
     .audio-modal { position: fixed; inset: 0; z-index: 200; background: rgba(5,8,11,0.92); display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.22s ease; }
     .audio-modal.open { opacity: 1; pointer-events: auto; }
-    .audio-card { width: min(92vw, 360px); background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 26px 26px 24px; box-shadow: 0 12px 60px rgba(0,0,0,0.6); transform: translateY(8px) scale(0.98); transition: transform 0.22s ease; display: flex; flex-direction: column; align-items: center; }
+    .audio-card { width: min(94vw, 440px); background: var(--bg); border: 1px solid var(--stroke); border-radius: var(--radius-md); padding: 28px 28px 26px; box-shadow: 0 12px 60px rgba(0,0,0,0.6); transform: translateY(8px) scale(0.98); transition: transform 0.22s ease; display: flex; flex-direction: column; align-items: center; }
     .audio-modal.open .audio-card { transform: none; }
-    .audio-title { font-size: 15px; font-weight: 600; letter-spacing: 0.04em; text-align: center; color: var(--text-primary); margin: 0 0 18px; }
-    .audio-cover { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 10px; display: block; box-shadow: 0 6px 24px rgba(0,0,0,0.45); }
+    .audio-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; margin: 0 0 18px; }
+    .audio-title { font-size: 15px; font-weight: 500; letter-spacing: 0.04em; text-align: left; color: var(--text-primary); margin: 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .audio-lyrics-btn { display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: transparent; border: none; padding: 0; color: rgba(220,232,240,0.7); opacity: 0.85; cursor: pointer; transition: opacity 0.15s ease, color 0.15s ease; }
+    .audio-lyrics-btn:hover { opacity: 1; }
+    .audio-art { position: relative; width: 100%; aspect-ratio: 1 / 1; border: 1px solid var(--stroke); border-radius: 4px; overflow: hidden; }
+    .audio-cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 1; transition: opacity 0.3s ease; }
+    .audio-lyrics { position: absolute; inset: 0; background: var(--bg); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%); }
+    .audio-art.lyrics .audio-cover { opacity: 0; }
+    .audio-art.lyrics .audio-lyrics { opacity: 1; pointer-events: auto; }
+    .audio-lyrics-inner { position: absolute; left: 0; right: 0; top: 50%; padding: 0 22px; text-align: center; will-change: transform; transition: transform 0.45s cubic-bezier(0.22,0.61,0.36,1); }
+    .lyric-line { font-size: 14px; line-height: 1.45; color: rgba(220,232,240,0.4); margin: 10px 0; transition: color 0.3s ease, opacity 0.3s ease; }
+    .lyric-line.active { color: var(--text-primary); }
+    .lyric-gap { height: 12px; margin: 0; }
+    .audio-lyrics-empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 24px; text-align: center; font-size: 13px; color: rgba(220,232,240,0.5); }
+    .audio-lyrics-btn.active { color: var(--teal); opacity: 1; }
     .audio-trackrow { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; width: 100%; margin: 16px 0 14px; }
     .audio-trackname { font-size: 13px; color: rgba(220,232,240,0.85); text-align: left; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .audio-trackcount { font-size: 12px; color: rgba(220,232,240,0.5); text-align: right; white-space: nowrap; flex-shrink: 0; font-variant-numeric: tabular-nums; }
@@ -1050,11 +1063,19 @@ in the middle of a lake.</p>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
     </button>
     <div class="audio-card">
-      <p class="audio-title" id="audio-artist">no fixed star</p>
-      <img class="audio-cover" src="music/cover.jpg" alt="no fixed star — a peaceful, dark place album cover">
+      <div class="audio-head">
+        <p class="audio-title" id="audio-artist">no fixed star</p>
+        <button class="audio-lyrics-btn" id="audio-lyrics-toggle" aria-label="Show lyrics" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3H18a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H10l-4 4v-4H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><g fill="currentColor"><circle cx="9.8" cy="8.6" r="1.7"/><path d="M8.3 9.2 8.1 11.8 10.5 8.9Z"/><circle cx="13.7" cy="8.6" r="1.7"/><path d="M12.2 9.2 12 11.8 14.4 8.9Z"/></g></svg></button>
+      </div>
+      <div class="audio-art" id="audio-art">
+        <img class="audio-cover" id="audio-cover" src="music/cover.jpg" alt="no fixed star — a peaceful, dark place album cover">
+        <div class="audio-lyrics" id="audio-lyrics" aria-hidden="true">
+          <div class="audio-lyrics-inner" id="audio-lyrics-inner"></div>
+        </div>
+      </div>
       <div class="audio-trackrow">
         <span class="audio-trackname" id="audio-trackname">redwoods</span>
-        <span class="audio-trackcount" id="audio-trackcount">1 of 4</span>
+        <span class="audio-trackcount" id="audio-trackcount">1/4</span>
       </div>
       <audio id="audio-el" preload="metadata"></audio>
       <div class="audio-progress-row">
@@ -1752,20 +1773,249 @@ in the middle of a lake.</p>
       const nameEl  = document.getElementById('audio-trackname');
       const countEl = document.getElementById('audio-trackcount');
       const artistEl = document.getElementById('audio-artist');
+      const coverEl  = document.getElementById('audio-cover');
+      const artEl    = document.getElementById('audio-art');
+      const lyricsWrap = document.getElementById('audio-lyrics');
+      const lyricsInner = document.getElementById('audio-lyrics-inner');
+      const lyricsToggle = document.getElementById('audio-lyrics-toggle');
       const closeBtn = document.getElementById('audio-close');
       const PLAY  = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"/></svg>';
       const PAUSE = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
       const VOL_ON  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       const VOL_OFF = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 9.5l5 5M22 9.5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
       const NFS = 'no fixed star - a peaceful, dark place (remix) - ';
-      const TRACKS = [
-        { artist: 'no fixed star',  name: 'redwoods',                   file: NFS + '02 redwoods (remix).mp3' },
-        { artist: 'troubled coast', name: "I'm Still A Loner, Dottie",  file: "I'm Still A Loner, Dottie.mp3" },
-        { artist: 'troubled coast', name: 'Breathing',                  file: '03 Breathing.mp3' },
-        { artist: 'troubled coast', name: 'Brother',                    file: '01 Brother.mp3' },
+      const NFS_ART = 'music/cover.jpg';
+      /* lyrics: array of lines. A plain string = untimed (lyrics scroll continuously
+         with playback). An { t: seconds, text } object = timed (line highlights/centres
+         at its timestamp). An empty string "" is a stanza gap. */
+      const LYRICS_REDWOODS = [
+        { t: 7.34, text: 'tucking in the folds' },
+        { t: 9.14, text: 'making space to breathe' },
+        { t: 10.96, text: 'holding back replies' },
+        '',
+        { t: 14.74, text: 'every simple move' },
+        { t: 16.5, text: 'seemingly at ease' },
+        { t: 18.16, text: 'rehearsed neurotically' },
+        '',
+        { t: 22.16, text: 'every common choice' },
+        { t: 24.0, text: 'ordinary thought' },
+        { t: 25.5, text: 'questioned a thousand times' },
+        '',
+        { t: 29.72, text: 'a shade of pain' },
+        { t: 31.52, text: 'a simple glance' },
+        { t: 32.92, text: 'caught in unending time' },
+        '',
+        { t: 52.08, text: 'wading through black water' },
+        { t: 53.72, text: 'with words caught on my lips' },
+        { t: 59.08, text: 'all the thoughts I took to writing out' },
+        { t: 61.54, text: 'that couldn’t raise the dead' },
+        { t: 66.36, text: 'while we’re balancing on rafters' },
+        { t: 68.54, text: 'on frames above the depths' },
+        { t: 71.08, text: 'all the minor characters from our past' },
+        { t: 73.6, text: 'are taking center stage in the final act' },
+        { t: 76.78, text: 'with knives in hand' },
+        '',
+        { t: 82.12, text: 'all their paper masks' },
+        { t: 84.0, text: 'and unfeeling hands' },
+        { t: 89.22, text: 'passing collecting plates' },
+        { t: 91.32, text: 'reaching towards the Lamb' },
+        { t: 93.78, text: 'rewriting ledger books' },
+        { t: 99.0, text: 'under the bed' },
+        { t: 100.3, text: 'letting these filial debts' },
+        { t: 102.34, text: 'haunt my father’s death' },
+        { t: 105.14, text: 'keep longing' },
+        { t: 106.5, text: 'nothing’s coming' },
+        '',
+        { t: 111.26, text: 'i’ll disappear into the redwoods' },
+        { t: 119.12, text: 'with canvas and coal' },
+        { t: 124.68, text: 'i’ve held out in the wilds' },
+        { t: 132.96, text: 'one hundred years alone' },
+        '',
+        { t: 157.24, text: 'caught up in a country' },
+        { t: 158.96, text: 'a current, an undertow' },
+        { t: 161.76, text: 'in memories, in moments past' },
+        { t: 169.69, text: 'with breaking limbs we row' },
       ];
-      let idx = 0, seeking = false;
+      const LYRICS_DOTTIE = [
+        { t: 34.82, text: 'The casual walker-by below our yellow windowpanes' },
+        { t: 38.74, text: 'Must look up through the city lights and feel the same' },
+        { t: 42.68, text: 'As we wonder why in our beds above the darkening streets' },
+        { t: 46.52, text: '"With some sense of shared human secrecy"' },
+        { t: 50.38, text: 'Mostly crazed by thoughts of paint peeling at the seams' },
+        { t: 54.18, text: 'As the tiles on my shower wall crack at the base' },
+        { t: 57.52, text: 'Retracing every anxious line' },
+        { t: 59.3, text: 'Reflecting how they fell apart' },
+        { t: 61.4, text: 'I never want to come undone or unravel jealous in the wind' },
+        '',
+        { t: 67.47, text: 'And I\'ll say it again' },
+        { t: 73.55, text: 'I\'m not afraid to die' },
+        { t: 81.17, text: 'Just scared to live alone with you' },
+        '',
+        { t: 82.83, text: 'Drunk in the morning' },
+        { t: 83.81, text: 'I woke to Dragon\'s breath and summer tugging at my sheets to pull me out of bed' },
+        { t: 88.61, text: 'Drunk in the night' },
+        { t: 90.05, text: 'I swear I saw a raven grow black as your hair' },
+        { t: 93.01, text: 'Out of your thoughts, into the sky and through the outer holds' },
+        '',
+        { t: 96.31, text: 'One year ago I watched dance across a wedding floor' },
+        { t: 100.17, text: 'In a bridesmaids dress that fell to pieces at your feet' },
+        { t: 102.95, text: 'Could you not see?' },
+        { t: 103.95, text: 'So many thoughts came unsummoned to me then' },
+        { t: 106.69, text: 'Unuttered on the car ride home' },
+        { t: 108.73, text: 'Before you left for the new world in shades of blue' },
+        '',
+        { t: 111.75, text: 'I woke yesterday to no one lying by my side' },
+        { t: 115.49, text: 'Just empty pictures frames and broken dresser drawers' },
+        { t: 118.39, text: 'Where did you go?' },
+        { t: 119.37, text: 'I\'ve try to hold my hatred in composure' },
+        { t: 121.89, text: 'But your dress will not stop slipping' },
+        { t: 123.97, text: 'And your words are ripping through my simple mind' },
+        '',
+        { t: 126.65, text: 'And I\'ll say it again' },
+        { t: 129.13, text: 'I\'m not afraid to die' },
+        { t: 129.63, text: 'Just scared to live alone with you' },
+        '',
+        { t: 138.71, text: 'We\'re more than young-fucked-in-the-morning-sun' },
+        { t: 156.45, text: 'By some drunker-than-New-Years-Eve-Holy-seraphim-on-Haight-Street' },
+        { t: 166.45, text: 'Coffee shop poetics on love and drugs and War and Peace' },
+        { t: 200.04, text: 'I can\'t believe what they say to me' },
+        { t: 210.02, text: 'I can\'t believe what they did to you' },
+      ];
+      const LYRICS_BROTHER = [
+        { t: 32.88, text: 'I’ve been thinking of you since july' },
+        { t: 51.72, text: 'and now i’m feeling less and less' },
+        '',
+        { t: 54.76, text: 'I heard your name,' },
+        { t: 56.94, text: 'i found your letter from december last year' },
+        { t: 66.54, text: 'and though it was really more a poem' },
+        { t: 70.33, text: 'and you didn’t ask, here’s my reply.' },
+        { t: 78.27, text: 'i’ve been calling you' },
+        { t: 79.09, text: 'and now i’m wondering if it’s you who’s calling me' },
+        { t: 82.53, text: 'and i’m to blame but all negligence aside' },
+        '',
+        { t: 86.63, text: 'It’s been a waiting game,' },
+        { t: 87.69, text: 'a slow withdraw from grace' },
+        { t: 94.37, text: 'and i hope your sleeping better,' },
+        { t: 97.99, text: 'i’m finding ease in the cold,' },
+        { t: 104.09, text: 'in the still out in the woods' },
+        { t: 109.29, text: 'just slightly east of here, just west of there' },
+        { t: 118.61, text: 'you told me there’s a place you go' },
+        { t: 135.49, text: 'where you feel most alone' },
+        '',
+        { t: 137.23, text: 'Why are you here again when i let you go?' },
+        { t: 141.59, text: 'young and frail.' },
+        { t: 143.49, text: 'woke up fucked again.' },
+        { t: 147.01, text: 'june in the trees, you on my mind,' },
+        { t: 149.97, text: 'courage to feel it all' },
+        '',
+        { t: 151.01, text: 'I’m still writing you,' },
+        { t: 152.01, text: 'i’m still thinking of the airport just south of here' },
+        { t: 156.05, text: 'i let you walk to in the rain' },
+        { t: 158.61, text: 'to run from the world and hide from the past' },
+        { t: 164.71, text: 'in the fog and the grey, quiet still, moving slow' },
+        '',
+        { t: 174.05, text: 'Was i a thousand feet below?' },
+        { t: 180.63, text: 'were you a thousand miles gone?' },
+        { t: 187.97, text: 'so many pieces left behind' },
+        { t: 195.35, text: 'not one simple reply' },
+        '',
+        { t: 199.91, text: 'We move to stay whole' },
+      ];
+      const LYRICS_BREATHING = [
+        { t: 6.0, text: 'Remember the day you told me' },
+        { t: 18.86, text: 'That breathing was for the birds' },
+        { t: 24.58, text: 'And you sucked in the nicotine' },
+        { t: 27.72, text: 'And blew out pieces of you and me' },
+        { t: 35.58, text: 'You unlaced all your organs' },
+        { t: 42.34, text: 'You fucked with the best of me' },
+        { t: 47.54, text: 'Breathing feels so close to normal' },
+        { t: 53.36, text: 'Breathing seems so apropos (by your side)' },
+        { t: 65.12, text: 'Now breathe in, the world is forming' },
+        { t: 69.79, text: 'Now breathe out, you\'ve made the seas' },
+        { t: 72.05, text: 'Now breathing\'s not for the sovereign' },
+        { t: 77.83, text: 'And breathing\'s for you and me' },
+        { t: 82.85, text: 'Breathing seems so close to normal' },
+        { t: 88.73, text: 'Breathing feels so apropos (by your side)' },
+        { t: 117.95, text: 'If breathing\'s not for you' },
+        { t: 120.75, text: 'Then breathing\'s not me' },
+        { t: 123.53, text: 'If breathing\'s not for you' },
+        { t: 127.47, text: 'Then breathing means nothing now' },
+      ];
+      const TRACKS = [
+        { artist: 'no fixed star',  name: 'redwoods',                   file: NFS + '02 redwoods (remix).mp3', cover: NFS_ART,            lyrics: LYRICS_REDWOODS },
+        { artist: 'troubled coast', name: "I'm Still A Loner, Dottie",  file: "I'm Still A Loner, Dottie.mp3",  cover: 'music/dottie.jpg',    lyrics: LYRICS_DOTTIE },
+        { artist: 'troubled coast', name: 'Breathing',                  file: '03 Breathing.mp3',              cover: 'music/breathing.jpg', lyrics: LYRICS_BREATHING },
+        { artist: 'troubled coast', name: 'Brother',                    file: '01 Brother.mp3',                cover: 'music/brother.jpg',   lyrics: LYRICS_BROTHER },
+      ];
+      let idx = 0, seeking = false, lineEls = [], activeLine = -1, lyricsTimed = false;
       const fmt = (t) => (!isFinite(t) ? '0:00' : Math.floor(t/60) + ':' + String(Math.floor(t%60)).padStart(2,'0'));
+      /* ── Lyrics view: cover flips to a scroll of the current track's lines, which
+         follow playback via their LRC-style timestamps. No lyrics → placeholder. */
+      function buildLyrics(track) {
+        if (!lyricsInner) return;
+        lyricsInner.innerHTML = '';
+        lineEls = [];
+        activeLine = -1;
+        const lines = (track && track.lyrics) || [];
+        lyricsTimed = lines.some((l) => l && typeof l === 'object' && typeof l.t === 'number');
+        if (!lines.length) {
+          const p = document.createElement('div');
+          p.className = 'audio-lyrics-empty';
+          p.textContent = 'lyrics coming soon';
+          lyricsInner.appendChild(p);
+          lyricsInner.style.transform = 'translateY(0)';
+          return;
+        }
+        lines.forEach((ln) => {
+          const text = (typeof ln === 'string') ? ln : (ln.text || '');
+          const d = document.createElement('div');
+          d.className = text ? 'lyric-line' : 'lyric-line lyric-gap';
+          d.textContent = text;
+          lyricsInner.appendChild(d);
+          lineEls.push(d);
+        });
+        syncLyrics(true);
+      }
+      function centerLine(i) {
+        const target = lineEls[Math.max(i, 0)];
+        const offset = target ? (target.offsetTop + target.offsetHeight / 2) : 0;
+        lyricsInner.style.transform = 'translateY(' + (-offset) + 'px)';
+      }
+      function syncLyrics(force) {
+        if (!artEl || !artEl.classList.contains('lyrics') || !lineEls.length) return;
+        const lines = TRACKS[idx].lyrics || [];
+        let i;
+        if (lyricsTimed) {
+          /* karaoke: last line whose timestamp has passed */
+          i = -1;
+          for (let k = 0; k < lines.length; k++) {
+            const t = lines[k] && lines[k].t;
+            if (typeof t === 'number' && audio.currentTime >= t) i = k;
+          }
+        } else {
+          /* continuous: scroll proportionally to playback, highlight the nearest line */
+          const dur = audio.duration;
+          const p = (isFinite(dur) && dur > 0) ? Math.min(Math.max(audio.currentTime / dur, 0), 1) : 0;
+          i = Math.round(p * (lineEls.length - 1));
+          while (i > 0 && !lineEls[i].textContent) i--;   /* don't rest on a stanza gap */
+        }
+        if (i === activeLine && !force) return;
+        activeLine = i;
+        lineEls.forEach((el, k) => el.classList.toggle('active', k === i && !!el.textContent));
+        centerLine(i);
+      }
+      function toggleLyrics() {
+        if (!artEl) return;
+        const on = !artEl.classList.contains('lyrics');
+        artEl.classList.toggle('lyrics', on);
+        lyricsWrap && lyricsWrap.setAttribute('aria-hidden', on ? 'false' : 'true');
+        if (lyricsToggle) {
+          lyricsToggle.classList.toggle('active', on);
+          lyricsToggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+          lyricsToggle.setAttribute('aria-label', on ? 'Hide lyrics' : 'Show lyrics');
+        }
+        if (on) syncLyrics(true);
+      }
       /* Both the record-player modal and the About-scene bar drive the same audio */
       const playBtns   = [playBtn];
       const muteBtns   = [document.getElementById('audio-mute')].filter(Boolean);
@@ -1782,10 +2032,17 @@ in the middle of a lake.</p>
       }
       function load(i, play) {
         idx = (i + TRACKS.length) % TRACKS.length;
-        audio.src = 'music/' + TRACKS[idx].file;
-        if (artistEl) artistEl.textContent = TRACKS[idx].artist;
-        nameEl.textContent = TRACKS[idx].name.toLowerCase();
-        countEl.textContent = (idx + 1) + ' of ' + TRACKS.length;
+        const t = TRACKS[idx];
+        audio.src = 'music/' + t.file;
+        if (artistEl) artistEl.textContent = t.artist;
+        nameEl.textContent = t.name.toLowerCase();
+        countEl.textContent = (idx + 1) + '/' + TRACKS.length;
+        if (coverEl) {
+          coverEl.src = t.cover || NFS_ART;
+          coverEl.alt = t.artist + ' — ' + t.name + ' album cover';
+          coverEl.onerror = () => { coverEl.onerror = null; coverEl.src = NFS_ART; };
+        }
+        buildLyrics(t);
         if (play) audio.play().catch(() => {});
       }
       function open()  { modal.classList.add('open'); if (window._sceneSongRecordOpen) window._sceneSongRecordOpen(true); }
@@ -1802,12 +2059,13 @@ in the middle of a lake.</p>
       volSliders.forEach(s => s.addEventListener('input', () => { audio.volume = +s.value; audio.muted = (+s.value === 0); syncVol(); }));
       prevBtn.addEventListener('click', () => { (audio.currentTime > 3 ? load(idx, true) : load(idx - 1, true)); });
       nextBtn.addEventListener('click', () => load(idx + 1, true));
+      if (lyricsToggle) lyricsToggle.addEventListener('click', toggleLyrics);
       audio.addEventListener('play', syncBtn);
       audio.addEventListener('pause', syncBtn);
       audio.addEventListener('volumechange', syncVol);
       audio.addEventListener('ended', () => load(idx + 1, true));   /* auto-advance */
       audio.addEventListener('loadedmetadata', () => { durEl.textContent = fmt(audio.duration); seek.max = audio.duration || 100; });
-      audio.addEventListener('timeupdate', () => { if (!seeking) seek.value = audio.currentTime; curEl.textContent = fmt(audio.currentTime); });
+      audio.addEventListener('timeupdate', () => { if (!seeking) seek.value = audio.currentTime; curEl.textContent = fmt(audio.currentTime); syncLyrics(false); });
       seek.addEventListener('input', () => { seeking = true; curEl.textContent = fmt(+seek.value); });
       seek.addEventListener('change', () => { audio.currentTime = +seek.value; seeking = false; });
       closeBtn.addEventListener('click', close);
