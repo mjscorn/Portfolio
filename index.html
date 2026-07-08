@@ -253,15 +253,18 @@
     .cta:hover { opacity: 0.85; transform: translateY(-1px); }
     /* Home "View Portfolio": outline only; on hover a field of 2x2 pixels
        rolls across it in interfering wave motion (rendered on a canvas). */
-    .cta[data-section="portfolio"] { position: relative; overflow: hidden; background: transparent; border: 1px solid #fff; }
-    .cta[data-section="portfolio"]:hover { opacity: 1; }
-    .cta[data-section="portfolio"] .cta-px { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.25s ease; pointer-events: none; image-rendering: pixelated; }
-    .cta[data-section="portfolio"]:hover .cta-px { opacity: 1; }
-    .cta[data-section="portfolio"] .cta-label { position: relative; z-index: 1; }
+    .hero-ctas { display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 14px; }
+    .hero .cta { position: relative; overflow: hidden; background: transparent; border: 1px solid #fff; justify-content: center; }
+    .hero .cta:hover { opacity: 1; }
+    .hero .cta .cta-px { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.25s ease; pointer-events: none; image-rendering: pixelated; }
+    .hero .cta:hover .cta-px { opacity: 1; }
+    .hero .cta .cta-label { position: relative; z-index: 1; display: inline-flex; align-items: center; }
     .cta-arrow { width: 16px; height: 16px; vertical-align: middle; margin-left: 8px; }
     .cta-arrow--filled { display: none; }
-    .cta[data-section="portfolio"]:hover .cta-arrow--outline { display: none; }
-    .cta[data-section="portfolio"]:hover .cta-arrow--filled { display: inline; }
+    .hero .cta:hover .cta-arrow--outline { display: none; }
+    .hero .cta:hover .cta-arrow--filled { display: inline; }
+    /* "About me": arrow on the left, pointing left */
+    .cta--back .cta-arrow { margin-left: 0; margin-right: 8px; transform: scaleX(-1); }
 
     /* ── Portfolio ── */
     .portfolio-intro { width: 100%; max-width: 900px; margin: 0 auto 40px; }
@@ -401,12 +404,15 @@
     .audio-progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; width: 100%; }
     .audio-time { font-size: 11px; color: rgba(220,232,240,0.55); min-width: 32px; font-variant-numeric: tabular-nums; }
     .audio-time:last-child { text-align: right; }
-    .audio-seek, .audio-volrange { -webkit-appearance: none; appearance: none; height: 4px; background: var(--stroke); border-radius: 999px; outline: none; accent-color: var(--teal); cursor: pointer; }
+    .audio-seek, .audio-volrange { -webkit-appearance: none; appearance: none; height: 4px; background: var(--stroke); border-radius: 999px; outline: none; accent-color: var(--teal); cursor: url('cursors/dark/hand.cur'), pointer; }
+    body.light .audio-seek, body.light .audio-volrange { cursor: url('cursors/light/hand.cur'), pointer; }
     /* Volume track fills up to the thumb: teal below --fill, stroke above (--fill set by JS, follows the dot) */
     .audio-volrange { background: linear-gradient(to right, var(--teal) var(--fill, 100%), var(--stroke) var(--fill, 100%)); }
     .audio-seek { flex: 1; }
-    .audio-seek::-webkit-slider-thumb, .audio-volrange::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--teal); cursor: pointer; }
-    .audio-seek::-moz-range-thumb, .audio-volrange::-moz-range-thumb { width: 13px; height: 13px; border: none; border-radius: 50%; background: var(--teal); cursor: pointer; }
+    .audio-seek::-webkit-slider-thumb, .audio-volrange::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--teal); cursor: url('cursors/dark/hand.cur'), pointer; }
+    .audio-seek::-moz-range-thumb, .audio-volrange::-moz-range-thumb { width: 13px; height: 13px; border: none; border-radius: 50%; background: var(--teal); cursor: url('cursors/dark/hand.cur'), pointer; }
+    body.light .audio-seek::-webkit-slider-thumb, body.light .audio-volrange::-webkit-slider-thumb { cursor: url('cursors/light/hand.cur'), pointer; }
+    body.light .audio-seek::-moz-range-thumb, body.light .audio-volrange::-moz-range-thumb { cursor: url('cursors/light/hand.cur'), pointer; }
     .audio-controls { display: flex; align-items: center; justify-content: center; gap: 24px; }
     .audio-btn { display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: var(--text-primary); cursor: pointer; padding: 0; opacity: 0.85; transition: opacity 0.15s ease, transform 0.15s ease; }
     .audio-btn:hover { opacity: 1; }
@@ -688,6 +694,11 @@
   </style>
 </head>
 <body class="gated">
+  <script>
+    /* Warm the cursor cache so custom .cur cursors don't flash the system
+       fallback (e.g. the grab hand) on their first hover. */
+    ['hand', 'grab', 'grabbing'].forEach(n => ['dark', 'light'].forEach(t => { fetch('cursors/' + t + '/' + n + '.cur').catch(() => {}); }));
+  </script>
   <canvas id="bg-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
 
   <!-- Hamburger button (collapsed nav only) -->
@@ -757,7 +768,10 @@
         <p class="hero-eyebrow">UX/UI</p>
         <h1>Michael Young</h1>
         <p>I believe design is an empathetic process. <br class="hero-break">Based in Pacific Grove, CA.</p>
-        <a class="cta" data-section="portfolio"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">View Portfolio<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></a>
+        <div class="hero-ctas">
+          <a class="cta cta--back" data-section="about"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label"><img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true">About me</span></a>
+          <a class="cta" data-section="portfolio"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">View Portfolio<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></a>
+        </div>
       </div>
     </div>
   </section>
@@ -1914,10 +1928,9 @@ in the middle of a lake.</p>
       if (isAbout() && !recordOpen) play();   /* already on About when the SVG finished injecting */
     }
 
-    /* ── "View Portfolio" hover: field of 2x2 pixels rolling in a wave ── */
-    (function () {
-      const btn = document.querySelector('.cta[data-section="portfolio"]');
-      const canvas = btn && btn.querySelector('.cta-px');
+    /* ── Home CTA hover: field of 2x2 pixels rolling in a wave (both buttons) ── */
+    document.querySelectorAll('.hero .cta').forEach(function (btn) {
+      const canvas = btn.querySelector('.cta-px');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const PXSIZE = 2, GUTTER = 1, CELL = PXSIZE + GUTTER;   /* 2x2 pixels, 1px gutter all around */
@@ -1962,7 +1975,7 @@ in the middle of a lake.</p>
       btn.addEventListener('mouseleave', stop);
       btn.addEventListener('focus', go);
       btn.addEventListener('blur', stop);
-    })();
+    });
 
     /* ── Portfolio link cards (ReachOut, QB Mobile): same pixel wave behind the thumbnail ── */
     (function () {
@@ -2449,8 +2462,13 @@ in the middle of a lake.</p>
       const svg = root.querySelector('svg');
       const mouse = svg && svg.querySelector('#mouse');
       if (!mouse) return;
+      /* Render the mouse on top of the bamboo so it never slides behind the plant */
+      const bamboo = svg.querySelector('#bamboo');
+      if (bamboo && bamboo.parentNode) bamboo.parentNode.insertBefore(mouse, bamboo.nextSibling);
       const VBW = 1381, MW = 65, MH = 56, BASE_X = 825, BASE_Y = 652;
-      const B = { minX: 680, maxX: 1120, minY: 648, maxY: 712 };
+      /* Stay on the desk top (bottom above the front edge) and stop at the
+         bamboo's left edge so the mouse never crosses over/under the plant. */
+      const B = { minX: 680, maxX: 890, minY: 648, maxY: 684 };
       const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
       let offX = 0, offY = 0, drag = false, sCX = 0, sCY = 0, sOX = 0, sOY = 0, scale = 1;
       const apply = () => mouse.setAttribute('transform', `translate(${offX.toFixed(1)} ${offY.toFixed(1)})`);
