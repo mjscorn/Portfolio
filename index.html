@@ -201,14 +201,14 @@
     /* ── Hero (Home) ── */
     .hero { text-align: center; max-width: 600px; padding: 0 24px; }
     /* ── About me ── */
-    .about-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; padding: 0 24px; }
+    .about-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; padding: 0; }
     /* Interactive office scene (line-art SVG injected from about-office.svg).
        Sized to fit within the About card by width, height, and viewport. */
     .about-hero { width: 100%; }
     /* Framed like the main canvas cards: same border colour, radius, and
        fill. A small inset keeps the rounded corners from cropping the
        full-bleed line art (desk, window, guitar reach the edges). */
-    .office-scene { width: min(94%, 1060px, calc(76vh * 1.478)); margin: 0 auto; background: var(--bg); border: 1px solid #33343c; border-radius: var(--radius-md); overflow: hidden; padding: 14px; }
+    .office-scene { width: min(100%, 1060px, calc(76vh * 1.478)); margin: 0 auto; background: var(--bg); border: 1px solid #33343c; border-radius: var(--radius-md); overflow: hidden; padding: 14px; }
     .office-scene svg { display: block; width: 100%; height: auto; border-radius: 4px; }
     /* Curtain gently blows in from the window: swing pivots at the rod (top),
        so the hem billows most; the SVG turbulence filter adds the cloth ripple. */
@@ -406,9 +406,8 @@
     .audio-art.lyrics .audio-cover { opacity: 0; }
     .audio-art.lyrics .audio-lyrics { opacity: 1; pointer-events: auto; }
     .audio-lyrics-inner { position: absolute; left: 0; right: 0; top: 50%; padding: 0 22px; text-align: center; will-change: transform; transition: transform 0.45s cubic-bezier(0.22,0.61,0.36,1); }
-    .lyric-line { font-size: 14px; line-height: 1.45; color: rgba(220,232,240,0.4); margin: 10px 0; transition: color 0.3s ease, opacity 0.3s ease; }
-    .lyric-line.active { color: var(--text-primary); }
-    .lyric-gap { height: 12px; margin: 0; }
+    .lyric-line { font-size: 14px; line-height: 1.45; color: var(--text-primary); opacity: 0; margin: 10px 0; transition: opacity 0.35s ease; }
+    .lyric-gap { height: 12px; margin: 0; opacity: 0; }
     .audio-lyrics-empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 24px; text-align: center; font-size: 13px; color: rgba(220,232,240,0.5); }
     .audio-lyrics-btn.active { color: var(--teal); opacity: 1; }
     .audio-trackrow { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; width: 100%; margin: 16px 0 14px; }
@@ -1883,7 +1882,7 @@ in the middle of a lake.</p>
       ];
       const LYRICS_BROTHER = [
         { t: 32.88, text: 'I’ve been thinking of you since july' },
-        { t: 51.72, text: 'and now i’m feeling less and less' },
+        { t: 42, text: 'and now i’m feeling less and less' },
         '',
         { t: 54.76, text: 'I heard your name, i found your letter' },
         { t: 62.6, text: 'from december last year' },
@@ -1949,7 +1948,7 @@ in the middle of a lake.</p>
         { artist: 'troubled coast', name: 'Breathing',                  file: '03 Breathing.mp3',              cover: 'music/breathing.jpg', lyrics: LYRICS_BREATHING },
         { artist: 'troubled coast', name: 'Brother',                    file: '01 Brother.mp3',                cover: 'music/brother.jpg',   lyrics: LYRICS_BROTHER },
       ];
-      let idx = 0, seeking = false, lineEls = [], activeLine = -1, lyricsTimed = false;
+      let idx = 0, seeking = false, lineEls = [], activeLine = -1, lyricsTimed = false, lineOrds = [];
       const fmt = (t) => (!isFinite(t) ? '0:00' : Math.floor(t/60) + ':' + String(Math.floor(t%60)).padStart(2,'0'));
       /* ── Lyrics view: cover flips to a scroll of the current track's lines, which
          follow playback via their LRC-style timestamps. No lyrics → placeholder. */
@@ -1976,6 +1975,9 @@ in the middle of a lake.</p>
           lyricsInner.appendChild(d);
           lineEls.push(d);
         });
+        /* ordinal among non-empty lines (gaps don't count toward fade distance) */
+        let ord = 0;
+        lineOrds = lineEls.map((el) => (el.textContent ? ord++ : -1));
         syncLyrics(true);
       }
       function centerLine(i) {
@@ -2003,7 +2005,16 @@ in the middle of a lake.</p>
         }
         if (i === activeLine && !force) return;
         activeLine = i;
-        lineEls.forEach((el, k) => el.classList.toggle('active', k === i && !!el.textContent));
+        /* fade by line distance from the active line: active 100%, ±1 50%,
+           ±2 35%, ±3 20%, beyond hidden (gaps don't count toward distance) */
+        const refOrd = (i >= 0 && lineOrds[i] >= 0) ? lineOrds[i] : 0;
+        lineEls.forEach((el, k) => {
+          el.classList.toggle('active', k === i && !!el.textContent);
+          const o = lineOrds[k];
+          if (o < 0) { el.style.opacity = '0'; return; }
+          const d = Math.abs(o - refOrd);
+          el.style.opacity = d === 0 ? '1' : d === 1 ? '0.5' : d === 2 ? '0.35' : d === 3 ? '0.2' : '0';
+        });
         centerLine(i);
       }
       function toggleLyrics() {
