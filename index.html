@@ -227,6 +227,8 @@
       .about-hero .office-scene { display: none; }
       .about-mobile-links { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 360px; margin: 0 auto; }
     }
+    /* Below the point where it wraps, shorten "Analogue music" → "music" */
+    @media (max-width: 300px) { .cta-drop-analogue { display: none; } }
     .office-scene svg { display: block; width: 100%; height: auto; border-radius: 4px; }
     /* Curtain gently blows in from the window: swing pivots at the rod (top),
        so the hem billows most; the SVG turbulence filter adds the cloth ripple. */
@@ -286,6 +288,8 @@
     @media (max-width: 600px) {
       .hero-ctas { grid-auto-flow: row; grid-template-columns: 1fr; gap: 12px; }
     }
+    /* Below the point where the label wraps, shorten it: "View Portfolio" → "Portfolio" */
+    @media (max-width: 350px) { .cta-drop-view { display: none; } }
     /* Ghost CTA: transparent outline that fills with the home pixel-wave on hover */
     .cta.cta-ghost { position: relative; overflow: hidden; background: transparent; border: 1px solid #fff; justify-content: center; }
     .cta-ghost:hover { opacity: 1; }
@@ -296,6 +300,8 @@
     .resume-actions { width: 100%; max-width: 720px; margin: 0 auto 16px; display: flex; justify-content: flex-end; }
     .resume-actions-grid { display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 10px; }
     .resume-actions .cta-ghost { font-size: 11px; padding: 8px 18px; }
+    /* Below the point where the buttons would clip, shorten to "Show" / "Hide" */
+    @media (max-width: 260px) { .cta-drop-all { display: none; } }
     /* "About me": arrow on the left, pointing left */
     .cta--back .cta-arrow { margin-left: 0; margin-right: 8px; transform: scaleX(-1); }
 
@@ -494,7 +500,7 @@
     .qb-section { padding-bottom: 72px; }
     .qb-section:last-child { padding-bottom: 96px; }
     .qb-section-title { position: sticky; top: 0; z-index: 5; background: var(--bg); margin: 0 -24px; padding: 16px 24px; font-size: 22px; font-weight: 600; color: var(--text-primary); border-bottom: 1px solid rgba(220,232,240,0.1); }
-    .qb-section:nth-child(even) .qb-section-title { padding-left: calc(50% + 48px); }
+    .qb-section:nth-child(even) .qb-section-title { padding-left: calc(50% + 69px); }
     .qb-section:nth-child(odd) .qb-section-title { padding-right: calc(50% + 48px); }
     .qb-row { display: flex; gap: 48px; align-items: stretch; padding-top: 36px; }
     .qb-section:nth-child(even) .qb-row { flex-direction: row-reverse; }
@@ -819,7 +825,7 @@
         <p>I believe design is an empathetic process. <br class="hero-break">Based in Pacific Grove, CA.</p>
         <div class="hero-ctas">
           <a class="cta cta--back" data-section="about"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label"><img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true">About me</span></a>
-          <a class="cta" data-section="portfolio"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">View Portfolio<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></a>
+          <a class="cta" data-section="portfolio"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label"><span class="cta-drop-view">View&nbsp;</span>Portfolio<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></a>
         </div>
       </div>
     </div>
@@ -831,7 +837,7 @@
         <div class="about-hero">
           <div class="office-scene" id="office-scene" role="img" aria-label="Line illustration of my office desk: an acoustic guitar, widescreen monitor and keyboard, a framed fly-fishing trout print, a record player, a teapot and mug, a model sailboat, potted plants, a fly rod, and a window looking out over the ocean."></div>
           <div class="about-mobile-links">
-            <button class="cta about-link" type="button" data-about="music"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Analogue music<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></button>
+            <button class="cta about-link" type="button" data-about="music"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label"><span class="cta-drop-analogue">Analogue&nbsp;</span>music<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></button>
             <button class="cta about-link" type="button" data-about="fishing"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Fly fishing<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></button>
             <button class="cta about-link" type="button" data-about="woodworking"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Woodworking<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></button>
             <button class="cta about-link" type="button" data-about="poetry"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Poetry<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></button>
@@ -892,8 +898,8 @@
       <div class="page-body">
         <div class="resume-actions">
           <div class="resume-actions-grid">
-            <button class="cta cta-ghost" type="button" id="resume-show-all"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Show all</span></button>
-            <button class="cta cta-ghost" type="button" id="resume-hide-all"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Hide all</span></button>
+            <button class="cta cta-ghost" type="button" id="resume-show-all"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Show<span class="cta-drop-all">&nbsp;all</span></span></button>
+            <button class="cta cta-ghost" type="button" id="resume-hide-all"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Hide<span class="cta-drop-all">&nbsp;all</span></span></button>
           </div>
         </div>
         <div class="resume-summary collapsible">
