@@ -223,9 +223,22 @@
     .about-link .cta-label { position: relative; z-index: 1; display: inline-flex; align-items: center; }
     .about-link:hover .cta-arrow--outline { display: none; }
     .about-link:hover .cta-arrow--filled { display: inline; }
+    /* Steaming teapot + mug cloned from the office scene, shown under the buttons on mobile */
+    .about-tea { display: none; }
+    .about-tea svg { width: 100%; height: auto; display: block; overflow: visible; }
+    .tea-steam { fill: none; stroke: rgba(220,232,240,0.5); stroke-width: 2.2; stroke-linecap: round; opacity: 0; transform-box: fill-box; transform-origin: 50% 100%; animation: tea-steam-rise 3.6s ease-in-out infinite; }
+    @keyframes tea-steam-rise {
+      0%   { opacity: 0; transform: translateY(3px) scaleY(0.6); }
+      30%  { opacity: 0.5; }
+      65%  { opacity: 0.28; }
+      100% { opacity: 0; transform: translateY(-9px) scaleY(1.12); }
+    }
+    @media (prefers-reduced-motion: reduce) { .tea-steam { animation: none; opacity: 0.32; } }
     @media (max-width: 640px) {
       .about-hero .office-scene { display: none; }
       .about-mobile-links { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 360px; margin: 0 auto; }
+      .about-tea { display: block; width: 150px; margin: 30px auto 0; }
+      #contact .contact-box h2 { display: none; }
     }
     /* Below the point where it wraps, shorten "Analogue music" → "music" */
     @media (max-width: 300px) { .cta-drop-analogue { display: none; } }
@@ -841,6 +854,7 @@
             <button class="cta about-link" type="button" data-about="fishing"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Fly fishing<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></button>
             <button class="cta about-link" type="button" data-about="woodworking"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Woodworking<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></button>
             <button class="cta about-link" type="button" data-about="poetry"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Poetry<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></button>
+            <div class="about-tea" id="about-tea" aria-hidden="true"></div>
           </div>
           <audio id="scene-audio-el" src="music/reflections.m4a" preload="auto" loop></audio>
         </div>
@@ -2726,8 +2740,39 @@ in the middle of a lake.</p>
           setupOfficePx(host);
           setupMouseDrag(host);
           setupSceneAudio(host);
+          buildTeaGraphic(host);
         })
         .catch(() => {}); /* image is decorative; fail silently if missing */
+
+      /* Clone just the teapot + mug (from the office scene) into a small standalone
+         SVG under the mobile About buttons, and add rising steam wisps. */
+      function buildTeaGraphic(root) {
+        const teaHost = document.getElementById('about-tea');
+        const src = root.querySelector('svg');
+        if (!teaHost || !src || teaHost.childElementCount) return;
+        const pot = src.querySelector('#pot'), mug = src.querySelector('#mug');
+        if (!pot || !mug) return;
+        const NS = 'http://www.w3.org/2000/svg';
+        const out = document.createElementNS(NS, 'svg');
+        out.setAttribute('viewBox', '203 532 219 204');   /* pot+mug bbox (211,580,203,147) + steam headroom */
+        out.setAttribute('fill', 'none');
+        out.setAttribute('role', 'img');
+        out.setAttribute('aria-label', 'A steaming teapot and mug');
+        const art = document.createElementNS(NS, 'g');
+        art.appendChild(mug.cloneNode(true));
+        art.appendChild(pot.cloneNode(true));
+        out.appendChild(art);
+        const steam = document.createElementNS(NS, 'g');
+        [[246, 606, '0s'], [326, 580, '1.2s'], [360, 584, '2.1s']].forEach(function (w) {
+          const p = document.createElementNS(NS, 'path');
+          p.setAttribute('class', 'tea-steam');
+          p.setAttribute('d', 'M' + w[0] + ' ' + w[1] + ' c -6 -9 6 -15 0 -22 c -5 -6 5 -11 0 -17');
+          p.style.animationDelay = w[2];
+          steam.appendChild(p);
+        });
+        out.appendChild(steam);
+        teaHost.appendChild(out);
+      }
     })();
 
     /* ── Office-scene pixel-fill hover ──
