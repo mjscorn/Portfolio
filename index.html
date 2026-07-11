@@ -234,10 +234,25 @@
       100% { opacity: 0; transform: translateY(-9px) scaleY(1.12); }
     }
     @media (prefers-reduced-motion: reduce) { .tea-steam { animation: none; opacity: 0.32; } }
+    /* Mobile ambient-song controls, pinned to the bottom of the About card */
+    #scene-audio-el { display: none; }
+    .about-audio-m { display: none; align-items: center; justify-content: center; gap: 14px; width: 100%; color: rgba(220,232,240,0.85); }
+    .am-play { display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 50%; background: var(--teal); color: #fff; border: none; cursor: pointer; padding: 0; transition: transform 0.15s ease; }
+    .am-play:hover { transform: scale(1.06); }
+    .am-play svg { width: 20px; height: 20px; }
+    .am-mute { display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: inherit; cursor: pointer; padding: 0; opacity: 0.85; transition: opacity 0.15s ease; }
+    .am-mute:hover { opacity: 1; }
+    .am-mute svg { width: 22px; height: 22px; }
+    .am-vol { -webkit-appearance: none; appearance: none; width: 120px; height: 4px; border-radius: 999px; background: linear-gradient(to right, var(--teal) var(--fill, 10%), var(--stroke) var(--fill, 10%)); outline: none; cursor: pointer; }
+    .am-vol::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--teal); }
+    .am-vol::-moz-range-thumb { width: 13px; height: 13px; border: none; border-radius: 50%; background: var(--teal); }
     @media (max-width: 640px) {
       .about-hero .office-scene { display: none; }
-      .about-mobile-links { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 360px; margin: 0 auto; }
-      .about-tea { display: block; width: 150px; margin: 30px auto 0; }
+      #about .page-body { justify-content: flex-start; }
+      .about-hero { flex: 1; width: 100%; justify-content: flex-start; }
+      .about-mobile-links { display: flex; flex: 1; flex-direction: column; justify-content: center; gap: 20px; width: 100%; max-width: 360px; margin: 0 auto; }
+      .about-tea { display: block; width: 150px; margin: 0 auto 4px; }
+      .about-audio-m { display: flex; }
       #contact .contact-box h2 { display: none; }
     }
     /* Below the point where it wraps, shorten "Analogue music" → "music" */
@@ -679,9 +694,9 @@
       /* Company / org names: keep the date on the same row, pushed to the right */
       .r-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
       .r-line .dt { white-space: nowrap; }
-      /* Role titles: drop the date onto its own line, under the title */
-      .xp-role-title.r-line { display: block; }
-      .xp-role-title.r-line .dt { display: block; white-space: normal; margin-top: 1px; }
+      /* Role titles and Past Experience orgs: drop the date onto its own line, below the name */
+      .xp-role-title.r-line, .r-name.r-line { display: block; }
+      .xp-role-title.r-line .dt, .r-name.r-line .dt { display: block; white-space: normal; margin-top: 1px; }
     }
     .resume-slider { display: flex; gap: 48px; width: 100%; flex: 1; min-height: 0; transition: transform 0.44s cubic-bezier(0.8, 0, 0.16, 1); }
     .resume-pane, .poetry-pane { width: 100%; flex-shrink: 0; min-height: 0; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable; padding: 24px 24px 0; scrollbar-width: thin; scrollbar-color: var(--stroke) transparent; }
@@ -850,11 +865,16 @@
         <div class="about-hero">
           <div class="office-scene" id="office-scene" role="img" aria-label="Line illustration of my office desk: an acoustic guitar, widescreen monitor and keyboard, a framed fly-fishing trout print, a record player, a teapot and mug, a model sailboat, potted plants, a fly rod, and a window looking out over the ocean."></div>
           <div class="about-mobile-links">
+            <div class="about-tea" id="about-tea" aria-hidden="true"></div>
             <button class="cta about-link" type="button" data-about="music"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label"><span class="cta-drop-analogue">Analogue&nbsp;</span>music<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></button>
             <button class="cta about-link" type="button" data-about="fishing"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Fly fishing<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></button>
             <button class="cta about-link" type="button" data-about="woodworking"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Woodworking<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></button>
             <button class="cta about-link" type="button" data-about="poetry"><canvas class="cta-px" aria-hidden="true"></canvas><span class="cta-label">Poetry<img class="cta-arrow cta-arrow--outline" src="images/arrow.svg" alt="" aria-hidden="true"><img class="cta-arrow cta-arrow--filled" src="images/arrow-filled.svg" alt="" aria-hidden="true"></span></button>
-            <div class="about-tea" id="about-tea" aria-hidden="true"></div>
+          </div>
+          <div class="about-audio-m" id="about-audio-m" aria-label="Ambient song controls">
+            <button class="am-play" id="scene-playpause-m" type="button" aria-label="Play"></button>
+            <button class="am-mute" id="scene-mute-m" type="button" aria-label="Mute"></button>
+            <input type="range" class="am-vol" id="scene-vol-m" min="0" max="1" step="0.01" value="0.1" aria-label="Volume">
           </div>
           <audio id="scene-audio-el" src="music/reflections.m4a" preload="auto" loop></audio>
         </div>
@@ -2169,27 +2189,28 @@ in the middle of a lake.</p>
        signal while playing and a flatline when paused. Separate from the record
        player, which pauses this so two tracks never overlap. Default vol 20%. */
     function setupSceneAudio(root) {
-      const el      = document.getElementById('scene-audio-el');
-      const playBtn = root.querySelector('#scene-playpause');
-      const muteBtn = root.querySelector('#scene-mute');
-      const vol     = root.querySelector('#scene-vol');
-      const wave    = root.querySelector('.mon-wave');
-      if (!el || !playBtn) return;
+      const el       = document.getElementById('scene-audio-el');
+      /* Controls live both in the monitor (desktop) and at the card bottom (mobile) */
+      const playBtns = [root.querySelector('#scene-playpause'), document.getElementById('scene-playpause-m')].filter(Boolean);
+      const muteBtns = [root.querySelector('#scene-mute'), document.getElementById('scene-mute-m')].filter(Boolean);
+      const vols     = [root.querySelector('#scene-vol'), document.getElementById('scene-vol-m')].filter(Boolean);
+      const wave     = root.querySelector('.mon-wave');
+      if (!el || !playBtns.length) return;
       const PLAY  = '<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"/></svg>';
       const PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
       const VOL_ON  = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       const VOL_OFF = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 9.5l5 5M22 9.5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 
       el.volume = 0.1;
-      if (vol) vol.value = 0.1;
+      vols.forEach(v => { v.value = 0.1; });
       let userPaused = false, recordOpen = false;
       const isAbout = () => { const a = document.getElementById('about'); return a && a.classList.contains('active'); };
-      const paintVol = () => vol && vol.style.setProperty('--fill', Math.round(+vol.value * 100) + '%');
-      const syncBtn = () => { playBtn.innerHTML = el.paused ? PLAY : PAUSE; playBtn.setAttribute('aria-label', el.paused ? 'Play' : 'Pause'); };
+      const paintVol = () => vols.forEach(v => v.style.setProperty('--fill', Math.round(+v.value * 100) + '%'));
+      const syncBtn = () => playBtns.forEach(b => { b.innerHTML = el.paused ? PLAY : PAUSE; b.setAttribute('aria-label', el.paused ? 'Play' : 'Pause'); });
       function syncVol() {
         const muted = el.muted || el.volume === 0;
-        if (muteBtn) { muteBtn.innerHTML = muted ? VOL_OFF : VOL_ON; muteBtn.setAttribute('aria-label', muted ? 'Unmute' : 'Mute'); }
-        if (vol && document.activeElement !== vol) vol.value = el.muted ? 0 : el.volume;
+        muteBtns.forEach(b => { b.innerHTML = muted ? VOL_OFF : VOL_ON; b.setAttribute('aria-label', muted ? 'Unmute' : 'Mute'); });
+        vols.forEach(v => { if (document.activeElement !== v) v.value = el.muted ? 0 : el.volume; });
         paintVol();
       }
 
@@ -2250,9 +2271,9 @@ in the middle of a lake.</p>
 
       const toggle = () => { if (el.paused) { userPaused = false; play(); } else { userPaused = true; el.pause(); } };
       window._sceneToggle = toggle;
-      playBtn.addEventListener('click', toggle);
-      if (muteBtn) muteBtn.addEventListener('click', () => { el.muted = !el.muted; syncVol(); });
-      if (vol) vol.addEventListener('input', () => { el.volume = +vol.value; el.muted = (+vol.value === 0); syncVol(); });
+      playBtns.forEach(b => b.addEventListener('click', toggle));
+      muteBtns.forEach(b => b.addEventListener('click', () => { el.muted = !el.muted; syncVol(); }));
+      vols.forEach(v => v.addEventListener('input', () => { el.volume = +v.value; el.muted = (+v.value === 0); syncVol(); }));
       el.addEventListener('play', syncBtn);
       el.addEventListener('pause', syncBtn);
       el.addEventListener('volumechange', syncVol);
