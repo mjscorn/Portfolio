@@ -176,6 +176,7 @@
        collapsed to the hamburger (or on mobile); hide when the full nav is visible. */
     section > .page-title, .resume-pane > .page-title { display: none; }
     body.nav-collapsed section > .page-title, body.nav-collapsed .resume-pane > .page-title { display: block; }
+    @media (max-width: 640px) { section > .page-title, .resume-pane > .page-title { font-size: 24px; } }
     .page-body { flex: 1; display: flex; flex-direction: column; align-items: center; width: 100%; }
     #home .page-body, #contact .page-body, #about .page-body { justify-content: center; }
     /* Push main content 80px below the title bar (12px title margin + 68px) */
