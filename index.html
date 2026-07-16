@@ -530,13 +530,13 @@
     .qb-section { flex: 0 0 100%; width: 100%; height: 100%; box-sizing: border-box; overflow-y: auto; overflow-x: hidden; padding: 0 24px 72px; scrollbar-width: thin; scrollbar-color: var(--stroke) transparent; }
     .qb-section::-webkit-scrollbar { width: 4px; }
     .qb-section::-webkit-scrollbar-thumb { background: var(--stroke); border-radius: 2px; }
-    .qb-section-title { position: sticky; top: 0; z-index: 5; background: var(--bg); margin: 0 -24px; padding: 16px 24px; font-size: 14px; font-weight: 500; color: var(--text-primary); border-bottom: 1px solid rgba(220,232,240,0.1); }
+    .qb-section-title { position: sticky; top: 0; z-index: 5; background: var(--bg); margin: 0 -24px; padding: 16px 24px; font-size: 22px; font-weight: 600; color: var(--text-primary); border-bottom: 1px solid rgba(220,232,240,0.1); }
     .qb-section:nth-child(even) .qb-section-title { padding-left: calc(50% + 69px); }
     .qb-section:nth-child(odd) .qb-section-title { padding-right: calc(50% + 48px); }
     .qb-row { display: flex; gap: 48px; align-items: stretch; padding-top: 36px; }
     .qb-section:nth-child(even) .qb-row { flex-direction: row-reverse; }
     .qb-text { flex: 1 1 0; min-width: 0; }
-    .qb-body { font-size: 15px; line-height: 1.7; color: var(--text-primary); margin: 0 0 20px; }
+    .qb-body { font-size: 14px; font-weight: 500; line-height: 1.7; color: var(--text-primary); margin: 0 0 20px; }
     .qb-bullets { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 11px; }
     .qb-bullets li { position: relative; padding-left: 18px; font-size: 14px; line-height: 1.55; color: rgba(220,232,240,0.72); }
     .qb-bullets li::before { content: '•'; position: absolute; left: 2px; color: var(--teal); }
@@ -773,7 +773,7 @@
       #portfolio .page-body, #resume .page-body { margin-top: 20px; }
       /* Shrink long sub-page header titles (e.g. "QuickBooks Mobile") so they don't crop */
       .poetry-header .page-title { font-size: 23px; }
-      .qb-section-title { font-size: 14px; }
+      .qb-section-title { font-size: 19px; }
       /* Home tagline flows as one sentence (no forced break) on phones */
       .hero-break { display: none; }
     }
