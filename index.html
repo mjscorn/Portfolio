@@ -362,8 +362,8 @@
     .proto-title { margin: 0; font-size: 15px; font-weight: 600; color: var(--text-primary); }
     .proto-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
     .proto-new, .proto-close { display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid #33343c; border-radius: var(--radius-md); color: rgba(220,232,240,0.7); cursor: pointer; transition: color 0.2s ease, border-color 0.2s ease; }
-    .proto-new { padding: 6px 11px; font-size: 12px; text-decoration: none; }
-    .proto-close { width: 32px; height: 32px; }
+    .proto-new, .proto-close { width: 32px; height: 32px; }
+    .proto-new { text-decoration: none; }
     .proto-new:hover, .proto-close:hover { color: var(--text-primary); border-color: rgba(220,232,240,0.4); }
     .proto-frame { flex: 1; width: 100%; min-height: 0; border: 0; display: block; background: #fff; }
     @media (max-width: 640px) { .proto-modal { padding: 12px; } .proto-panel { width: 100%; height: 100%; } }
@@ -1355,7 +1355,9 @@ in the middle of a lake.</p>
       <div class="proto-head">
         <p class="proto-title" id="proto-title">QuickBooks Navigation</p>
         <div class="proto-actions">
-          <a class="proto-new" id="proto-new" href="https://mjscorn.github.io/navigation/" target="_blank" rel="noopener">Open in new tab</a>
+          <a class="proto-new" id="proto-new" href="https://mjscorn.github.io/navigation/" target="_blank" rel="noopener" aria-label="Open prototype in a new tab" title="Open in new tab">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
           <button class="proto-close" id="proto-close" aria-label="Close prototype">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
           </button>
