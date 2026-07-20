@@ -354,6 +354,21 @@
     .card-link:hover .card-thumb .card-px { opacity: 1; }
     .card-link .card-thumb img { position: relative; z-index: 1; }
     .card-link { cursor: pointer; }
+    .proto-thumb { color: rgba(220,232,240,0.55); transition: color 0.2s ease; }
+    .card-link:hover .proto-thumb { color: var(--text-primary); }
+    /* ── Prototype modal: embeds a live prototype in a large overlay ── */
+    .proto-modal { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(10,15,20,0.86); }
+    .proto-modal.open { display: flex; }
+    .proto-panel { display: flex; flex-direction: column; width: min(1400px, 96vw); height: min(920px, 90vh); background: var(--bg); border: 1px solid #33343c; border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.7); }
+    .proto-head { display: flex; align-items: center; gap: 12px; flex-shrink: 0; padding: 12px 16px; border-bottom: 1px solid #33343c; }
+    .proto-title { margin: 0; font-size: 15px; font-weight: 600; color: var(--text-primary); }
+    .proto-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .proto-new, .proto-close { display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid #33343c; border-radius: var(--radius-md); color: rgba(220,232,240,0.7); cursor: pointer; transition: color 0.2s ease, border-color 0.2s ease; }
+    .proto-new { padding: 6px 11px; font-size: 12px; text-decoration: none; }
+    .proto-close { width: 32px; height: 32px; }
+    .proto-new:hover, .proto-close:hover { color: var(--text-primary); border-color: rgba(220,232,240,0.4); }
+    .proto-frame { flex: 1; width: 100%; min-height: 0; border: 0; display: block; background: #fff; }
+    @media (max-width: 640px) { .proto-modal { padding: 12px; } .proto-panel { width: 100%; height: 100%; } }
     .card-body { padding: 16px; }
     .card-title { font-size: 13px; font-weight: 300; margin-bottom: 6px; }
     .card-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); background: var(--teal-light); display: inline-block; padding: 2px 8px; border-radius: 4px; }
@@ -893,8 +908,8 @@
         <div class="grid">
           <div class="card card-link" id="reachout-link"><div class="card-thumb"><canvas class="card-px" aria-hidden="true"></canvas><img src="reachout/12.jpg" alt="ReachOut USA"></div><div class="card-body"><p class="card-title">ReachOut USA</p><span class="card-tag">Branding</span></div></div>
           <div class="card card-link" id="qbmobile-link"><div class="card-thumb"><canvas class="card-px" aria-hidden="true"></canvas><img src="qbmobile/thumb.png" alt="QuickBooks Mobile"></div><div class="card-body"><p class="card-title">QuickBooks Mobile</p><span class="card-tag">UX/UI</span></div></div>
+          <div class="card card-link" id="qbnav-link"><div class="card-thumb proto-thumb">VIEW PROTOTYPE</div><div class="card-body"><p class="card-title">QuickBooks Navigation</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">QuickBooks Payments</p><span class="card-tag">UX/UI</span></div></div>
-          <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">QuickBooks Navigation</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">Project 5</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">Project 6</p><span class="card-tag">UX/UI</span></div></div>
         </div>
@@ -1335,6 +1350,22 @@ in the middle of a lake.</p>
   <button class="scroll-top" id="scroll-top" aria-label="Back to top">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
+
+  <!-- Prototype modal: iframe src is set on open so the prototype isn't fetched on every page load -->
+  <div class="proto-modal" id="proto-modal" role="dialog" aria-modal="true" aria-labelledby="proto-title">
+    <div class="proto-panel">
+      <div class="proto-head">
+        <p class="proto-title" id="proto-title">QuickBooks Navigation</p>
+        <div class="proto-actions">
+          <a class="proto-new" id="proto-new" href="https://mjscorn.github.io/navigation/" target="_blank" rel="noopener">Open in new tab</a>
+          <button class="proto-close" id="proto-close" aria-label="Close prototype">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <iframe class="proto-frame" id="proto-frame" title="QuickBooks Navigation prototype" src="about:blank" allow="fullscreen"></iframe>
+    </div>
+  </div>
 
   <!-- Passcode gate: locks the whole site until the passcode is entered; open by default so no content flashes before the JS runs -->
   <div class="passkey-overlay open" id="passkey-modal" role="dialog" aria-modal="true" aria-labelledby="pk-title">
@@ -2548,6 +2579,44 @@ in the middle of a lake.</p>
       });
       window._resetDeck = () => { sections.forEach(s => { s.scrollTop = 0; }); goTo(0); };
       update();
+    })();
+
+    /* ── Prototype modal: opens a live prototype in an iframe overlay ── */
+    (function () {
+      const modal = document.getElementById('proto-modal');
+      const frame = document.getElementById('proto-frame');
+      const opener = document.getElementById('qbnav-link');
+      const closeBtn = document.getElementById('proto-close');
+      if (!modal || !frame || !opener) return;
+      const URL_ = 'https://mjscorn.github.io/navigation/';
+      function open() {
+        if (frame.src !== URL_) frame.src = URL_;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+      }
+      function close() {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+        frame.src = 'about:blank';   /* stop any audio/animation in the prototype */
+      }
+      opener.addEventListener('click', open);
+      closeBtn.addEventListener('click', close);
+      /* Click the backdrop (not the panel) to dismiss */
+      modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('open')) { e.preventDefault(); close(); }
+      });
+      /* Focus lives inside the iframe once it loads, so the parent never sees Escape.
+         Deployed, the prototype is same-origin (mjscorn.github.io) and we can listen
+         within it; on localhost it's cross-origin, so this quietly no-ops. */
+      frame.addEventListener('load', () => {
+        try {
+          frame.contentDocument.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') close();
+          });
+        } catch (_) {}
+      });
     })();
   </script>
 
