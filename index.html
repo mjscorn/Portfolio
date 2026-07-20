@@ -359,6 +359,7 @@
     .proto-panel { display: flex; flex-direction: column; width: min(1400px, 96vw); height: min(920px, 90vh); background: var(--bg); border: 1px solid #33343c; border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.7); }
     .proto-head { display: flex; align-items: center; gap: 12px; flex-shrink: 0; padding: 12px 16px; border-bottom: 1px solid #33343c; }
     .proto-title { margin: 0; font-size: 15px; font-weight: 600; color: var(--text-primary); }
+    .proto-title-sub { font-weight: 500; }
     .proto-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
     .proto-new, .proto-close { display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid #33343c; border-radius: var(--radius-md); color: rgba(220,232,240,0.7); cursor: pointer; transition: color 0.2s ease, border-color 0.2s ease; }
     .proto-new, .proto-close { width: 32px; height: 32px; }
@@ -1351,7 +1352,7 @@ in the middle of a lake.</p>
   <div class="proto-modal" id="proto-modal" role="dialog" aria-modal="true" aria-labelledby="proto-title">
     <div class="proto-panel">
       <div class="proto-head">
-        <p class="proto-title" id="proto-title">QuickBooks Navigation</p>
+        <p class="proto-title" id="proto-title">QuickBooks Navigation <span class="proto-title-sub">| Concept testing</span></p>
         <div class="proto-actions">
           <a class="proto-new" id="proto-new" href="https://mjscorn.github.io/navigation/" target="_blank" rel="noopener" aria-label="Open prototype in a new tab" title="Open in new tab">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1361,7 +1362,7 @@ in the middle of a lake.</p>
           </button>
         </div>
       </div>
-      <iframe class="proto-frame" id="proto-frame" title="QuickBooks Navigation prototype" src="about:blank" allow="fullscreen"></iframe>
+      <iframe class="proto-frame" id="proto-frame" title="QuickBooks Navigation — Concept testing prototype" src="about:blank" allow="fullscreen"></iframe>
     </div>
   </div>
 
