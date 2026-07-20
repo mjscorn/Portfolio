@@ -638,7 +638,7 @@
     .qb-img.hover-active-3 .qb-c3-phone { animation: qbc3-phone-in 0.38s ease-out calc(var(--c3-delay) * 1ms + 60ms) forwards; }
     @keyframes qbc3-label-in { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
     @keyframes qbc3-phone-in { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
-    .qb-body:has(+ .qb-cards) { font-size: 14px; font-weight: 500; color: #fff; }
+    .qb-body:has(+ .qb-cards), .qb-body:has(+ .qb-bullets) { font-size: 14px; font-weight: 500; color: #fff; }
     .qb-cards { display: flex; flex-direction: column; gap: 20px; }
     .qb-card { background: rgba(255,255,255,0.04); border: 1px solid var(--stroke); border-radius: 12px; padding: 14px 16px; font-size: 14px; line-height: 1.6; color: rgba(220,232,240,0.72); transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.2s ease; cursor: default; }
     .qb-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(110,123,207,0.45); color: var(--text-primary); transform: scale(1.03); }
@@ -1220,8 +1220,13 @@ in the middle of a lake.</p>
         <p class="qb-section-title">Where we started</p>
         <div class="qb-row">
           <div class="qb-text">
-            <p class="qb-body">When this project began, the team had a fairly large charter: find opportunities to increase the payments processing volume on QuickBooks mobile.</p>
-            <p class="qb-body">So we launched into research mode and started talking to customers. From what we heard, we started iterating, prototyping concepts, and refining ideas with their input. These early &ldquo;follow me homes,&rdquo; comic strip readings, feature purchasing exercises, and low fidelity prototypes were what ultimately shaped our future roadmaps and launches.</p>
+            <p class="qb-body">Leading the design effort, our team set out to assess the opportunity and dive into customer research through:</p>
+            <ul class="qb-bullets">
+              <li>Qualitative customer interviews</li>
+              <li>Comic-strip readings to elicit reactions</li>
+              <li>Lo-fi prototype and co-design sessions</li>
+              <li>Card sorting and feature purchasing</li>
+            </ul>
           </div>
           <div class="qb-img"><img src="qbmobile/img1.png" alt="Lofi payment flow sketches"></div>
         </div>
