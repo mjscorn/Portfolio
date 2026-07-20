@@ -539,6 +539,7 @@
     .qb-bullets li { position: relative; padding-left: 18px; font-size: 14px; line-height: 1.55; color: rgba(220,232,240,0.72); }
     .qb-bullets li::before { content: '•'; position: absolute; left: 2px; color: var(--teal); }
     .qb-img { flex: 1 1 0; min-width: 0; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid #33343c; border-radius: 12px; background: rgba(255,255,255,0.025); padding: 20px; min-height: 240px; }
+    .qb-img-placeholder { width: 100%; min-height: 200px; display: flex; align-items: center; justify-content: center; border: 1px dashed rgba(220,232,240,0.22); border-radius: 8px; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(220,232,240,0.35); }
     .qb-img img { width: 100%; height: auto; object-fit: contain; display: block; background: transparent; border-radius: 0; padding: 0; box-shadow: none; transition: opacity 0.25s; }
     /* Tall single-phone hero default: constrain height and center (not full width) */
     .qb-img .qb-hero-tap { width: auto; height: auto; max-height: 460px; max-width: 100%; margin: 0 auto; }
@@ -1200,6 +1201,21 @@ in the middle of a lake.</p>
     </div>
     <div class="qb-scroll" id="qb-scroll">
       <div class="qb-track" id="qb-track">
+      <div class="qb-section">
+        <p class="qb-section-title">Project context</p>
+        <div class="qb-row">
+          <div class="qb-text">
+            <ul class="qb-bullets">
+              <li>QuickBooks is a leading SMB accounting and financial management platform</li>
+              <li>Our payments offering is an embedded service that let users take payments on-the-go and online</li>
+              <li>But the majority of our processing volume was happening through our invoicing</li>
+              <li>Our on-the-go or mobile services were under-invested in but critical for customers</li>
+            </ul>
+          </div>
+          <!-- Placeholder: swap this div for <img src="qbmobile/img0.png" alt="..."> when the asset is ready -->
+          <div class="qb-img"><div class="qb-img-placeholder">Image placeholder</div></div>
+        </div>
+      </div>
       <div class="qb-section">
         <p class="qb-section-title">Where we started</p>
         <div class="qb-row">
