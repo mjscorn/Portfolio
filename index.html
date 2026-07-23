@@ -905,8 +905,8 @@
         <div class="grid">
           <div class="card card-link" id="reachout-link"><div class="card-thumb"><canvas class="card-px" aria-hidden="true"></canvas><img src="reachout/12.jpg" alt="ReachOut USA"></div><div class="card-body"><p class="card-title">ReachOut USA</p><span class="card-tag">Branding</span></div></div>
           <div class="card card-link" id="qbmobile-link"><div class="card-thumb"><canvas class="card-px" aria-hidden="true"></canvas><img src="qbmobile/thumb.png" alt="QuickBooks Mobile"></div><div class="card-body"><p class="card-title">QuickBooks Mobile</p><span class="card-tag">UX/UI</span></div></div>
-          <div class="card card-link" id="qbnav-link"><div class="card-thumb"><canvas class="card-px" aria-hidden="true"></canvas><img src="qbnav/thumb.svg" alt="QuickBooks Navigation"></div><div class="card-body"><p class="card-title">QuickBooks Navigation</p><span class="card-tag">UX/UI</span></div></div>
-          <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">QuickBooks Payments</p><span class="card-tag">UX/UI</span></div></div>
+          <div class="card card-link proto-open" id="qbnav-link" data-proto-url="https://mjscorn.github.io/navigation/" data-proto-title="Navigation <span class=&quot;proto-title-sub&quot;>| Concept testing</span>"><div class="card-thumb"><canvas class="card-px" aria-hidden="true"></canvas><img src="qbnav/thumb.svg" alt="QuickBooks Navigation"></div><div class="card-body"><p class="card-title">QuickBooks Navigation</p><span class="card-tag">UX/UI</span></div></div>
+          <div class="card card-link proto-open" id="qbnav2-link" data-proto-url="https://mjscorn.github.io/nav2/" data-proto-title="Navigation <span class=&quot;proto-title-sub&quot;>| Refined</span>"><div class="card-thumb"><canvas class="card-px" aria-hidden="true"></canvas>VIEW PROTOTYPE</div><div class="card-body"><p class="card-title">Navigation refined</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">Project 5</p><span class="card-tag">UX/UI</span></div></div>
           <div class="card"><div class="card-thumb">COMING SOON</div><div class="card-body"><p class="card-title">Project 6</p><span class="card-tag">UX/UI</span></div></div>
         </div>
@@ -2584,12 +2584,16 @@ in the middle of a lake.</p>
     (function () {
       const modal = document.getElementById('proto-modal');
       const frame = document.getElementById('proto-frame');
-      const opener = document.getElementById('qbnav-link');
+      const titleEl = document.getElementById('proto-title');
+      const newTab = document.getElementById('proto-new');
+      const openers = [...document.querySelectorAll('.proto-open')];
       const closeBtn = document.getElementById('proto-close');
-      if (!modal || !frame || !opener) return;
-      const URL_ = 'https://mjscorn.github.io/navigation/';
-      function open() {
-        if (frame.src !== URL_) frame.src = URL_;
+      if (!modal || !frame || !openers.length) return;
+      function open(card) {
+        const url = card.dataset.protoUrl;
+        titleEl.innerHTML = card.dataset.protoTitle || card.querySelector('.card-title').textContent;
+        newTab.href = url;
+        if (frame.src !== url) frame.src = url;
         modal.classList.add('open');
         document.body.style.overflow = 'hidden';
         closeBtn.focus();
@@ -2599,7 +2603,7 @@ in the middle of a lake.</p>
         document.body.style.overflow = '';
         frame.src = 'about:blank';   /* stop any audio/animation in the prototype */
       }
-      opener.addEventListener('click', open);
+      openers.forEach(card => card.addEventListener('click', () => open(card)));
       closeBtn.addEventListener('click', close);
       /* Click the backdrop (not the panel) to dismiss */
       modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
