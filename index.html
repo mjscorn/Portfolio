@@ -227,6 +227,10 @@
     /* Steaming teapot + mug cloned from the office scene, shown under the buttons on mobile */
     .about-tea { display: none; }
     .about-tea svg { width: 100%; height: auto; display: block; overflow: visible; }
+    /* A's picture frame hover: light the frame's own strokes only. The elephant
+       (#stomper) is a nested group, so the child combinator never reaches it. */
+    .office-scene [id="Frame 1"] > path { transition: stroke 0.22s ease; }
+    .office-scene [id="Frame 1"].frame-lit > path[stroke] { stroke: var(--teal); }
     .tea-steam { fill: none; stroke: rgba(220,232,240,0.5); stroke-width: 2.2; stroke-linecap: round; opacity: 0; transform-box: fill-box; transform-origin: 50% 100%; animation: tea-steam-rise 3.6s ease-in-out infinite; }
     @keyframes tea-steam-rise {
       0%   { opacity: 0; transform: translateY(3px) scaleY(0.6); }
@@ -2945,6 +2949,8 @@ in the middle of a lake.</p>
       const groupOf = el => el.getAttribute('data-group') || 'music';
       const FILL  = {};   /* every group uses the default accent-blue pixels */
       const TIP   = { music: '#record-tooltip', fishing: '#trout-tooltip', desk: '#desk-tooltip', poetry: '#books-tooltip', tea: '#tea-tooltip', athletics: '#athletics-tooltip' };
+      /* Groups that light their own strokes instead of pixel-filling a silhouette */
+      const HILITE = { athletics: '[id="Frame 1"]' };
       const CLICK = {
         music:   () => { if (window._openAudio)    window._openAudio(); },
         fishing: () => { if (window._openLightbox) window._openLightbox('images/flyfishing.jpg', 'Fly fishing on the river'); },
@@ -2965,8 +2971,9 @@ in the middle of a lake.</p>
         const g = groupOf(hit);
         const layers = layersByGroup[g] || [];
         const tip = TIP[g] ? root.querySelector(TIP[g]) : null;
-        const on  = () => { layers.forEach(l => { l.setAttribute('opacity', '1'); fieldOf.get(l).go(); }); if (tip) tip.setAttribute('opacity', '1'); };
-        const off = () => { layers.forEach(l => { l.setAttribute('opacity', '0'); fieldOf.get(l).stop(); }); if (tip) tip.setAttribute('opacity', '0'); };
+        const lit = HILITE[g] ? root.querySelector(HILITE[g]) : null;
+        const on  = () => { layers.forEach(l => { l.setAttribute('opacity', '1'); fieldOf.get(l).go(); }); if (tip) tip.setAttribute('opacity', '1'); if (lit) lit.classList.add('frame-lit'); };
+        const off = () => { layers.forEach(l => { l.setAttribute('opacity', '0'); fieldOf.get(l).stop(); }); if (tip) tip.setAttribute('opacity', '0'); if (lit) lit.classList.remove('frame-lit'); };
         hit.addEventListener('mouseenter', on);
         hit.addEventListener('mouseleave', off);
         hit.addEventListener('click', CLICK[g] || (() => {}));
